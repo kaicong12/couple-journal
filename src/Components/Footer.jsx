@@ -28,7 +28,6 @@ function Footer({ setActiveTab }) {
             setActiveTab(1)
             window.scrollTo({
               top: 0,
-              behavior: 'smooth'
             })
           }}  
         >
