@@ -3,16 +3,16 @@ import HeroSection from '../Components/Hero';
 import Footer from '../Components/Footer';
 import Appreciation from '../Components/Appreciation';
 import Whisper from '../Components/Whisper';
-import Moments from '../Components/Moments'
+import Testimonials from '../Components/Testimonials'
 
-const OurStory = () => {
+const OurStory = ({ setActiveTab }) => {
     return (
         <Box pt="30px">
             <HeroSection />
             <Appreciation />
             <Whisper />
-            <Moments />
-            <Footer />
+            <Testimonials />
+            <Footer setActiveTab={setActiveTab} />
         </Box>
     )
 }
