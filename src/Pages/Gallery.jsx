@@ -35,6 +35,7 @@ const Gallery = () => {
                                 title="Airport Send Off Video"
                                 src={imageUrl}
                                 allowFullScreen
+                                alt="Airport Send Off Video"
                             />
                         </AspectRatio>
                     )
