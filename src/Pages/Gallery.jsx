@@ -30,11 +30,12 @@ const Gallery = () => {
             { galleryImagesUrl.map((imageUrl, iIndex) => {
                 if (iIndex === galleryImagesUrl.length - 1) {
                     return (
-                        <AspectRatio display="block" ratio={9 / 16} key={`${iIndex}-video`}>
-                            <video controls>
-                                <source src={imageUrl} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
+                        <AspectRatio ratio={9 / 16} key={`${iIndex}-video`}>
+                            <iframe
+                                title="Airport Send Off Video"
+                                src={imageUrl}
+                                allowFullScreen
+                            />
                         </AspectRatio>
                     )
                 }
