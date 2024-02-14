@@ -4,7 +4,7 @@ const galleryImagesUrl = [
     '/gallery/IMG_2148.jpeg',
     '/gallery/IMG_1987.jpeg',
     '/gallery/IMG_2007.jpeg',
-    '/gallery/IMG_2149.jpg',
+    '/gallery/IMG_2149.JPG',
     '/gallery/airportSendOff.MP4',
 ]
 
