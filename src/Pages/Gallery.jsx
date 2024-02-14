@@ -1,9 +1,11 @@
-import { Box, Text, Image } from '@chakra-ui/react'
+import { Box, Text, Image, AspectRatio } from '@chakra-ui/react'
 
 const galleryImagesUrl = [
     '/gallery/IMG_2148.jpeg',
     '/gallery/IMG_1987.jpeg',
     '/gallery/IMG_2007.jpeg',
+    '/gallery/IMG_2149.jpg',
+    '/gallery/airportSendOff.MP4',
 ]
 
 const Gallery = () => {
@@ -26,9 +28,19 @@ const Gallery = () => {
             </Text>
 
             { galleryImagesUrl.map((imageUrl, iIndex) => {
+                if (iIndex === galleryImagesUrl.length - 1) {
+                    return (
+                        <AspectRatio display="block" ratio={9 / 16} key={`${iIndex}-video`}>
+                            <video controls>
+                                <source src={imageUrl} type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
+                        </AspectRatio>
+                    )
+                }
                 return (
                     <Box width="full" key={`${iIndex}-box`} mb={ iIndex !== galleryImagesUrl.length - 1 ? "10px": "0px" }>
-                        <Image borderRadius="6px" src={`${imageUrl}`} alt="images" key={iIndex} />
+                        <Image borderRadius="6px" src={`${imageUrl}`} alt="images" key={`${iIndex}-image`} objectFit="cover" />
                     </Box>
                 )
             }) }
