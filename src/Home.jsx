@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
-import OurStory from '../Pages/OurStory';
-import Gallery from '../Pages/Gallery';
+import OurStory from './Pages/OurStory';
+import Gallery from './Pages/Gallery';
+import EventPage from './Pages/EventsList'
 
 const HomePage = () => {
     const [activeTab, setActiveTab] = useState(0)
@@ -16,6 +17,7 @@ const HomePage = () => {
                 <TabList>
                     <Tab>Our Story</Tab>
                     <Tab>Gallery</Tab>
+                    <Tab>Events</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel px="0" pb="0">
@@ -23,6 +25,9 @@ const HomePage = () => {
                     </TabPanel>
                     <TabPanel px="0" pb="0">
                         <Gallery />
+                    </TabPanel>
+                    <TabPanel px="0" pb="0">
+                        <EventPage />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
