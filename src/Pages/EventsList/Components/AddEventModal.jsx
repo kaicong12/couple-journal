@@ -23,15 +23,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StarRating } from './StarRating'; 
-import { CalendarIcon } from '@chakra-ui/icons';
 import LocationIcon from '../../../Icons/Location.svg'
 
-
-const DatepickerInput = () => {
-    return <Input type="date" border="1px solid red"/>
-}
-
-export const AddEventModal = ({ newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
+export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
     const [previewImage, setPreviewImage] = useState([])
 
     const handleInputChange = (e) => {
@@ -109,8 +103,7 @@ export const AddEventModal = ({ newEvent, setNewEvent, isAddModalOpen, onAddModa
                     <FormControl mt={4}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
-                            <option value="Catering">Catering</option>
-                            <option value="Gifts">Gifts</option>
+                            { menuLists.map(({ label }) => <option value={label}>{label}</option>) }
                         </Select>
                     </FormControl>
                     <FormControl mt={4}>

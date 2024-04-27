@@ -12,6 +12,10 @@ import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
 import { getEvents, uploadEvent } from "../../db";
+import DiningIcon from '../../Icons/DiningIcon.svg'
+import GiftIcon from '../../Icons/Gifts.svg'
+
+import { FaPlaneDeparture } from "react-icons/fa";
 
 
 const EventPage = () => {
@@ -22,6 +26,23 @@ const EventPage = () => {
         category: '',
         rating: 3,
     }
+
+    const menuLists = useMemo(() => {
+        return [
+            {
+                leftIcon: <DiningIcon />,
+                label: "Catering"
+            },
+            {
+                leftIcon: <GiftIcon />,
+                label: "Gifts"
+            },
+            {
+                leftIcon: <FaPlaneDeparture fontSize="20px" />,
+                label: "Trips"
+            }
+        ]
+    }, [])
 
     const [newEvent, setNewEvent] = useState(defaultEventData)
     const [eventData, setEventData] = useState([])
@@ -113,6 +134,7 @@ const EventPage = () => {
     return (
         <Box background="brown.50">
             <SearchFilter
+                menuLists={menuLists}
                 onAddModalOpen={onAddModalOpen}
                 onSearchEvent={onSearchEvent}
                 onSelectCategory={onSelectCategory} 
@@ -129,6 +151,7 @@ const EventPage = () => {
                         <EventModal event={selectedEvent} isOpen={isOpen} onClose={onClose} />
                     )}
                     <AddEventModal 
+                        menuLists={menuLists}
                         newEvent={newEvent}
                         setNewEvent={setNewEvent}
                         isAddModalOpen={isAddModalOpen}

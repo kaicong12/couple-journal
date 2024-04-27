@@ -10,23 +10,9 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import CategoryIcon from '../../../Icons/CategoryIcon.svg'
-import DiningIcon from '../../../Icons/DiningIcon.svg'
-import GiftIcon from '../../../Icons/Gifts.svg'
 
 
-const menuLists = [
-    {
-        leftIcon: <DiningIcon />,
-        label: "Catering"
-    },
-    {
-        leftIcon: <GiftIcon />,
-        label: "Gifts"
-    },
-    
-]
-
-export const SearchFilter = ({ onAddModalOpen, onSearchEvent, onSelectCategory }) => {
+export const SearchFilter = ({ menuLists, onAddModalOpen, onSearchEvent, onSelectCategory }) => {
     return (
         <Box display="flex" gap="12px" py="12px" px="20px">
             <Menu>
@@ -48,7 +34,7 @@ export const SearchFilter = ({ onAddModalOpen, onSearchEvent, onSelectCategory }
                                 display="flex"
                                 onClick={() => onSelectCategory(label)}
                             >
-                                <Box display="flex">
+                                <Box display="flex" gap="8px">
                                     <span>{ leftIcon }</span> 
                                     { label }
                                 </Box>

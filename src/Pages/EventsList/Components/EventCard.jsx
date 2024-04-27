@@ -10,7 +10,12 @@ import LocationIcon from '../../../Icons/Location.svg'
 
 export const EventCard = ({ event, onOpen }) => (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" onClick={onOpen} p="16px" background="#D9D9D9">
-        <Image src={event.thumbnail || 'https://via.placeholder.com/150'} alt={`Thumbnail for ${event.title}`} />
+        <Image 
+            src={event.thumbnail || 'https://via.placeholder.com/150'} 
+            alt={`Thumbnail for ${event.title}`}
+            width="300px"
+            height="300px"
+        />
         <Box padding="6px 6px 0 6px">
             <HStack mt="2" display="flex" justifyContent="center">
                 {Array(5)

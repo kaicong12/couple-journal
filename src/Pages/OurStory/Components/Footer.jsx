@@ -6,7 +6,7 @@ import { ArrowForwardIcon} from '@chakra-ui/icons'
 function Footer({ setActiveTab }) {
   return (
     <Box 
-      bg="#D9D9D9"
+      bg="#F2F2F2"
       py="60px"
       px="37px"
       textAlign="center" 
