@@ -49,6 +49,16 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         }));
     }
 
+    const handleOnClose = () => {
+        onAddModalClose()
+        setNewEvent({
+            title: '',
+            description: '',
+            category: '',
+            rating: 3,
+        })
+    }
+
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         accept: {
             'image/*': []
@@ -65,7 +75,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
     });
 
     return (
-        <Modal isOpen={isAddModalOpen} onClose={onAddModalClose}>
+        <Modal isOpen={isAddModalOpen} onClose={handleOnClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>Add New Event</ModalHeader>
@@ -139,7 +149,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     <Button colorScheme="blue" mr={3} onClick={() => handleAddEvent(newEvent)}>
                         Save
                     </Button>
-                    <Button onClick={onAddModalClose}>Cancel</Button>
+                    <Button onClick={handleOnClose}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

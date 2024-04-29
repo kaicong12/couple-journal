@@ -75,10 +75,9 @@ const EventPage = () => {
 
     const fuzzySearchEvents = useCallback((events, query) => {
         const options = {
-            // Keys to search in each event object
-            keys: ['title', 'description', 'pros', 'cons'],
-            includeScore: true, // Include the score of how each item matched the search
-            threshold: 0.4,    // Adjust this for more or less strictness
+            keys: ['title', 'description', 'category', 'location'],
+            includeScore: true,
+            threshold: 0.4,
         };
     
         const fuse = new Fuse(events, options);
@@ -133,7 +132,7 @@ const EventPage = () => {
     };
 
     return (
-        <Box background="brown.50" height="100vh">
+        <Box background="brown.50" height="100%">
             <SearchFilter
                 menuLists={menuLists}
                 onAddModalOpen={onAddModalOpen}
@@ -142,8 +141,8 @@ const EventPage = () => {
             />
             { isLoading ? <Spinner size="xl" /> : (
                 <Box>
-                    <Text mt="5" mb="4">{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
-                    <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="5">
+                    <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
+                    <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
                         {filteredEventData.map(event => (
                             <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
                         ))}

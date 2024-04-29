@@ -14,7 +14,7 @@ import CategoryIcon from '../../../Icons/CategoryIcon.svg'
 
 export const SearchFilter = ({ menuLists, onAddModalOpen, onSearchEvent, onSelectCategory }) => {
     return (
-        <Box display="flex" gap="12px" py="12px" px="20px">
+        <Box display="flex" gap="12px" py="20px" px="20px">
             <Menu>
                 <MenuButton 
                     bg="brown.200"
