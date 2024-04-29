@@ -18,13 +18,17 @@ import {
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StarRating } from './StarRating'; 
 import { LocationSearchBox } from './LocationSearchBox';
 
 export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
     const [previewImage, setPreviewImage] = useState([])
+
+    const menuListWithoutAll = useMemo(() => {
+        return menuLists.slice(1, menuLists.length)
+    }, [menuLists])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -83,11 +87,14 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                 <ModalBody>
                     <FormControl mb={4}>
                         { previewImage.length ? (
-                            <Box> {previewImage.map((image, imageIdx) => (
+                            <Box display="flex" justifyContent="center"> {previewImage.map((image, imageIdx) => (
                                 <Image 
                                     key={imageIdx} 
                                     src={image.preview || 'https://via.placeholder.com/150'} 
                                     alt="Uploaded thumbnail" 
+                                    fit="cover"
+                                    width="300px"
+                                    height="300px"
                                 />
                             ))} </Box>
                         ) : (
@@ -119,7 +126,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     <FormControl mt={4}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
-                            { menuLists.map(({ label }) => <option key={label} value={label}>{label}</option>) }
+                            { menuListWithoutAll.map(({ label }) => <option key={label} value={label}>{label}</option>) }
                         </Select>
                     </FormControl>
                     <FormControl flex="1" mt={4}>

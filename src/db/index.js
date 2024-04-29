@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, getDoc, deleteDoc, collection, getDocs, addDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc, collection, getDocs, addDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 
@@ -54,5 +54,36 @@ export const deleteEvent = async (eventId) => {
     } catch (e) {
         console.error("Error deleting event: ", e);
         throw new Error("Failed to delete event: " + e.message);
+    }
+}
+
+export const updateEvent = async (event) => {
+    const { id: eventId, file, ...eventData } = event
+    const eventDocRef = doc(db, "events", eventId);
+    const storage = getStorage();
+
+    try {
+        // If there's a new file to update the thumbnail
+        if (file) {
+            // Check if there's an existing thumbnail to delete
+            const docSnap = await getDoc(eventDocRef);
+            if (docSnap.exists() && docSnap.data().thumbnail) {
+                const oldThumbnailRef = ref(storage, docSnap.data().thumbnail);
+                await deleteObject(oldThumbnailRef);  // Delete the old thumbnail
+            }
+
+            // Upload the new file and update the thumbnail URL
+            const newFileRef = ref(storage, `events/${file.name}`);
+            const fileSnapshot = await uploadBytes(newFileRef, file);
+            const newThumbnailURL = await getDownloadURL(fileSnapshot.ref);
+            eventData.thumbnail = newThumbnailURL;  // Update thumbnail URL in event data
+        }
+
+        // Update the event document with new data
+        await updateDoc(eventDocRef, eventData);
+        return eventId;  // Return the event ID to confirm the update
+    } catch (e) {
+        console.error("Error updating event: ", e);
+        throw new Error("Failed to update event: " + e.message);
     }
 }

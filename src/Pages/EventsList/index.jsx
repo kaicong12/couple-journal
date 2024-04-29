@@ -12,7 +12,7 @@ import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
-import { getEvents, uploadEvent } from "../../db";
+import { getEvents, uploadEvent, deleteEvent, updateEvent } from "../../db";
 import AllCategoryIcon from '../../Icons/AllCategory.svg'
 import DiningIcon from '../../Icons/DiningIcon.svg'
 import GiftIcon from '../../Icons/Gifts.svg'
@@ -26,6 +26,7 @@ const EventPage = () => {
         description: '',
         category: '',
         rating: 3,
+        date: Date.now(),
     }
 
     const menuLists = useMemo(() => {
@@ -118,6 +119,20 @@ const EventPage = () => {
         onAddModalClose();
     };
 
+    const handleDeleteEvent = async (event) => {
+        setIsLoading(true)
+
+        try {
+            await deleteEvent(event.id)
+            await fetchEvents()
+        } catch (err) {
+            console.log(err, 'delete event failed')
+        } finally {
+            setIsLoading(false)
+            onClose();
+        }
+    };
+
     const onSelectCategory = (label) => {
         setCategory(label)
     }
@@ -131,6 +146,19 @@ const EventPage = () => {
         onOpen();
     };
 
+    const handleUpdateEvent = async (event) => {
+        setIsLoading(true)
+
+        try {
+            await updateEvent(event)
+            await fetchEvents()
+        } catch (err) {
+            console.log(err, 'error updating event')
+        } finally {
+            handleCardClick(event)
+        }
+    }
+
     return (
         <Box background="brown.50" height="100%">
             <SearchFilter
@@ -139,7 +167,11 @@ const EventPage = () => {
                 onSearchEvent={onSearchEvent}
                 onSelectCategory={onSelectCategory} 
             />
-            { isLoading ? <Spinner size="xl" /> : (
+            { isLoading ? (
+                <Box height="calc(100vh - 200px)" display="flex" justifyContent="center" alignItems="center">
+                    <Spinner size="xl" /> 
+                </Box>
+            ) : (
                 <Box>
                     <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
                     <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
@@ -148,7 +180,13 @@ const EventPage = () => {
                         ))}
                     </SimpleGrid>
                     {selectedEvent && (
-                        <EventModal event={selectedEvent} isOpen={isOpen} onClose={onClose} />
+                        <EventModal 
+                            handleDeleteEvent={handleDeleteEvent}
+                            handleUpdateEvent={handleUpdateEvent}
+                            event={selectedEvent} 
+                            isOpen={isOpen} 
+                            onClose={onClose} 
+                        />
                     )}
                     <AddEventModal 
                         menuLists={menuLists}
