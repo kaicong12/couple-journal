@@ -30,7 +30,7 @@ export const LocationSearchBox = ({ onSelectLocation }) => {
     const fetchAutocomplete = async (search) => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("X-Goog-Api-Key", process.env.REACT_APP_GOOGLE_APIKEY);
+        myHeaders.append("X-Goog-Api-Key", "AIzaSyA7qFAV9taIxXIbzm2rnrdNOlnFBtHSp-8");
 
         const raw = JSON.stringify({
             "input": search
