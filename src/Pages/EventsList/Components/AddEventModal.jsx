@@ -2,8 +2,6 @@ import {
     Box,
     Flex,
     Image,
-    InputGroup,
-    InputLeftElement,
     Modal, 
     Button,
     ModalOverlay,
@@ -23,7 +21,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StarRating } from './StarRating'; 
-import LocationIcon from '../../../Icons/Location.svg'
+import { LocationSearchBox } from './LocationSearchBox';
 
 export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
     const [previewImage, setPreviewImage] = useState([])
@@ -42,6 +40,13 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
             date: date
         }));
     };
+
+    const handleLocationChange = (location) => {
+        setNewEvent(prev => ({
+            ...prev,
+            location
+        }));
+    }
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         accept: {
@@ -103,12 +108,12 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     <FormControl mt={4}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
-                            { menuLists.map(({ label }) => <option value={label}>{label}</option>) }
+                            { menuLists.map(({ label }) => <option key={label} value={label}>{label}</option>) }
                         </Select>
                     </FormControl>
-                    <FormControl mt={4}>
-                        <FormLabel>Rating</FormLabel>
-                        <StarRating rating={newEvent.rating} setRating={(rating) => setNewEvent(prev => ({ ...prev, rating }))} />
+                    <FormControl flex="1" mt={4}>
+                        <FormLabel>Where is this</FormLabel>
+                        <LocationSearchBox onSelectLocation={handleLocationChange} />
                     </FormControl>
                     <Flex mt={4} justifyContent="space-between" alignItems="center">
                         <FormControl flex="1" mr={2}>
@@ -123,15 +128,9 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                                 as={Input}
                             />
                         </FormControl>
-                        <FormControl flex="1" ml={2}>
-                            <FormLabel>Where is this</FormLabel>
-                            <InputGroup>
-                                <InputLeftElement
-                                    pointerEvents="none"
-                                    children={<LocationIcon color="gray.500" />}
-                                />
-                                <Input name="location" value={newEvent.location} onChange={handleInputChange} />
-                            </InputGroup>
+                        <FormControl>
+                        <FormLabel>Rating</FormLabel>
+                            <StarRating rating={newEvent.rating} setRating={(rating) => setNewEvent(prev => ({ ...prev, rating }))} />
                         </FormControl>
                     </Flex>
                 </ModalBody>

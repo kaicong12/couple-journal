@@ -7,6 +7,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import Fuse from 'fuse.js';
+import { useDebounce } from "../../hooks/useDebounce";
 import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
@@ -49,7 +50,7 @@ const EventPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [category, setCategory] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
-    const [debouncedSearch, setDebouncedSearch] = useState(searchTerm)
+    const debouncedSearch = useDebounce(searchTerm, 500)
     
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
@@ -120,16 +121,6 @@ const EventPage = () => {
         setSelectedEvent(event);
         onOpen();
     };
-
-    useEffect(() => {
-        const searchTimeout = setTimeout(() => {
-            setDebouncedSearch(searchTerm)
-        }, 500)
-
-        return () => {
-            clearTimeout(searchTimeout)
-        }
-    }, [searchTerm])
 
     return (
         <Box background="brown.50">
