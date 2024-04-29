@@ -13,6 +13,7 @@ export const EventCard = ({ event, onOpen }) => (
         <Image 
             src={event.thumbnail || 'https://via.placeholder.com/150'} 
             alt={`Thumbnail for ${event.title}`}
+            fit="cover"
             width="300px"
             height="300px"
         />

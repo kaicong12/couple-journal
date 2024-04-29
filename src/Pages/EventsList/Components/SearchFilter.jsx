@@ -24,7 +24,7 @@ export const SearchFilter = ({ menuLists, onAddModalOpen, onSearchEvent, onSelec
                 >
                 </MenuButton>
                 <MenuList>
-                    <MenuOptionGroup defaultValue='Catering' type='radio'>
+                    <MenuOptionGroup defaultValue='All' type='radio'>
                         { menuLists.map(({ label, leftIcon }, index) => (
                             <MenuItemOption 
                                 key={index}

@@ -13,6 +13,7 @@ import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
 import { getEvents, uploadEvent } from "../../db";
+import AllCategoryIcon from '../../Icons/AllCategory.svg'
 import DiningIcon from '../../Icons/DiningIcon.svg'
 import GiftIcon from '../../Icons/Gifts.svg'
 
@@ -23,7 +24,6 @@ const EventPage = () => {
     const defaultEventData = {
         title: '',
         description: '',
-        dateTime: null,
         category: '',
         rating: 3,
     }
@@ -31,8 +31,12 @@ const EventPage = () => {
     const menuLists = useMemo(() => {
         return [
             {
+                leftIcon: <AllCategoryIcon />,
+                label: "All"
+            },
+            {
                 leftIcon: <DiningIcon />,
-                label: "Catering"
+                label: "Meals"
             },
             {
                 leftIcon: <GiftIcon />,
@@ -48,7 +52,7 @@ const EventPage = () => {
     const [newEvent, setNewEvent] = useState(defaultEventData)
     const [eventData, setEventData] = useState([])
     const [isLoading, setIsLoading] = useState(false);
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState('All')
     const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearch = useDebounce(searchTerm, 500)
     
@@ -82,12 +86,18 @@ const EventPage = () => {
     }, [])
 
     const filteredEventData = useMemo(() => {
+        let filteredResults = eventData
+
         if (debouncedSearch && debouncedSearch.length) {
-            return fuzzySearchEvents(eventData, debouncedSearch)
+            filteredResults = fuzzySearchEvents(eventData, debouncedSearch)
+        }
+
+        if (category !== 'All') {
+            filteredResults = filteredResults.filter(event => event.category === category)
         }
         
-        return eventData
-    }, [debouncedSearch, eventData, fuzzySearchEvents])
+        return filteredResults
+    }, [category, debouncedSearch, eventData, fuzzySearchEvents])
 
     useEffect(() => {
         fetchEvents()
@@ -123,7 +133,7 @@ const EventPage = () => {
     };
 
     return (
-        <Box background="brown.50">
+        <Box background="brown.50" height="100vh">
             <SearchFilter
                 menuLists={menuLists}
                 onAddModalOpen={onAddModalOpen}
