@@ -1,6 +1,8 @@
 import {
     Box,
     Button,
+    FormControl,
+    FormLabel,
     Image,
     Text, 
     Modal, 
@@ -18,10 +20,15 @@ import {
     Input,
     Textarea
 } from '@chakra-ui/react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { MdEdit, MdDelete } from 'react-icons/md';
 import { useState } from 'react';
 import CalendarIcon from '../../../Icons/Calendar.svg'
+import { LocationSearchBox } from './LocationSearchBox';
+import LocationIcon from '../../../Icons/Location.svg'
 
 
 const formatDate = (firestoreTimestamp) => {
@@ -60,6 +67,10 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
         handleUpdateEvent(editedEvent)
         onEditClose();
     };
+
+    const handleLocationChange = () => {
+
+    }
     
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="sm">
@@ -106,12 +117,34 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                             width="300px"
                             height="300px"
                         />
-                        <Box display="flex" gap="8px" mt="20px">
-                            <CalendarIcon fill="black" />
-                            <Text>
-                                { event.date ? formatDate(event.date) : 'This event does not have a date'}
-                            </Text>
-                        </Box>
+                        {editMode ? (
+                            <Box display="flex" gap="8px" mt="20px">
+                                <DatePicker 
+                                    selected={editedEvent.date ? new Date(formatDate(editedEvent.date)) : new Date()} 
+                                    onChange={(date) => setEditedEvent({...editedEvent, date: date})}
+                                />
+                            </Box>
+                        ) : (
+                            <Box display="flex" gap="8px" mt="20px">
+                                <CalendarIcon fill="black" />
+                                <Text>
+                                    { event.date ? formatDate(event.date) : 'This event does not have a date'}
+                                </Text>
+                            </Box>
+                        )}
+                        {editMode ? (
+                            <LocationSearchBox 
+                                onSelectLocation={(location) => setEditedEvent({...editedEvent, location: location.text.text})} 
+                                currentLocation={event.location}
+                            />
+                        ) : (
+                            <Box display="flex" gap="8px" mt="20px" alignItems="center" justifyContent="center">
+                                <LocationIcon fill="black" />
+                                <Text textAlign="center" width="75%">
+                                    { event.location || 'This event does not have a location' }
+                                </Text>
+                            </Box>
+                        )}
                         <Text width="100%" textAlign="center" mt="12px" mb={ editMode ? "0" : "4" }>
                             {editMode ? (
                                 <Textarea 

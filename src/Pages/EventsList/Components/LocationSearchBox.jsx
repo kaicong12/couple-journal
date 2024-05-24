@@ -13,9 +13,9 @@ import LocationIcon from '../../../Icons/Location.svg'
 import { MdLocationOn } from 'react-icons/md';
 
 
-export const LocationSearchBox = ({ onSelectLocation }) => {
+export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
     const [searchInput, setSearchInput] = useState('')
-    const [displayInput, setDisplayInput] = useState('')
+    const [displayInput, setDisplayInput] = useState(currentLocation)
     const debouncedSearch = useDebounce(searchInput, 500)
     const [results, setResults] = useState([]);
 

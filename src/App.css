@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+
+.react-datepicker__input-container input {
+  border-width: 1px;
+  height: 35px;
+  border-radius: 0.375rem;
+  padding-left: 12px;
+}

@@ -14,17 +14,19 @@ import {
     FormLabel,
     Input,
     Select,
+    FormErrorMessage
 } from '@chakra-ui/react';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StarRating } from './StarRating'; 
 import { LocationSearchBox } from './LocationSearchBox';
 
 export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
     const [previewImage, setPreviewImage] = useState([])
+    const [errors, setErrors] = useState({});
 
     const menuListWithoutAll = useMemo(() => {
         return menuLists.slice(1, menuLists.length)
@@ -78,6 +80,30 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         }
     });
 
+    const handleSave = useCallback((newEvent) => {
+        const newErrors = {};
+        if (!newEvent.title || !newEvent.title.length) {
+            newErrors.title = 'Title is required'
+        }
+        if (!newEvent.file) {
+            newErrors.file = 'Thumbnail is required';
+        }
+        if (!newEvent.category) {
+            newErrors.category = 'Category is required';
+        }
+        if (!newEvent.date) {
+            newErrors.date = 'Date is required';
+        }
+        if (!newEvent.location || !newEvent.location.length) {
+            newErrors.location = 'Location is required'
+        }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+        handleAddEvent(newEvent);
+    }, [handleAddEvent])
+
     return (
         <Modal isOpen={isAddModalOpen} onClose={handleOnClose}>
             <ModalOverlay />
@@ -85,7 +111,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                 <ModalHeader>Add New Event</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <FormControl mb={4}>
+                    <FormControl mb={4} isInvalid={errors.file}>
                         { previewImage.length ? (
                             <Box display="flex" justifyContent="center"> {previewImage.map((image, imageIdx) => (
                                 <Image 
@@ -100,6 +126,8 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                         ) : (
                             <div {...getRootProps()} style={{ 
                                     borderWidth: '2px',
+                                    borderColor: errors.file ? '#E53E3E' : 'inherit',
+                                    boxShadow: errors.file ? '0 0 0 1px #E53E3E' : 'inherit',
                                     padding: '20px', 
                                     textAlign: 'center',
                                     display: 'flex',
@@ -114,30 +142,34 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                                 }
                             </div>
                         ) }
+                        { errors.file && <FormErrorMessage>{errors.file}</FormErrorMessage> }
                     </FormControl>
-                    <FormControl>
+                    <FormControl isInvalid={errors.title}>
                         <FormLabel>Title</FormLabel>
                         <Input name="title" value={newEvent.title} onChange={handleInputChange} />
+                        { errors.title && <FormErrorMessage>{errors.title}</FormErrorMessage> }
                     </FormControl>
                     <FormControl mt={4}>
                         <FormLabel>Description</FormLabel>
                         <Input name="description" value={newEvent.description} onChange={handleInputChange} />
                     </FormControl>
-                    <FormControl mt={4}>
+                    <FormControl mt={4} isInvalid={errors.category}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
                             { menuListWithoutAll.map(({ label }) => <option key={label} value={label}>{label}</option>) }
                         </Select>
+                        { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
                     </FormControl>
-                    <FormControl flex="1" mt={4}>
+                    <FormControl flex="1" mt={4} isInvalid={errors.location}>
                         <FormLabel>Where is this</FormLabel>
                         <LocationSearchBox onSelectLocation={handleLocationChange} />
+                        { errors.location && <FormErrorMessage>{errors.location}</FormErrorMessage> }
                     </FormControl>
                     <Flex mt={4} justifyContent="space-between" alignItems="center">
-                        <FormControl flex="1" mr={2}>
+                        <FormControl flex="1" mr={2} isInvalid={errors.date}>
                             <FormLabel>Date of Event</FormLabel>
                             <DatePicker
-                                selected={newEvent.date || Date.now()}
+                                selected={newEvent.date}
                                 onChange={handleDateChange}
                                 dateFormat="MMMM d, yyyy"
                                 className="chakra-input css-1es6f7d"
@@ -145,6 +177,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                                 calendarClassName="chakra-calendar"
                                 as={Input}
                             />
+                            { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
                         </FormControl>
                         <FormControl>
                         <FormLabel>Rating</FormLabel>
@@ -153,7 +186,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     </Flex>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={() => handleAddEvent(newEvent)}>
+                    <Button colorScheme="blue" mr={3} onClick={() => handleSave(newEvent)}>
                         Save
                     </Button>
                     <Button onClick={handleOnClose}>Cancel</Button>

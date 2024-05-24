@@ -4,6 +4,8 @@ import {
     SimpleGrid,
     Spinner,
     Text,
+    Button,
+    ButtonGroup,
     useDisclosure,
 } from '@chakra-ui/react';
 import Fuse from 'fuse.js';
@@ -24,9 +26,9 @@ const EventPage = () => {
     const defaultEventData = {
         title: '',
         description: '',
-        category: '',
+        category: null,
         rating: 3,
-        date: Date.now(),
+        date: null,
     }
 
     const menuLists = useMemo(() => {
@@ -56,6 +58,9 @@ const EventPage = () => {
     const [category, setCategory] = useState('All')
     const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearch = useDebounce(searchTerm, 500)
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
     
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
@@ -102,6 +107,11 @@ const EventPage = () => {
     useEffect(() => {
         fetchEvents()
     }, [])
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentEvents = filteredEventData.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredEventData.length / itemsPerPage);
 
     const handleAddEvent = async (newEvent) => {
         setIsLoading(true);
@@ -159,6 +169,15 @@ const EventPage = () => {
         }
     }
 
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    // Generate the page numbers to display
+    const pageNumbersToShow = 5; // Number of page buttons to display
+    const startPage = Math.max(1, currentPage - Math.floor(pageNumbersToShow / 2));
+    const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
+
     return (
         <Box background="brown.50" height="100%">
             <SearchFilter
@@ -172,10 +191,10 @@ const EventPage = () => {
                     <Spinner size="xl" /> 
                 </Box>
             ) : (
-                <Box>
+                <Box maxHeight="calc(100vh - 180px)" overflow="auto">
                     <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
                     <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
-                        {filteredEventData.map(event => (
+                        {currentEvents.map(event => (
                             <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
                         ))}
                     </SimpleGrid>
@@ -196,6 +215,24 @@ const EventPage = () => {
                         onAddModalClose={onAddModalClose}
                         handleAddEvent={handleAddEvent}
                     />
+                    <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
+                        <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
+                            Previous
+                        </Button>
+                        {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
+                            <Button
+                                bg="brown.200"
+                                key={i + startPage}
+                                onClick={() => handlePageChange(i + startPage)}
+                                isActive={currentPage === i + startPage}
+                            >
+                                {i + startPage}
+                            </Button>
+                        ))}
+                        <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
+                            Next
+                        </Button>
+                    </ButtonGroup>
                 </Box>
             )}
         </Box>
