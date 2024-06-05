@@ -110,7 +110,7 @@ const FoodRecommendations = () => {
     const toggleBookmark = async (currentlyIsBookmarked, restaurant) => {
         const updates = {}
         if (currentlyIsBookmarked) {
-            // clicking on this shoudl remove the restaurant from bookmark list
+            // clicking on this should remove the restaurant from bookmark list
             updates[restaurant.id] = null
         } else {
             updates[restaurant.id] = restaurant
