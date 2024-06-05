@@ -5,6 +5,7 @@ import { CuisineList } from "./CuisineList";
 import { RestaurantCard } from "./RestaurantCard";
 
 import { useDebounce } from "../../hooks/useDebounce"
+import { addListenerToNode, multiUpdate } from "../../db/rtdb";
 import { getLocation, getGeocode } from "./services/places"
 
 
@@ -21,10 +22,11 @@ const NoRestaurantSection = ({ noRestaurantMessage }) => {
 const FoodRecommendations = () => {
     const [locationError, setUserLocationError] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
-    const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(false)
+    const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
     const [searchArea, setSearchArea] = useState('');
     const debouncedSearchArea = useDebounce(searchArea, 500)
     const [selectedCuisine, setSelectedCuisine] = useState('');
+    const [bookmarkedRestaurants, setBookmarkedRestaurants] = useState([])
     const [restaurants, setRestaurants] = useState([]);
     const apiKey = 'AIzaSyA7qFAV9taIxXIbzm2rnrdNOlnFBtHSp-8';
 
@@ -105,6 +107,19 @@ const FoodRecommendations = () => {
         setSearchArea(event.target.value);
     };
 
+    const toggleBookmark = async (currentlyIsBookmarked, restaurant) => {
+        const updates = {}
+        if (currentlyIsBookmarked) {
+            // clicking on this shoudl remove the restaurant from bookmark list
+            updates[restaurant.id] = null
+        } else {
+            updates[restaurant.id] = restaurant
+        }
+
+        const pathToUpdate = "bookmarkedLocations"
+        await multiUpdate(pathToUpdate, updates)
+    }
+
     const handleCuisineClick = useCallback((cuisine, cuisineOptions) => {
         setSelectedCuisine(cuisine);
     }, [])
@@ -133,17 +148,35 @@ const FoodRecommendations = () => {
             )
         }
 
+        const bookmarkedRestaurantIds = bookmarkedRestaurants.map(restaurant => restaurant.id)
+
         return restaurantsToRender.length ? (
             <Flex overflow="auto" gap="20px" padding="10px" pb="20px">
                 { restaurantsToRender.map((restaurant, idx) => (
-                    <RestaurantCard key={`restaurant-${idx}`} restaurant={restaurant}/>
+                    <RestaurantCard 
+                        key={`restaurant-${idx}`} 
+                        restaurant={restaurant} 
+                        toggleBookmark={toggleBookmark}
+                        isBookmarked={bookmarkedRestaurantIds.includes(restaurant.id)}
+                    />
                 ))}
             </Flex>
         ) : <NoRestaurantSection noRestaurantMessage={noRestaurantMessage} />
-    }, [locationError])
+    }, [bookmarkedRestaurants, locationError])
 
     useEffect(() => {
         fetchPopularRestaurants()
+
+        const cb = (snapshot) => {
+            const val = snapshot.val() || {}
+            setBookmarkedRestaurants(Object.entries(val).map(([restaurantId, restaurantDetails]) => {
+                return { ...restaurantDetails, id: restaurantId }
+            }))
+            setIsBookmarkedLoading(false)
+        }
+
+        const offListener = addListenerToNode('/bookmarkedLocations', cb, 'value')
+        return offListener;
     }, [])
 
     return (
@@ -189,7 +222,7 @@ const FoodRecommendations = () => {
                             <ChevronRightIcon />
                         </Text>
                     </Box>
-                    {renderRestaurants(isBookmarkedLoading, [], "You have not bookmarked any restaurants")}
+                    {renderRestaurants(isBookmarkedLoading, bookmarkedRestaurants, "You have not bookmarked any restaurants")}
                 </Box>
             </Box>
         </Box>
