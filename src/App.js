@@ -1,5 +1,6 @@
 import './App.css';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react'
+import { Analytics } from '@vercel/analytics/react';
 import { brownScheme} from './theme'
 
 import HomePage from './Home';
@@ -29,6 +30,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <div className="App">
         <HomePage />
+        <Analytics />
       </div>
     </ChakraProvider>
   );

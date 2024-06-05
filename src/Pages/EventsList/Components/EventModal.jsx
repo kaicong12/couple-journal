@@ -1,8 +1,6 @@
 import {
     Box,
     Button,
-    FormControl,
-    FormLabel,
     Image,
     Text, 
     Modal, 
@@ -67,10 +65,6 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
         handleUpdateEvent(editedEvent)
         onEditClose();
     };
-
-    const handleLocationChange = () => {
-
-    }
     
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="sm">
