@@ -7,7 +7,7 @@ export const useDebounce = (searchText, delay) => {
     useEffect(() => {
         let searchTimeout = setTimeout(() => {
             setDebounced(searchText)
-        })
+        }, delay)
 
         return () => {
             clearTimeout(searchTimeout)

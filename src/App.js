@@ -1,9 +1,13 @@
 import './App.css';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
 import { brownScheme} from './theme'
 
-import HomePage from './Home';
+import NavBar from './NavBar';
+import OurStory from './Pages/OurStory'
+import Events from './Pages/EventsList';
+import FoodRecommender from './Pages/FoodRecommender';
 
 const theme = extendTheme({
   colors: {
@@ -28,10 +32,17 @@ const theme = extendTheme({
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <div className="App">
-        <HomePage />
+      <Router>
+        <div className="App">
+          <NavBar />
+          <Routes>
+              <Route path="/" element={<OurStory />} />
+              <Route path="events" element={<Events />} />
+              <Route path="food" element={<FoodRecommender />} />
+          </Routes>
+        </div>
         <Analytics />
-      </div>
+      </Router>
     </ChakraProvider>
   );
 }

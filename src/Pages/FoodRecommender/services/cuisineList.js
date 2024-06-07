@@ -40,5 +40,5 @@ export const cuisineIconMappings = {
     Mexican: "/foodRecommendations/mexican.svg",
     Japanese: "/foodRecommendations/japanese.svg",
     Korean: "/foodRecommendations/korean.svg",
-    FastFood: "/foodRecommendations/fastFood.svg",
+    FastFood: "/foodRecommendations/fastfood.svg",
 }

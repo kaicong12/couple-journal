@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from "react"
-import { Box, Button, Flex, Input, Text, Skeleton, SkeletonText, SkeletonCircle } from '@chakra-ui/react';
+import { Link } from "react-router-dom";
+import { Box, Flex, Input, Text, Skeleton, SkeletonText, SkeletonCircle } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons'
+
 import { CuisineList } from "./CuisineList";
 import { RestaurantCard } from "./RestaurantCard";
-
 import { useDebounce } from "../../hooks/useDebounce"
 import { addListenerToNode, multiUpdate } from "../../db/rtdb";
-import { getLocation, getGeocode } from "./services/places"
+import { fetchRestaurants, getLocation, getGeocode } from "./services/places"
 
 
 const NoRestaurantSection = ({ noRestaurantMessage }) => {
@@ -20,6 +21,7 @@ const NoRestaurantSection = ({ noRestaurantMessage }) => {
 }
 
 const FoodRecommendations = () => {
+    const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null })
     const [locationError, setUserLocationError] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
     const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
@@ -28,86 +30,12 @@ const FoodRecommendations = () => {
     const [selectedCuisine, setSelectedCuisine] = useState('');
     const [bookmarkedRestaurants, setBookmarkedRestaurants] = useState([])
     const [restaurants, setRestaurants] = useState([]);
-    const apiKey = 'AIzaSyA7qFAV9taIxXIbzm2rnrdNOlnFBtHSp-8';
-
-    const fetchRestaurantImage = async (imageName) => {
-        const photoUrl = `https://places.googleapis.com/v1/${imageName}/media?maxHeightPx=400&key=${apiKey}`;
-        const imageFetchRes = await fetch(photoUrl)
-
-        return imageFetchRes.url
-    }
-
-    const fetchPopularRestaurants = async () => {
-        setIsLoading(true)
-        setUserLocationError(null)
-
-        let location
-        if (debouncedSearchArea) {
-            location = await getGeocode(debouncedSearchArea);
-            if (!location) {
-                setRestaurants([]);
-                setIsLoading(false)
-                setUserLocationError('No restaurants can be found in this area')
-                return
-            }
-        } else { 
-            const position = await getLocation()
-            try {
-                location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }
-            } catch (error) {
-                setUserLocationError(error.message);
-            }
-        }
-    
-        const response = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': apiKey,
-                'X-Goog-FieldMask': '*'
-            },
-            body: JSON.stringify({
-                'includedTypes': [
-                    'restaurant'
-                ],
-                'maxResultCount': 10,
-                'locationRestriction': {
-                    'circle': {
-                        'center': location,
-                        'radius': 500
-                    }
-                }
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch restaurants');
-        }
-    
-        const data = await response.json();
-        const restaurantImagePromise = data?.places?.map(async (place) => {
-            const firstPhoto = place?.photos?.[0]
-            return {
-                ...place,
-                thumbnailUrl: firstPhoto ? await fetchRestaurantImage(firstPhoto.name) : null
-            }
-        }) ?? []
-
-        const restaurantData = await Promise.all(restaurantImagePromise)
-        const dataSortByRating = restaurantData.sort((a, b) => b.rating - a.rating)
-        console.log(restaurantData, ' res dat')
-        setRestaurants(dataSortByRating || []);
-        setIsLoading(false);
-    }
 
     const handleSearchChange = (event) => {
         setSearchArea(event.target.value);
     };
 
-    const toggleBookmark = async (currentlyIsBookmarked, restaurant) => {
+    const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
         const updates = {}
         if (currentlyIsBookmarked) {
             // clicking on this should remove the restaurant from bookmark list
@@ -118,11 +46,18 @@ const FoodRecommendations = () => {
 
         const pathToUpdate = "bookmarkedLocations"
         await multiUpdate(pathToUpdate, updates)
-    }
-
-    const handleCuisineClick = useCallback((cuisine, cuisineOptions) => {
-        setSelectedCuisine(cuisine);
     }, [])
+
+    const handleCuisineClick = useCallback(async (cuisine) => {
+        if (selectedCuisine === cuisine) {
+            setSelectedCuisine(null);
+        } else {
+            setSelectedCuisine(cuisine);
+        }
+
+        const data = await fetchRestaurants(cuisine, userLocation)
+        setRestaurants(data || []);
+    }, [selectedCuisine, userLocation])
 
     const renderRestaurants = useCallback((isSectionLoading, restaurantsToRender, noRestaurantMessage) => {
         if (isSectionLoading) {
@@ -162,9 +97,40 @@ const FoodRecommendations = () => {
                 ))}
             </Flex>
         ) : <NoRestaurantSection noRestaurantMessage={noRestaurantMessage} />
-    }, [bookmarkedRestaurants, locationError])
+    }, [bookmarkedRestaurants, locationError, toggleBookmark])
 
     useEffect(() => {
+        const fetchPopularRestaurants = async () => {
+            setIsLoading(true)
+            setUserLocationError(null)
+    
+            let location
+            if (debouncedSearchArea) {
+                location = await getGeocode(debouncedSearchArea);
+                if (!location) {
+                    setRestaurants([]);
+                    setIsLoading(false)
+                    setUserLocationError('No restaurants can be found in this area')
+                    return
+                }
+            } else {
+                const position = await getLocation()
+                try {
+                    location = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }
+                } catch (error) {
+                    setUserLocationError(error.message);
+                }
+            }
+    
+            const data = await fetchRestaurants(selectedCuisine, location)
+            setUserLocation(location)
+            setRestaurants(data || []);
+            setIsLoading(false);
+        }
+
         fetchPopularRestaurants()
 
         const cb = (snapshot) => {
@@ -177,7 +143,7 @@ const FoodRecommendations = () => {
 
         const offListener = addListenerToNode('/bookmarkedLocations', cb, 'value')
         return offListener;
-    }, [])
+    }, [debouncedSearchArea, selectedCuisine, locationError])
 
     return (
         <Box>
@@ -185,7 +151,6 @@ const FoodRecommendations = () => {
                 <Box p={4}>
                     <Flex mb={4}>
                         <Input value={searchArea} onChange={handleSearchChange} placeholder="Search by Area" mr={2} />
-                        <Button onClick={fetchPopularRestaurants}>Search</Button>
                     </Flex>
                     
                 </Box>
@@ -202,7 +167,7 @@ const FoodRecommendations = () => {
                             decoration="underline" 
                             cursor="pointer"
                         >
-                            View All 
+                            <Link to={`/food/viewAllPopular`}>View All</Link>
                             <ChevronRightIcon />
                         </Text>
                     </Box>
