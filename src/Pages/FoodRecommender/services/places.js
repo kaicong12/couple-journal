@@ -38,11 +38,9 @@ export const getLocation = (timeoutDelay) => {
     const defaultCoordPromise = new Promise((resolve) => {
         setTimeout(() => {
             const defaultCoord = {
-                position: {
-                    coords: {
-                        latitude: 1.352083,
-                        longitude: 103.819836
-                    }
+                coords: {
+                    latitude: 1.352083,
+                    longitude: 103.819836
                 }
             }
             
@@ -89,9 +87,10 @@ const fetchRestaurantImage = async (imageName) => {
     return imageFetchRes.url
 }
 
-export const fetchRestaurants = async (cuisine, location, maxResultCount = 10) => {
+export const fetchRestaurants = async (cuisine, location, maxResultCount = 5) => {
     const bodyData = {
         'includedTypes': (cuisineCategories[cuisine] || ["restaurant"]),
+        'rankPreference': "POPULARITY",
         'locationRestriction': {
             'circle': {
                 'center': location,
@@ -103,7 +102,6 @@ export const fetchRestaurants = async (cuisine, location, maxResultCount = 10) =
     if (maxResultCount) {
         bodyData["maxResultCount"] = maxResultCount
     }
-
 
     if (process.env.NODE_ENV === "development") {
         const data = await fetchMockRestaurantData(1000)
@@ -117,16 +115,15 @@ export const fetchRestaurants = async (cuisine, location, maxResultCount = 10) =
         }) ?? []
 
         const restaurantData = await Promise.all(restaurantImagePromise)
-        const dataSortByRating = restaurantData.sort((a, b) => b.rating - a.rating)
-        
-        return dataSortByRating
+        return restaurantData
+
     } else {
         const response = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Goog-Api-Key': apiKey,
-                'X-Goog-FieldMask': '*'
+                'X-Goog-FieldMask': 'places.id,places.rating,places.displayName,places.formattedAddress,places.photos,places.priceLevel,places.primaryTypeDisplayName',
             },
             body: JSON.stringify(bodyData)
         });
@@ -146,8 +143,7 @@ export const fetchRestaurants = async (cuisine, location, maxResultCount = 10) =
         }) ?? []
 
         const restaurantData = await Promise.all(restaurantImagePromise)
-        const dataSortByRating = restaurantData.sort((a, b) => b.rating - a.rating)
 
-        return dataSortByRating
+        return restaurantData
     }
 }

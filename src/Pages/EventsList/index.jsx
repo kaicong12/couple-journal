@@ -179,7 +179,7 @@ const EventPage = () => {
     const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
 
     return (
-        <Box background="brown.50" height="100%">
+        <Box background="brown.50" height="100%" width="100vw">
             <SearchFilter
                 menuLists={menuLists}
                 onAddModalOpen={onAddModalOpen}

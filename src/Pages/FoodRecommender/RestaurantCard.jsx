@@ -92,7 +92,7 @@ export const RestaurantCard = ({ restaurant, isBookmarked, toggleBookmark }) => 
                     <Flex alignItems="center" gap="8px">
                         <FontAwesomeIcon icon={faLocationDot} />
                         <Text isTruncated>
-                            { `${ restaurant.addressComponents?.[0].shortText }, ${ restaurant.addressComponents?.[1].shortText }, ${ restaurant.addressComponents?.[2].shortText }`}
+                            { restaurant.formattedAddress }
                         </Text>
                     </Flex>
                 </Box>

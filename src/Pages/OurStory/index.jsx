@@ -6,7 +6,7 @@ import Whisper from './Components/Whisper';
 
 const OurStory = ({ setActiveTab }) => {
     return (
-        <Box pt="30px">
+        <Box pt="15px">
             <HeroSection />
             <Appreciation />
             <Whisper />

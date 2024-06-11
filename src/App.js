@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import OurStory from './Pages/OurStory'
 import Events from './Pages/EventsList';
 import FoodRecommender from './Pages/FoodRecommender';
+import { AllPopularFood } from './Pages/FoodRecommender/Popular'
 
 const theme = extendTheme({
   colors: {
@@ -39,6 +40,7 @@ function App() {
               <Route path="/" element={<OurStory />} />
               <Route path="events" element={<Events />} />
               <Route path="food" element={<FoodRecommender />} />
+              <Route path="food/viewAll" element={<AllPopularFood />} />
           </Routes>
         </div>
         <Analytics />

@@ -1,13 +1,25 @@
 import { useState, useEffect, useCallback } from "react"
-import { Link } from "react-router-dom";
-import { Box, Flex, Input, Text, Skeleton, SkeletonText, SkeletonCircle } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons'
+import { Link, useNavigate } from "react-router-dom";
+import { 
+    Box, 
+    Button, 
+    Flex, 
+    Input, 
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Text, 
+    Skeleton, 
+    SkeletonText, 
+    SkeletonCircle
+} from '@chakra-ui/react';
+import { ChevronRightIcon, ChevronDownIcon } from '@chakra-ui/icons'
 
 import { CuisineList } from "./CuisineList";
 import { RestaurantCard } from "./RestaurantCard";
-import { useDebounce } from "../../hooks/useDebounce"
 import { addListenerToNode, multiUpdate } from "../../db/rtdb";
-import { fetchRestaurants, getLocation, getGeocode } from "./services/places"
+import { fetchRestaurants, getLocation } from "./services/places"
 
 
 const NoRestaurantSection = ({ noRestaurantMessage }) => {
@@ -21,18 +33,27 @@ const NoRestaurantSection = ({ noRestaurantMessage }) => {
 }
 
 const FoodRecommendations = () => {
+    const navigate = useNavigate();
     const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null })
     const [locationError, setUserLocationError] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
     const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
-    const [searchArea, setSearchArea] = useState('');
-    const debouncedSearchArea = useDebounce(searchArea, 500)
+    const [searchQuery, setSearchArea] = useState('');
     const [selectedCuisine, setSelectedCuisine] = useState('');
     const [bookmarkedRestaurants, setBookmarkedRestaurants] = useState([])
     const [restaurants, setRestaurants] = useState([]);
+    const [searchType, setSearchType] = useState('area');
 
     const handleSearchChange = (event) => {
         setSearchArea(event.target.value);
+    };
+
+    const handleSearchButtonClick = () => {
+        if (searchType === 'food') {
+            navigate({ pathname: "/food/viewAll", search: `?food=${searchQuery}` });
+        } else {
+            navigate({ pathname: "/food/viewAll", search: `?area=${searchQuery}` });
+        }
     };
 
     const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
@@ -59,7 +80,7 @@ const FoodRecommendations = () => {
         setRestaurants(data || []);
     }, [selectedCuisine, userLocation])
 
-    const renderRestaurants = useCallback((isSectionLoading, restaurantsToRender, noRestaurantMessage) => {
+    const renderRestaurants = useCallback((isSectionLoading, _locationError, restaurantsToRender, noRestaurantMessage) => {
         if (isSectionLoading) {
             return (
                 // Display skeletons while loading
@@ -73,7 +94,7 @@ const FoodRecommendations = () => {
                     </Flex>
                 </Box>
             )
-        } else if (locationError) {
+        } else if (_locationError) {
             return (
                 <Box minH="25vh" display="flex" alignItems="center" justifyContent="center">
                     <Text fontWeight="600" fontSize="18px">
@@ -97,42 +118,34 @@ const FoodRecommendations = () => {
                 ))}
             </Flex>
         ) : <NoRestaurantSection noRestaurantMessage={noRestaurantMessage} />
-    }, [bookmarkedRestaurants, locationError, toggleBookmark])
+    }, [bookmarkedRestaurants, toggleBookmark])
 
     useEffect(() => {
         const fetchPopularRestaurants = async () => {
             setIsLoading(true)
             setUserLocationError(null)
     
-            let location
-            if (debouncedSearchArea) {
-                location = await getGeocode(debouncedSearchArea);
-                if (!location) {
-                    setRestaurants([]);
-                    setIsLoading(false)
-                    setUserLocationError('No restaurants can be found in this area')
-                    return
+            const position = await getLocation()
+            try {
+                const location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
                 }
-            } else {
-                const position = await getLocation()
-                try {
-                    location = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    }
-                } catch (error) {
-                    setUserLocationError(error.message);
-                }
+
+                const data = await fetchRestaurants(selectedCuisine, location)
+
+                setUserLocation(location)
+                setRestaurants(data || []);
+                setIsLoading(false);
+            } catch (error) {
+                setUserLocationError(error.message);
             }
-    
-            const data = await fetchRestaurants(selectedCuisine, location)
-            setUserLocation(location)
-            setRestaurants(data || []);
-            setIsLoading(false);
         }
 
         fetchPopularRestaurants()
+    }, [])
 
+    useEffect(() => {
         const cb = (snapshot) => {
             const val = snapshot.val() || {}
             setBookmarkedRestaurants(Object.entries(val).map(([restaurantId, restaurantDetails]) => {
@@ -143,21 +156,44 @@ const FoodRecommendations = () => {
 
         const offListener = addListenerToNode('/bookmarkedLocations', cb, 'value')
         return offListener;
-    }, [debouncedSearchArea, selectedCuisine, locationError])
+    }, [])
 
     return (
         <Box>
-            <Box>
-                <Box p={4}>
-                    <Flex mb={4}>
-                        <Input value={searchArea} onChange={handleSearchChange} placeholder="Search by Area" mr={2} />
-                    </Flex>
-                    
-                </Box>
-            </Box>
             <Box bg="#F2F2F2">
+                <Box padding="12px" display="flex">
+                    <Menu>
+                        <MenuButton 
+                            bg="#EAD9BF"
+                            color="#8F611B"
+                            fontWeight="bold" 
+                            as={Button} 
+                            rightIcon={<ChevronDownIcon />}
+                            textTransform="capitalize"
+                            mr={2}
+                        >
+                            { searchType }
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={() => { setSearchType('food') }}>Food</MenuItem>
+                            <MenuItem onClick={() => { setSearchType('area') }}>Area</MenuItem>
+                        </MenuList>
+                    </Menu>
+                    <Flex>
+                        <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search by Area" mr={2} />
+                    </Flex>
+                    <Button 
+                        bg="#EAD9BF"
+                        color="#8F611B"
+                        fontWeight="bold" 
+                        onClick={handleSearchButtonClick}
+                    >
+                        Search
+                    </Button>
+                </Box>
                 <CuisineList handleCuisineClick={handleCuisineClick} selectedCuisine={selectedCuisine} />
-                <Box padding={'1rem 1rem 0 1rem'}>
+            
+                <Box padding={'0 1rem'}>
                     <Box mb="12px" display="flex" justifyContent="space-between" alignItems="center">
                         <Text fontWeight="600" fontSize="24px">Popular Near You</Text>
                         <Text 
@@ -167,11 +203,11 @@ const FoodRecommendations = () => {
                             decoration="underline" 
                             cursor="pointer"
                         >
-                            <Link to={`/food/viewAllPopular`}>View All</Link>
+                            <Link to={`/food/viewAll`}>View All</Link>
                             <ChevronRightIcon />
                         </Text>
                     </Box>
-                    {renderRestaurants(isLoading, restaurants, "There is no restaurants near you")}
+                    {renderRestaurants(isLoading, locationError, restaurants, "There is no restaurants near you")}
                 </Box>
                 <Box px={4} pt="0.5rem" pb="1rem">
                     <Box mb="12px" display="flex" justifyContent="space-between" alignItems="center">
@@ -187,7 +223,7 @@ const FoodRecommendations = () => {
                             <ChevronRightIcon />
                         </Text>
                     </Box>
-                    {renderRestaurants(isBookmarkedLoading, bookmarkedRestaurants, "You have not bookmarked any restaurants")}
+                    {renderRestaurants(isBookmarkedLoading, null, bookmarkedRestaurants, "You have not bookmarked any restaurants")}
                 </Box>
             </Box>
         </Box>

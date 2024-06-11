@@ -17,6 +17,9 @@ export const EventCard = ({ event, onOpen }) => (
         onClick={onOpen} 
         p="16px" 
         background="#D9D9D9"
+        display="flex"
+        flexDir="column"
+        alignItems="center"
     >
         <Image 
             src={event.thumbnail || 'https://via.placeholder.com/150'} 

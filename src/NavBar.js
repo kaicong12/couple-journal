@@ -8,12 +8,19 @@ const NavBar = () => {
     const [activeTab, setActiveTab] = useState(0);
 
     useEffect(() => {
-        const newActiveTab = routesWithinApp.indexOf(location.pathname);
+        let basePath = '/'
+        if (location.pathname && location.pathname.startsWith('/')) {
+            // Split the pathname by slashes and return the first non-empty part
+            const parts = location.pathname.split('/').filter(part => part.length > 0);
+            basePath = parts.length > 0 ? `/${parts[0]}` : '/';
+        }
+
+        const newActiveTab = routesWithinApp.indexOf(basePath);
         setActiveTab(newActiveTab);
     }, [location.pathname]);
 
   return (
-        <Box bg="#D9D9D9" pt="40px">
+        <Box bg="#D9D9D9" py="20px">
             <Tabs
             variant="soft-rounded"
             colorScheme="brown"
