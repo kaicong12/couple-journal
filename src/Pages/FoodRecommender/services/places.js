@@ -37,6 +37,7 @@ export const getLocation = (timeoutDelay) => {
 
     const defaultCoordPromise = new Promise((resolve) => {
         setTimeout(() => {
+            // default coordinate is the coordinate of Singapore
             const defaultCoord = {
                 coords: {
                     latitude: 1.352083,
@@ -87,20 +88,23 @@ const fetchRestaurantImage = async (imageName) => {
     return imageFetchRes.url
 }
 
-export const fetchRestaurants = async (cuisine, location, maxResultCount = 5) => {
+export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, pageSize = 5 }) => {
     const bodyData = {
-        'includedTypes': (cuisineCategories[cuisine] || ["restaurant"]),
-        'rankPreference': "POPULARITY",
-        'locationRestriction': {
-            'circle': {
-                'center': location,
-                'radius': 500
-            }
-        }
+        'textQuery': textQuery ?? "Popular restaurants near me",
+        'includedType': (cuisineCategories[cuisine] || "restaurant"),
+        'rankPreference': "RELEVANCE",
     }
 
-    if (maxResultCount) {
-        bodyData["maxResultCount"] = maxResultCount
+    if (pageSize !== undefined) {
+        bodyData["pageSize"] = pageSize
+    }
+    if (locationCoord) {
+        bodyData["locationBias"] = {
+            circle: {
+                center: locationCoord,
+                radius: 500.0
+            }
+        }
     }
 
     if (process.env.NODE_ENV === "development") {
@@ -110,7 +114,7 @@ export const fetchRestaurants = async (cuisine, location, maxResultCount = 5) =>
             const [catImageUrl] = await fetchCatImages()
             return {
                 ...place,
-                thumbnailUrl: catImageUrl
+                thumbnailUrl: catImageUrl,
             }
         }) ?? []
 
@@ -118,12 +122,23 @@ export const fetchRestaurants = async (cuisine, location, maxResultCount = 5) =>
         return restaurantData
 
     } else {
-        const response = await fetch('https://places.googleapis.com/v1/places:searchNearby', {
+        const fieldMasksArray = [
+            'places.id',
+            'places.rating',
+            'places.displayName',
+            'places.formattedAddress',
+            'places.photos',
+            'places.priceLevel',
+            'places.primaryTypeDisplayName',
+            'nextPageToken'
+        ]
+
+        const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Goog-Api-Key': apiKey,
-                'X-Goog-FieldMask': 'places.id,places.rating,places.displayName,places.formattedAddress,places.photos,places.priceLevel,places.primaryTypeDisplayName',
+                'X-Goog-FieldMask': fieldMasksArray.join(',')
             },
             body: JSON.stringify(bodyData)
         });

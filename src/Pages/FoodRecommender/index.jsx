@@ -1,20 +1,16 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Link, useNavigate } from "react-router-dom";
 import { 
     Box, 
     Button, 
     Flex, 
-    Input, 
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
+    Input,
     Text, 
     Skeleton, 
     SkeletonText, 
     SkeletonCircle
 } from '@chakra-ui/react';
-import { ChevronRightIcon, ChevronDownIcon } from '@chakra-ui/icons'
+import { ChevronRightIcon } from '@chakra-ui/icons'
 
 import { CuisineList } from "./CuisineList";
 import { RestaurantCard } from "./RestaurantCard";
@@ -39,21 +35,20 @@ const FoodRecommendations = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
     const [searchQuery, setSearchArea] = useState('');
-    const [selectedCuisine, setSelectedCuisine] = useState('');
+    const [selectedCuisine, setSelectedCuisine] = useState('Popular');
     const [bookmarkedRestaurants, setBookmarkedRestaurants] = useState([])
     const [restaurants, setRestaurants] = useState([]);
-    const [searchType, setSearchType] = useState('area');
+
+
+    const cuisineCache = useRef({});
+    const cacheTimeout = 15 * 60 * 1000; // 15 minutes in milliseconds
 
     const handleSearchChange = (event) => {
         setSearchArea(event.target.value);
     };
 
     const handleSearchButtonClick = () => {
-        if (searchType === 'food') {
-            navigate({ pathname: "/food/viewAll", search: `?food=${searchQuery}` });
-        } else {
-            navigate({ pathname: "/food/viewAll", search: `?area=${searchQuery}` });
-        }
+        navigate({ pathname: "/food/viewAll", search: `?search=${searchQuery}` });
     };
 
     const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
@@ -69,16 +64,39 @@ const FoodRecommendations = () => {
         await multiUpdate(pathToUpdate, updates)
     }, [])
 
-    const handleCuisineClick = useCallback(async (cuisine) => {
+    const handleCuisineClick = async (cuisine) => {
         if (selectedCuisine === cuisine) {
-            setSelectedCuisine(null);
+            setSelectedCuisine('Popular');
         } else {
             setSelectedCuisine(cuisine);
         }
 
-        const data = await fetchRestaurants(cuisine, userLocation)
-        setRestaurants(data || []);
-    }, [selectedCuisine, userLocation])
+        const currentTime = new Date().getTime();
+        if (cuisineCache.current[cuisine] && (currentTime - cuisineCache.current[cuisine].timestamp < cacheTimeout)) {
+            // Use cached data if it's not expired
+            setRestaurants(cuisineCache.current[cuisine].data);
+        } else {
+            setIsLoading(true);
+
+            try {
+                const data = await fetchRestaurants({
+                    cuisine,
+                    locationCoord: userLocation
+                })
+    
+                cuisineCache.current[cuisine] = {
+                    data,
+                    timestamp: new Date().getTime()
+                };
+    
+                setRestaurants(data || []);
+            } catch (error) {
+                setUserLocationError(error.message);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    }
 
     const renderRestaurants = useCallback((isSectionLoading, _locationError, restaurantsToRender, noRestaurantMessage) => {
         if (isSectionLoading) {
@@ -132,7 +150,15 @@ const FoodRecommendations = () => {
                     longitude: position.coords.longitude
                 }
 
-                const data = await fetchRestaurants(selectedCuisine, location)
+                const data = await fetchRestaurants({
+                    cuisine: 'Popular',
+                    locationCoord: location,
+                })
+
+                cuisineCache.current['Popular'] = {
+                    data,
+                    timestamp: new Date().getTime()
+                };
 
                 setUserLocation(location)
                 setRestaurants(data || []);
@@ -162,26 +188,7 @@ const FoodRecommendations = () => {
         <Box>
             <Box bg="#F2F2F2">
                 <Box padding="12px" display="flex">
-                    <Menu>
-                        <MenuButton 
-                            bg="#EAD9BF"
-                            color="#8F611B"
-                            fontWeight="bold" 
-                            as={Button} 
-                            rightIcon={<ChevronDownIcon />}
-                            textTransform="capitalize"
-                            mr={2}
-                        >
-                            { searchType }
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem onClick={() => { setSearchType('food') }}>Food</MenuItem>
-                            <MenuItem onClick={() => { setSearchType('area') }}>Area</MenuItem>
-                        </MenuList>
-                    </Menu>
-                    <Flex>
-                        <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search by Area" mr={2} />
-                    </Flex>
+                    <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search for food" mr={2} />
                     <Button 
                         bg="#EAD9BF"
                         color="#8F611B"
