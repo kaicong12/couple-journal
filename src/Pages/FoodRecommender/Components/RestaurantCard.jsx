@@ -1,9 +1,12 @@
+import { useCallback } from 'react';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark as unSaved } from '@fortawesome/free-regular-svg-icons';
-import { faBookmark as saved } from '@fortawesome/free-solid-svg-icons';
-import { faLocationDot, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as saved, faLocationDot, faQuestion } from '@fortawesome/free-solid-svg-icons';
+
+import { multiUpdate } from "../../../db/rtdb";
+
 
 
 const RestaurantTag = ({ leftIcon, leftMessage, upperCaseText}) => {
@@ -26,7 +29,20 @@ const RestaurantTags = {
     "PRICE_LEVEL_VERY_EXPENSIVE": <RestaurantTag leftMessage="$" upperCaseText="very expensive" />
 }
 
-export const RestaurantCard = ({ restaurant, isBookmarked, toggleBookmark }) => {
+export const RestaurantCard = ({ restaurant, isBookmarked }) => {
+    const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
+        const updates = {}
+        if (currentlyIsBookmarked) {
+            // clicking on this should remove the restaurant from bookmark list
+            updates[restaurant.id] = null
+        } else {
+            updates[restaurant.id] = restaurant
+        }
+
+        const pathToUpdate = "bookmarkedLocations"
+        await multiUpdate(pathToUpdate, updates)
+    }, [])
+
     return (
         <Box
             display="flex"
@@ -34,6 +50,7 @@ export const RestaurantCard = ({ restaurant, isBookmarked, toggleBookmark }) => 
             borderRadius="lg"
             width="100%"
             minWidth="350px"
+            maxWidth="500px"
             boxShadow="lg"
             position="relative"
         >

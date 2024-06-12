@@ -1,20 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from "react"
+import { useRecoilState } from "recoil"
+import { bookmarkedRestaurant } from "../../recoil/restaurantAtoms";
 import { Link, useNavigate } from "react-router-dom";
 import { 
     Box, 
     Button, 
     Flex, 
     Input,
-    Text, 
-    Skeleton, 
-    SkeletonText, 
-    SkeletonCircle
+    Text,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
-import { CuisineList } from "./CuisineList";
-import { RestaurantCard } from "./RestaurantCard";
-import { addListenerToNode, multiUpdate } from "../../db/rtdb";
+import { CuisineList } from "./Components/CuisineList";
+import { RestaurantCard } from "./Components/RestaurantCard";
+import { RestaurantSkeleton } from "./Components/RestaurantSkeleton";
+import { addListenerToNode } from "../../db/rtdb";
 import { fetchRestaurants, getLocation } from "./services/places"
 
 
@@ -36,7 +36,7 @@ const FoodRecommendations = () => {
     const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
     const [searchQuery, setSearchArea] = useState('');
     const [selectedCuisine, setSelectedCuisine] = useState('Popular');
-    const [bookmarkedRestaurants, setBookmarkedRestaurants] = useState([])
+    const [bookmarkedRestaurants, setBookmarkedRestaurants] = useRecoilState(bookmarkedRestaurant)
     const [restaurants, setRestaurants] = useState([]);
 
 
@@ -50,19 +50,6 @@ const FoodRecommendations = () => {
     const handleSearchButtonClick = () => {
         navigate({ pathname: "/food/viewAll", search: `?search=${searchQuery}` });
     };
-
-    const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
-        const updates = {}
-        if (currentlyIsBookmarked) {
-            // clicking on this should remove the restaurant from bookmark list
-            updates[restaurant.id] = null
-        } else {
-            updates[restaurant.id] = restaurant
-        }
-
-        const pathToUpdate = "bookmarkedLocations"
-        await multiUpdate(pathToUpdate, updates)
-    }, [])
 
     const handleCuisineClick = async (cuisine) => {
         if (selectedCuisine === cuisine) {
@@ -100,18 +87,7 @@ const FoodRecommendations = () => {
 
     const renderRestaurants = useCallback((isSectionLoading, _locationError, restaurantsToRender, noRestaurantMessage) => {
         if (isSectionLoading) {
-            return (
-                // Display skeletons while loading
-                <Box my="12px" padding='6' boxShadow='lg' bg='white' minWidth="300px" borderRadius="20px">
-                    <Skeleton h="100px" />
-                    <SkeletonText mt="6" noOfLines={3} spacing="4" skeletonHeight="2" />
-                    <Flex gap="20px" mt="6">
-                        <SkeletonCircle width='20%' />
-                        <SkeletonCircle width='20%' />
-                        <SkeletonCircle width='20%' />
-                    </Flex>
-                </Box>
-            )
+            return <RestaurantSkeleton />
         } else if (_locationError) {
             return (
                 <Box minH="25vh" display="flex" alignItems="center" justifyContent="center">
@@ -126,17 +102,16 @@ const FoodRecommendations = () => {
 
         return restaurantsToRender.length ? (
             <Flex overflow="auto" gap="20px" padding="10px" pb="20px">
-                { restaurantsToRender.map((restaurant, idx) => (
+                { restaurantsToRender.map(restaurant => (
                     <RestaurantCard 
-                        key={`restaurant-${idx}`} 
+                        key={restaurant.id} 
                         restaurant={restaurant} 
-                        toggleBookmark={toggleBookmark}
                         isBookmarked={bookmarkedRestaurantIds.includes(restaurant.id)}
                     />
                 ))}
             </Flex>
         ) : <NoRestaurantSection noRestaurantMessage={noRestaurantMessage} />
-    }, [bookmarkedRestaurants, toggleBookmark])
+    }, [bookmarkedRestaurants])
 
     useEffect(() => {
         const fetchPopularRestaurants = async () => {
@@ -210,7 +185,7 @@ const FoodRecommendations = () => {
                             decoration="underline" 
                             cursor="pointer"
                         >
-                            <Link to={`/food/viewAll`}>View All</Link>
+                            <Link to={`/food/viewAllPopular`}>View All</Link>
                             <ChevronRightIcon />
                         </Text>
                     </Box>
@@ -226,7 +201,7 @@ const FoodRecommendations = () => {
                             decoration="underline" 
                             cursor="pointer"
                         >
-                            View All 
+                            <Link to={`/food/viewAllBookmarked`}>View All</Link>
                             <ChevronRightIcon />
                         </Text>
                     </Box>

@@ -11,7 +11,7 @@ const poem = [
 
 const Appreciation = () => {
     return (
-        <Box bg="#F2F2F2" pt="75px">
+        <Box pt="75px">
             <Text
                 fontSize="30px"
                 fontWeight="800"

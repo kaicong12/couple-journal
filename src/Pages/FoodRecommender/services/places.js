@@ -88,7 +88,7 @@ const fetchRestaurantImage = async (imageName) => {
     return imageFetchRes.url
 }
 
-export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, pageSize = 5 }) => {
+export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, pageToken, pageSize = 5 }) => {
     const bodyData = {
         'textQuery': textQuery ?? "Popular restaurants near me",
         'includedType': (cuisineCategories[cuisine] || "restaurant"),
@@ -105,6 +105,9 @@ export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, page
                 radius: 500.0
             }
         }
+    }
+    if (pageToken) {
+        bodyData["pageToken"] = pageToken
     }
 
     if (process.env.NODE_ENV === "development") {

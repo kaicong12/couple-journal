@@ -1,6 +1,6 @@
 import { Flex, Text, Box, Image } from '@chakra-ui/react';
 
-import { cuisineCategories, cuisineIconMappings } from "./services/cuisineList"
+import { cuisineCategories, cuisineIconMappings } from "../services/cuisineList"
 
 const CuisineButton = ({ cuisine, handleCuisineClick, isSelected }) => {
     return (

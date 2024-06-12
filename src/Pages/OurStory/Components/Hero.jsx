@@ -4,7 +4,7 @@ import { Text, Box, Image } from '@chakra-ui/react'
 
 function HeroSection() {
   return (
-    <Box px="20px" textAlign="center" display="flex" flexDir="column" justifyContent="center" alignItems="center">
+    <Box bg="#D9D9D9" px="20px" textAlign="center" display="flex" flexDir="column" justifyContent="center" alignItems="center">
         <Text
             fontSize="40px"
             fontWeight="600"
