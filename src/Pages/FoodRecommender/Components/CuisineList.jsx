@@ -1,10 +1,10 @@
-import { Flex, Text, Button, Image } from '@chakra-ui/react';
+import { Flex, Text, Box, Image } from '@chakra-ui/react';
 
-import { cuisineCategories, cuisineIconMappings } from "./services/cuisineList"
+import { cuisineCategories, cuisineIconMappings } from "../services/cuisineList"
 
-const CuisineButton = ({ cuisine, cuisineOptions, handleCuisineClick, isSelected }) => {
+const CuisineButton = ({ cuisine, handleCuisineClick, isSelected }) => {
     return (
-        <Button 
+        <Box 
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -14,16 +14,15 @@ const CuisineButton = ({ cuisine, cuisineOptions, handleCuisineClick, isSelected
             minHeight="120px"
             minWidth="100px"
             gap="8px"
-            bg={isSelected ? '#B97C22' : '#EDF2F7'}
+            bg={isSelected ? '#D1AB70' : '#EDF2F7'}
             boxShadow="0px 4px 4px rgba(0, 0, 0, 0.15)"
-            _hover={{ bg: '#D1AB70' }}
-            onClick={() => { handleCuisineClick(cuisine, cuisineOptions) }}
+            onClick={() => { handleCuisineClick(cuisine) }}
         >
             <Image height="50px" width="50px" src={cuisineIconMappings[cuisine]} alt={`${cuisine}-icon`}/>
-            <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
+            <Text fontWeight="semibold" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap">
                 { cuisine }
             </Text>
-        </Button>
+        </Box>
     )
 }
 
@@ -39,13 +38,12 @@ export const CuisineList = ({ handleCuisineClick, selectedCuisine }) => {
                 }
             }}
         >
-            { Object.entries(cuisineCategories).map(([cuisine, cuisineOptions], index) => (
+            { Object.keys(cuisineCategories).map((cuisine, index) => (
                 <CuisineButton 
                     key={`${cuisine}-${index}`}
                     handleCuisineClick={handleCuisineClick} 
                     cuisine={cuisine} 
                     isSelected={selectedCuisine === cuisine}
-                    cuisineOptions={cuisineOptions} 
                 />
             ))}
         </Flex>
