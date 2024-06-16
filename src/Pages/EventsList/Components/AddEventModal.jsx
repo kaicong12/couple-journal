@@ -19,7 +19,7 @@ import {
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StarRating } from './StarRating'; 
 import { LocationSearchBox } from './LocationSearchBox';
@@ -104,6 +104,17 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         handleAddEvent(newEvent);
     }, [handleAddEvent])
 
+    useEffect(() => {
+        const dateInput = document.querySelector('.react-datepicker__input-container input');
+        if (errors.date && dateInput) {
+            dateInput.style.borderColor = '#E53E3E';
+            dateInput.style.boxShadow = '0 0 0 1px #E53E3E';
+        } else if (dateInput) {
+            dateInput.style.borderColor = '';
+            dateInput.style.boxShadow = '';
+        }
+    }, [errors.date]);
+
     return (
         <Modal isOpen={isAddModalOpen} onClose={handleOnClose}>
             <ModalOverlay />
@@ -156,6 +167,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     <FormControl mt={4} isInvalid={errors.category}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
+                            <option value="">Select a category</option>
                             { menuListWithoutAll.map(({ label }) => <option key={label} value={label}>{label}</option>) }
                         </Select>
                         { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }

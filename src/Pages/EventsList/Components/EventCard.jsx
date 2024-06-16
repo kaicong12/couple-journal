@@ -5,7 +5,8 @@ import {
     HStack,
 } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
-import LocationIcon from '../../../Icons/Location.svg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 
 export const EventCard = ({ event, onOpen }) => (
@@ -48,7 +49,7 @@ export const EventCard = ({ event, onOpen }) => (
                 </Box>
             </Box>
             <Box mt="2" display="flex" alignItems="center" justifyContent="center" gap="4px">
-                <LocationIcon fill="#49516F" />
+                <FontAwesomeIcon icon={faLocationDot} />
                 <Text color="#49516F">
                     {event.location}
                 </Text>

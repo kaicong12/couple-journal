@@ -8,19 +8,21 @@ import {
     ButtonGroup,
     useDisclosure,
 } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Fuse from 'fuse.js';
 import { useDebounce } from "../../hooks/useDebounce";
 import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
+import { EmptySearchState } from "./Components/EmptyState";
+import { SearchFood } from "./Components/FilterOptions"
 import { getEvents, uploadEvent, deleteEvent, updateEvent } from "../../db";
-import AllCategoryIcon from '../../Icons/AllCategory.svg'
-import DiningIcon from '../../Icons/DiningIcon.svg'
-import GiftIcon from '../../Icons/Gifts.svg'
 
-import { FaPlaneDeparture } from "react-icons/fa";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBowlFood, faPlane, faGift, faHeart } from '@fortawesome/free-solid-svg-icons';
 
+const MotionBox = motion(Box);
 
 const EventPage = () => {
     const defaultEventData = {
@@ -34,19 +36,19 @@ const EventPage = () => {
     const menuLists = useMemo(() => {
         return [
             {
-                leftIcon: <AllCategoryIcon />,
+                leftIcon: <FontAwesomeIcon icon={faHeart} />,
                 label: "All"
             },
             {
-                leftIcon: <DiningIcon />,
+                leftIcon: <FontAwesomeIcon icon={faBowlFood} />,
                 label: "Meals"
             },
             {
-                leftIcon: <GiftIcon />,
+                leftIcon: <FontAwesomeIcon icon={faGift} />,
                 label: "Gifts"
             },
             {
-                leftIcon: <FaPlaneDeparture fontSize="20px" />,
+                leftIcon: <FontAwesomeIcon icon={faPlane} />,
                 label: "Trips"
             }
         ]
@@ -64,7 +66,16 @@ const EventPage = () => {
     
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
+    const { isOpen: isFilterOpen, onOpen: onFilterOpen, onClose: onFilterClose } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState(null);
+
+    const toggleFilterOpen = () => {
+        if (isFilterOpen) {
+            onFilterClose()
+        } else {
+            onFilterOpen()
+        }
+    }
 
     const fetchEvents = async () => {
         setIsLoading(true)
@@ -179,62 +190,102 @@ const EventPage = () => {
     const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
 
     return (
-        <Box background="brown.50" height="100%" width="100vw">
+        <Box minH="calc(100vh - 80px)" background="brown.50" width="100vw">
             <SearchFilter
-                menuLists={menuLists}
                 onAddModalOpen={onAddModalOpen}
                 onSearchEvent={onSearchEvent}
-                onSelectCategory={onSelectCategory} 
+                onFilterClose={onFilterClose}
+                toggleFilterOpen={toggleFilterOpen}
             />
-            { isLoading ? (
-                <Box height="calc(100vh - 200px)" display="flex" justifyContent="center" alignItems="center">
-                    <Spinner size="xl" /> 
-                </Box>
-            ) : (
-                <Box maxHeight="calc(100vh - 180px)" overflow="auto">
-                    <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
-                    <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
-                        {currentEvents.map(event => (
-                            <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
-                        ))}
-                    </SimpleGrid>
-                    {selectedEvent && (
-                        <EventModal 
-                            handleDeleteEvent={handleDeleteEvent}
-                            handleUpdateEvent={handleUpdateEvent}
-                            event={selectedEvent} 
-                            isOpen={isOpen} 
-                            onClose={onClose} 
-                        />
+            <Box position="relative">
+                <AnimatePresence>
+                    {isFilterOpen && (
+                        <MotionBox
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            position="absolute"
+                            width="100%"
+                            height="100%"
+                        >
+                            <SearchFood 
+                                menuLists={menuLists} 
+                                selectedCategory={category} 
+                                onSelectCategory={onSelectCategory}
+                                onClose={onFilterClose} // Pass the onFilterClose function to SearchFood component
+                            />
+                        </MotionBox>
                     )}
-                    <AddEventModal 
-                        menuLists={menuLists}
-                        newEvent={newEvent}
-                        setNewEvent={setNewEvent}
-                        isAddModalOpen={isAddModalOpen}
-                        onAddModalClose={onAddModalClose}
-                        handleAddEvent={handleAddEvent}
-                    />
-                    <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
-                        <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
-                            Previous
-                        </Button>
-                        {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
-                            <Button
-                                bg="brown.200"
-                                key={i + startPage}
-                                onClick={() => handlePageChange(i + startPage)}
-                                isActive={currentPage === i + startPage}
-                            >
-                                {i + startPage}
-                            </Button>
-                        ))}
-                        <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
-                            Next
-                        </Button>
-                    </ButtonGroup>
-                </Box>
-            )}
+                </AnimatePresence>
+            </Box>
+            
+            <Box>
+                <AnimatePresence>
+                    { !isFilterOpen ? (
+                        <MotionBox
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            {isLoading ? (
+                                <Box display="flex" justifyContent="center" alignItems="center">
+                                    <Spinner size="xl" /> 
+                                </Box>
+                            ) : (
+                                <Box overflow="auto">
+                                    {currentEvents.length ? (
+                                        <Box>
+                                            <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
+                                            <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
+                                                {currentEvents.map(event => (
+                                                    <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
+                                                ))}
+                                            </SimpleGrid>
+
+                                            <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
+                                                <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
+                                                    Previous
+                                                </Button>
+                                                {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
+                                                    <Button
+                                                        bg="brown.200"
+                                                        key={i + startPage}
+                                                        onClick={() => handlePageChange(i + startPage)}
+                                                        isActive={currentPage === i + startPage}
+                                                    >
+                                                        {i + startPage}
+                                                    </Button>
+                                                ))}
+                                                <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
+                                                    Next
+                                                </Button>
+                                            </ButtonGroup>
+                                        </Box>
+                                    ) : <EmptySearchState />}
+                                    {selectedEvent && (
+                                        <EventModal 
+                                            handleDeleteEvent={handleDeleteEvent}
+                                            handleUpdateEvent={handleUpdateEvent}
+                                            event={selectedEvent} 
+                                            isOpen={isOpen} 
+                                            onClose={onClose} 
+                                            availableCategories={menuLists}
+                                        />
+                                    )}
+                                    <AddEventModal 
+                                        menuLists={menuLists}
+                                        newEvent={newEvent}
+                                        setNewEvent={setNewEvent}
+                                        isAddModalOpen={isAddModalOpen}
+                                        onAddModalClose={onAddModalClose}
+                                        handleAddEvent={handleAddEvent}
+                                    />
+                                </Box>
+                            )}
+                        </MotionBox>
+                    ) : null }
+                </AnimatePresence>
+            </Box>
         </Box>
     )
 }
