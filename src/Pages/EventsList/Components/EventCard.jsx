@@ -2,12 +2,11 @@ import {
     Box,
     Image, 
     Text,
-    HStack,
+    Icon
 } from '@chakra-ui/react';
-import { StarIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-
+import { faLocationDot, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import { convertFbTimestampToDate } from '../../../utils'
 
 export const EventCard = ({ event, onOpen }) => (
     <Box 
@@ -30,13 +29,6 @@ export const EventCard = ({ event, onOpen }) => (
             height="300px"
         />
         <Box padding="6px 6px 0 6px">
-            <HStack mt="2" display="flex" justifyContent="center">
-                {Array(5)
-                .fill("")
-                .map((_, i) => (
-                    <StarIcon key={i} color={i < Math.floor(event.rating) ? "#ffc107" : "#e4e5e9" } />
-                ))}
-            </HStack>
             <Box mt="2" d="flex" alignItems="baseline">
                 <Box
                     color="#49516F"
@@ -49,9 +41,15 @@ export const EventCard = ({ event, onOpen }) => (
                 </Box>
             </Box>
             <Box mt="2" display="flex" alignItems="center" justifyContent="center" gap="4px">
-                <FontAwesomeIcon icon={faLocationDot} />
-                <Text color="#49516F">
+                <Icon as={FontAwesomeIcon} icon={faLocationDot} />
+                <Text isTruncated maxWidth="80%" color="#49516F">
                     {event.location}
+                </Text>
+            </Box>
+            <Box mt="2" display="flex" alignItems="center" justifyContent="center" gap="4px">
+                <Icon as={FontAwesomeIcon} icon={faCalendar} />
+                <Text color="#49516F">
+                    { convertFbTimestampToDate(event.date) }
                 </Text>
             </Box>
         </Box>

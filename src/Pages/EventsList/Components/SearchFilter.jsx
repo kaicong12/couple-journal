@@ -4,19 +4,18 @@ import {
     Input,
     InputGroup,
     InputLeftElement,
-    InputRightElement,
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 
-export const SearchFilter = ({ onAddModalOpen, onSearchEvent, onFilterClose, toggleFilterOpen }) => {
+export const SearchFilter = ({ onAddModalOpen, onSearchEvent }) => {
     return (
-        <Box display="flex" gap="12px" py="20px" px="20px">
-            <InputGroup onClick={() => { toggleFilterOpen() }}>
+        <Box display="flex" gap="12px" pt="20px" px="20px">
+            <InputGroup>
                 <InputLeftElement pointerEvents='none'>
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </InputLeftElement>
@@ -26,7 +25,7 @@ export const SearchFilter = ({ onAddModalOpen, onSearchEvent, onFilterClose, tog
                     pl="35px"
                     borderWidth='2px'
                     borderColor='brown.200'
-                    // onChange={onSearchEvent}
+                    onChange={onSearchEvent}
                     _focus={{ 
                         boxShadow: '0 0 0 1px rgba(255, 181, 62, 0.6)',
                         borderWidth: '2px',
@@ -34,16 +33,10 @@ export const SearchFilter = ({ onAddModalOpen, onSearchEvent, onFilterClose, tog
                         outline: 'none' 
                     }} 
                 />
-                <InputRightElement>
-                    <FontAwesomeIcon onClick={() => { toggleFilterOpen() }} icon={faSliders} />
-                </InputRightElement>
             </InputGroup>
             
             <Button 
-                onClick={() => {
-                    onFilterClose()
-                    onAddModalOpen()
-                }} 
+                onClick={onAddModalOpen} 
                 bg="brown.200" 
                 minWidth="80px"
             >

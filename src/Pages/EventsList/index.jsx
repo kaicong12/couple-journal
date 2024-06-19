@@ -1,44 +1,68 @@
 import { useEffect, useState, useCallback, useMemo } from "react"
 import { 
+    forwardRef,
     Box,
     SimpleGrid,
     Spinner,
     Text,
     Button,
     ButtonGroup,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuOptionGroup,
+    MenuItemOption,
+    HStack,
+    VStack,
+    Input,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverBody,
+    PopoverArrow,
     useDisclosure,
 } from '@chakra-ui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import Fuse from 'fuse.js';
 import { useDebounce } from "../../hooks/useDebounce";
+import { useModalParams } from "../../hooks/useModalParams";
 import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
 import { EmptySearchState } from "./Components/EmptyState";
-import { SearchFood } from "./Components/FilterOptions"
 import { getEvents, uploadEvent, deleteEvent, updateEvent } from "../../db";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBowlFood, faPlane, faGift, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { 
+    faBowlFood, 
+    faCalendar,
+    faPlane, 
+    faGift, 
+    faList, 
+    faX 
+} from '@fortawesome/free-solid-svg-icons';
 
-const MotionBox = motion(Box);
+
+const FilterButton = forwardRef((props, ref) => {
+    const { rightIcon, buttontext } = props
+    return (
+        <Button {...props} rightIcon={rightIcon} ref={ref}>
+            { buttontext }
+        </Button>
+    )
+})
 
 const EventPage = () => {
     const defaultEventData = {
         title: '',
         description: '',
         category: null,
-        rating: 3,
         date: null,
     }
 
     const menuLists = useMemo(() => {
         return [
-            {
-                leftIcon: <FontAwesomeIcon icon={faHeart} />,
-                label: "All"
-            },
             {
                 leftIcon: <FontAwesomeIcon icon={faBowlFood} />,
                 label: "Meals"
@@ -57,7 +81,7 @@ const EventPage = () => {
     const [newEvent, setNewEvent] = useState(defaultEventData)
     const [eventData, setEventData] = useState([])
     const [isLoading, setIsLoading] = useState(false);
-    const [category, setCategory] = useState('All')
+    const [selectedCategories, setSelectedCategories] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearch = useDebounce(searchTerm, 500)
 
@@ -66,16 +90,8 @@ const EventPage = () => {
     
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
-    const { isOpen: isFilterOpen, onOpen: onFilterOpen, onClose: onFilterClose } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState(null);
-
-    const toggleFilterOpen = () => {
-        if (isFilterOpen) {
-            onFilterClose()
-        } else {
-            onFilterOpen()
-        }
-    }
+    const [isDateFilterOpen, dateFilterParam, openDateFilter, closeDateFilter, updateDateFilterParam] = useModalParams();
 
     const fetchEvents = async () => {
         setIsLoading(true)
@@ -108,12 +124,35 @@ const EventPage = () => {
             filteredResults = fuzzySearchEvents(eventData, debouncedSearch)
         }
 
-        if (category !== 'All') {
-            filteredResults = filteredResults.filter(event => event.category === category)
+        if (selectedCategories.length) {
+            filteredResults = filteredResults.filter(event => {
+                if (!selectedCategories.length) {
+                    return true
+                } else {
+                    return selectedCategories.includes(event.category)
+                }
+            })
+        }
+
+        const hasDateRange = dateFilterParam?.startDate || dateFilterParam?.endDate
+        if (hasDateRange) {
+            const paramStartDate = new Date(dateFilterParam?.startDate)
+            const paramEndDate =  new Date(dateFilterParam?.endDate)
+
+            filteredResults = filteredResults.filter(event => {
+                const fbTimestampDate = event.date.toDate()
+                if (dateFilterParam.startDate && fbTimestampDate < paramStartDate) {
+                    return false;
+                }
+                if (dateFilterParam.endDate && fbTimestampDate > paramEndDate) {
+                    return false;
+                }
+                return true;
+            });
         }
         
         return filteredResults
-    }, [category, debouncedSearch, eventData, fuzzySearchEvents])
+    }, [eventData, debouncedSearch, selectedCategories, dateFilterParam, fuzzySearchEvents])
 
     useEffect(() => {
         fetchEvents()
@@ -154,8 +193,8 @@ const EventPage = () => {
         }
     };
 
-    const onSelectCategory = (label) => {
-        setCategory(label)
+    const onSelectCategory = (categories) => {
+        setSelectedCategories(categories)
     }
 
     const onSearchEvent = (e) => {
@@ -184,107 +223,143 @@ const EventPage = () => {
         setCurrentPage(newPage);
     };
 
+    const handleDeactivateDateFilter = (e) => {
+        e.stopPropagation()
+        closeDateFilter(true);
+    };
+
     // Generate the page numbers to display
     const pageNumbersToShow = 5; // Number of page buttons to display
     const startPage = Math.max(1, currentPage - Math.floor(pageNumbersToShow / 2));
     const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
+    const hasActiveCategories = selectedCategories.length
 
     return (
         <Box minH="calc(100vh - 80px)" background="brown.50" width="100vw">
             <SearchFilter
                 onAddModalOpen={onAddModalOpen}
                 onSearchEvent={onSearchEvent}
-                onFilterClose={onFilterClose}
-                toggleFilterOpen={toggleFilterOpen}
             />
-            <Box position="relative">
-                <AnimatePresence>
-                    {isFilterOpen && (
-                        <MotionBox
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            position="absolute"
-                            width="100%"
-                            height="100%"
-                        >
-                            <SearchFood 
-                                menuLists={menuLists} 
-                                selectedCategory={category} 
-                                onSelectCategory={onSelectCategory}
-                                onClose={onFilterClose} // Pass the onFilterClose function to SearchFood component
-                            />
-                        </MotionBox>
-                    )}
-                </AnimatePresence>
-            </Box>
             
             <Box>
-                <AnimatePresence>
-                    { !isFilterOpen ? (
-                        <MotionBox
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                        >
-                            {isLoading ? (
-                                <Box display="flex" justifyContent="center" alignItems="center">
-                                    <Spinner size="xl" /> 
-                                </Box>
-                            ) : (
-                                <Box overflow="auto">
-                                    {currentEvents.length ? (
-                                        <Box>
-                                            <Text>{`Showing Events for: ${category.length ? category : 'All'}`}</Text>
-                                            <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="40px" p="10px" justifyItems="center" alignItems="center">
-                                                {currentEvents.map(event => (
-                                                    <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
-                                                ))}
-                                            </SimpleGrid>
-
-                                            <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
-                                                <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
-                                                    Previous
-                                                </Button>
-                                                {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
-                                                    <Button
-                                                        bg="brown.200"
-                                                        key={i + startPage}
-                                                        onClick={() => handlePageChange(i + startPage)}
-                                                        isActive={currentPage === i + startPage}
-                                                    >
-                                                        {i + startPage}
-                                                    </Button>
-                                                ))}
-                                                <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
-                                                    Next
-                                                </Button>
-                                            </ButtonGroup>
-                                        </Box>
-                                    ) : <EmptySearchState />}
-                                    {selectedEvent && (
-                                        <EventModal 
-                                            handleDeleteEvent={handleDeleteEvent}
-                                            handleUpdateEvent={handleUpdateEvent}
-                                            event={selectedEvent} 
-                                            isOpen={isOpen} 
-                                            onClose={onClose} 
-                                            availableCategories={menuLists}
-                                        />
-                                    )}
-                                    <AddEventModal 
-                                        menuLists={menuLists}
-                                        newEvent={newEvent}
-                                        setNewEvent={setNewEvent}
-                                        isAddModalOpen={isAddModalOpen}
-                                        onAddModalClose={onAddModalClose}
-                                        handleAddEvent={handleAddEvent}
+                {isLoading ? (
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <Spinner size="xl" /> 
+                    </Box>
+                ) : (
+                    <Box overflow="auto">
+                        <ButtonGroup display="flex" mt="10px" px="20px">
+                        <Popover isOpen={isDateFilterOpen} onClose={closeDateFilter} placement="bottom-end">
+                                <PopoverTrigger>
+                                    <FilterButton 
+                                        buttontext={'Date'}
+                                        onClick={() => { openDateFilter(dateFilterParam) }}
+                                        bg={dateFilterParam?.dateFilterApplied ? '#8F611B' : '#EAD9BF' }
+                                        color={dateFilterParam?.dateFilterApplied ? 'white' : '#8F611B'}
+                                        leftIcon={<FontAwesomeIcon icon={faCalendar} />}
+                                        rightIcon={dateFilterParam?.dateFilterApplied && <FontAwesomeIcon icon={faX} onClick={(e) => handleDeactivateDateFilter(e) } />}
                                     />
-                                </Box>
-                            )}
-                        </MotionBox>
-                    ) : null }
-                </AnimatePresence>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverBody>
+                                        <VStack spacing="4" py="12px">
+                                            <HStack>
+                                                <Text>Start Date:</Text>
+                                                <Input 
+                                                    type="date" 
+                                                    value={dateFilterParam?.startDate || ''} 
+                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, startDate: e.target.value })} 
+                                                />
+                                            </HStack>
+                                            <HStack>
+                                                <Text>End Date:</Text>
+                                                <Input 
+                                                    type="date" 
+                                                    value={dateFilterParam?.endDate || ''} 
+                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, endDate: e.target.value })} 
+                                                />
+                                            </HStack>
+                                        </VStack>
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Popover>
+                            <Menu closeOnSelect={false}>
+                                <MenuButton
+                                    as={FilterButton}
+                                    buttontext={'Category'}
+                                    bg={hasActiveCategories ? '#8F611B' : '#EAD9BF' }
+                                    color={hasActiveCategories ? 'white' : '#8F611B'}
+                                    leftIcon={<FontAwesomeIcon icon={faList} />}
+                                >
+                                </MenuButton>
+                                <MenuList>
+                                    <MenuOptionGroup onChange={(value) => { onSelectCategory(value) }} type="checkbox">
+                                        {menuLists.map(menu => (
+                                            <MenuItemOption 
+                                                isChecked={selectedCategories.includes(menu.label)}
+                                                key={menu.label} 
+                                                value={menu.label}
+                                            >
+                                                <Box display="flex" gap="10px" alignItems="center">
+                                                    { menu.leftIcon }
+                                                    <Text>{ menu.label }</Text>
+                                                </Box>
+                                            </MenuItemOption>
+                                        ))}
+                                    </MenuOptionGroup>
+                                </MenuList>
+                            </Menu>
+                        </ButtonGroup>
+
+                        {currentEvents.length ? (
+                            <Box>
+                                <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="10px" p="10px" justifyItems="center" alignItems="center">
+                                    {currentEvents.map(event => (
+                                        <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
+                                    ))}
+                                </SimpleGrid>
+
+                                <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
+                                    <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
+                                        Previous
+                                    </Button>
+                                    {Array.from({ length: endPage - startPage + 1 }, (_, i) => (
+                                        <Button
+                                            bg="brown.200"
+                                            key={i + startPage}
+                                            onClick={() => handlePageChange(i + startPage)}
+                                            isActive={currentPage === i + startPage}
+                                        >
+                                            {i + startPage}
+                                        </Button>
+                                    ))}
+                                    <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
+                                        Next
+                                    </Button>
+                                </ButtonGroup>
+                            </Box>
+                        ) : <EmptySearchState />}
+                        {selectedEvent && (
+                            <EventModal 
+                                handleDeleteEvent={handleDeleteEvent}
+                                handleUpdateEvent={handleUpdateEvent}
+                                event={selectedEvent} 
+                                isOpen={isOpen} 
+                                onClose={onClose} 
+                                availableCategories={menuLists}
+                            />
+                        )}
+                        <AddEventModal 
+                            menuLists={menuLists}
+                            newEvent={newEvent}
+                            setNewEvent={setNewEvent}
+                            isAddModalOpen={isAddModalOpen}
+                            onAddModalClose={onAddModalClose}
+                            handleAddEvent={handleAddEvent}
+                        />
+                    </Box>
+                )}
             </Box>
         </Box>
     )

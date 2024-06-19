@@ -2,13 +2,17 @@ import {
     Badge,
     Box,
     Button,
+    ButtonGroup,
     Divider,
     Image,
     Text, 
     Modal, 
     ModalOverlay,
+    ModalHeader,
+    ModalCloseButton,
     ModalContent,
     ModalBody,
+    ModalFooter,
     IconButton,
     Menu,
     MenuButton,
@@ -21,7 +25,7 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-    faStar, 
+    faLocationDot,
     faCalendar, 
     faEllipsis, 
     faTrash, 
@@ -32,30 +36,11 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useState, useMemo } from 'react';
 import { Timestamp } from "firebase/firestore";
-
-
-const formatDate = (firestoreTimestamp) => {
-    if (!firestoreTimestamp) return 'This event does not have a date';
-
-    // Convert Firestore Timestamp to JavaScript Date object
-    let date
-    if (typeof firestoreTimestamp === 'number') {
-        date = new Date(firestoreTimestamp);
-    } else {
-        date = firestoreTimestamp?.toDate()
-    }
-
-    const options = {
-        year: 'numeric', // "2021"
-        month: 'long',   // "July"
-        day: 'numeric'   // "20"
-    };
-
-    return date.toLocaleDateString('en-US', options); // "July 20, 2021"
-};
+import { convertFbTimestampToDate as formatDate } from '../../../utils';
+import { LocationSearchBox } from './LocationSearchBox';
 
 export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen, onClose, availableCategories }) => {
-    const { onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
+    const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
     const [editMode, setEditMode] = useState(false);
     const [editedEvent, setEditedEvent] = useState(event);
 
@@ -66,20 +51,35 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
     const handleEdit = () => {
         setEditedEvent(event)
         setEditMode(true);
-        onEditOpen();
     };
 
     const handleSave = () => {
         setEditMode(false);
-
         handleUpdateEvent(editedEvent)
-        onEditClose();
+    };
+    
+    const handleCancelEdit = () => {
+        setEditMode(false);
+        setEditedEvent(event);
+    };
+
+    const handleDelete = () => {
+        onDeleteOpen();
+    };
+
+    const handleConfirmDelete = () => {
+        handleDeleteEvent(event);
+        onDeleteClose();
+    };
+
+    const handleCancelDelete = () => {
+        onDeleteClose();
     };
 
     const handleChange = (field, value) => {
         if (field === 'date') {
             const newDate = Timestamp.fromDate(new Date(value));
-        setEditedEvent(prev => ({ ...prev, date: newDate }));
+            setEditedEvent(prev => ({ ...prev, date: newDate }));
 
         } else {
             setEditedEvent(prev => ({ ...prev, [field]: value }));
@@ -136,7 +136,12 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                 <Badge p="2" borderRadius="6px" colorScheme='green'>{event.category || "Unknown Category"}</Badge>
                             )}
 
-                            { editMode ? <Button onClick={() => { handleSave() }} colorScheme='brown' variant='solid'> Save </Button>: (
+                            { editMode ? (
+                                <ButtonGroup>
+                                    <Button onClick={handleSave} colorScheme='brown' variant='solid'>Save</Button>
+                                    <Button onClick={handleCancelEdit} colorScheme='red' variant='outline'>Cancel</Button>
+                                </ButtonGroup>
+                            ) : (
                                 <Menu>
                                     <MenuButton
                                         as={IconButton}
@@ -147,13 +152,13 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                     <MenuList>
                                         <MenuItem 
                                             icon={<FontAwesomeIcon icon={faTrash} />}
-                                            onClick={() => { handleDeleteEvent(event) }}
+                                            onClick={() => { handleDelete() }}
                                         >
                                             Delete
                                         </MenuItem>
                                         <MenuItem 
                                             icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                                            onClick={() => { handleEdit(event) }}
+                                            onClick={() => { handleEdit() }}
                                         >
                                             Edit
                                         </MenuItem>
@@ -187,7 +192,7 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
 
                         <Divider height="2px" />
 
-                        <Box py="16px" display="flex" justifyContent="space-between">
+                        <Box py="16px">
                             <Box display="flex" gap="8px" alignItems="center">
                                 <FontAwesomeIcon color="#8F611B" icon={faCalendar} />
                                 {editMode ? (
@@ -202,15 +207,43 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                     <Text color="#333333">{event.date ? formatDate(event.date) : "Missing date for this event"}</Text>
                                 )}
                             </Box>
-                            <Box display="flex" gap="5px" alignItems="center">
-                                <FontAwesomeIcon color="#8F611B" icon={faStar} />
-                                <Text color="#333333">{ event.rating }</Text>
-
+                            <Box mt="12px" display="flex" gap="8px" alignItems="center">
+                                <FontAwesomeIcon color="#8F611B" icon={faLocationDot} />
+                                {editMode ? (
+                                    <Box width="100%">
+                                        <LocationSearchBox onSelectLocation={(location) => handleChange('location', location.text.text)} />
+                                    </Box>
+                                ) : (
+                                    <Text maxW="90%" isTruncated color="#333333">{event.location || "Unknown Location"}</Text>
+                                )}
                             </Box>
                         </Box>
 
                     </Box>
                 </ModalBody>
+
+                {isDeleteOpen && (
+                        <Modal isOpen={isOpen} onClose={onDeleteClose} size="sm" bg="#F2F2F2" isCentered>
+                            <ModalOverlay />
+                            <ModalContent>
+                                <ModalHeader fontWeight="semibold">Modal Title</ModalHeader>
+                                <ModalCloseButton />
+                                <Divider />
+                                <ModalBody>
+                                    <Text>Are you sure you want to continue with your action?</Text>
+                                </ModalBody>
+                                <Divider />
+                                <ModalFooter>
+                                    <Button mr="6px" variant="solid" colorScheme="red" onClick={handleConfirmDelete}>
+                                        Confirm
+                                    </Button>
+                                    <Button variant="outline" colorScheme="red" onClick={handleCancelDelete}>
+                                        Cancel
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                    )}
             </ModalContent>
         </Modal>
     );
