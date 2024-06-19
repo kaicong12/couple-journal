@@ -243,8 +243,8 @@ const EventPage = () => {
             
             <Box>
                 {isLoading ? (
-                    <Box display="flex" justifyContent="center" alignItems="center">
-                        <Spinner size="xl" /> 
+                    <Box  minH="calc(100vh - 80px)" display="flex" justifyContent="center" alignItems="center">
+                        <Spinner position="relative" top="-100px" size="xl" /> 
                     </Box>
                 ) : (
                     <Box overflow="auto">
@@ -269,7 +269,7 @@ const EventPage = () => {
                                                 <Input 
                                                     type="date" 
                                                     value={dateFilterParam?.startDate || ''} 
-                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, startDate: e.target.value })} 
+                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, startDate: e.target.value, dateFilterApplied: true })} 
                                                 />
                                             </HStack>
                                             <HStack>
@@ -277,7 +277,7 @@ const EventPage = () => {
                                                 <Input 
                                                     type="date" 
                                                     value={dateFilterParam?.endDate || ''} 
-                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, endDate: e.target.value })} 
+                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, endDate: e.target.value, dateFilterApplied: true })} 
                                                 />
                                             </HStack>
                                         </VStack>
