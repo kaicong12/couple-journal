@@ -40,7 +40,8 @@ import {
     faPlane, 
     faGift, 
     faList, 
-    faX 
+    faX,
+    faSort
 } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -78,6 +79,16 @@ const EventPage = () => {
         ]
     }, [])
 
+    const sortOptions = useMemo(() => {
+        return [
+            'Date (Latest To Oldest)',
+            'Date (Oldest To Latest)',
+            'Name (A to Z)',
+            'Name (Z to Z)',
+        ]
+    }, [])
+
+    const [eventSort, setEventSort] = useState('Date (Latest To Oldest)')
     const [newEvent, setNewEvent] = useState(defaultEventData)
     const [eventData, setEventData] = useState([])
     const [isLoading, setIsLoading] = useState(false);
@@ -118,6 +129,7 @@ const EventPage = () => {
     }, [])
 
     const filteredEventData = useMemo(() => {
+        setCurrentPage(1)
         let filteredResults = eventData
 
         if (debouncedSearch && debouncedSearch.length) {
@@ -150,9 +162,21 @@ const EventPage = () => {
                 return true;
             });
         }
+
+        const sortedFilteredResults = filteredResults.sort((a, b) => {
+            if (eventSort === 'Date (Latest To Oldest)') {
+                return b.date - a.date
+            } else if (eventSort === 'Date (Oldest To Latest)') {
+                return a.date - b.date
+            } else if (eventSort === 'Name (A to Z)') {
+                return a.title.localeCompare(b.title)
+            } else {
+                return b.title.localeCompare(a.title)
+            }
+        })
         
-        return filteredResults
-    }, [eventData, debouncedSearch, selectedCategories, dateFilterParam, fuzzySearchEvents])
+        return sortedFilteredResults
+    }, [eventData, debouncedSearch, selectedCategories, dateFilterParam, fuzzySearchEvents, eventSort])
 
     useEffect(() => {
         fetchEvents()
@@ -249,7 +273,7 @@ const EventPage = () => {
                 ) : (
                     <Box overflow="auto">
                         <ButtonGroup display="flex" mt="10px" px="20px">
-                        <Popover isOpen={isDateFilterOpen} onClose={closeDateFilter} placement="bottom-end">
+                            <Popover isOpen={isDateFilterOpen} onClose={closeDateFilter} placement="bottom-end">
                                 <PopoverTrigger>
                                     <FilterButton 
                                         buttontext={'Date'}
@@ -284,6 +308,30 @@ const EventPage = () => {
                                     </PopoverBody>
                                 </PopoverContent>
                             </Popover>
+                            <Menu>
+                                <MenuButton
+                                    as={FilterButton}
+                                    buttontext={'Sort By'}
+                                    bg='#EAD9BF'
+                                    color='#8F611B'
+                                    leftIcon={<FontAwesomeIcon icon={faSort} />}
+                                >
+                                </MenuButton>
+                                <MenuList>
+                                    <MenuOptionGroup defaultValue={eventSort} onChange={(value) => { setEventSort(value) }}>
+                                        {sortOptions.map(sortOpt => (
+                                            <MenuItemOption 
+                                                key={sortOpt} 
+                                                value={sortOpt}
+                                            >
+                                                <Box display="flex" gap="10px" alignItems="center">
+                                                    <Text>{ sortOpt }</Text>
+                                                </Box>
+                                            </MenuItemOption>
+                                        ))}
+                                    </MenuOptionGroup>
+                                </MenuList>
+                            </Menu>
                             <Menu closeOnSelect={false}>
                                 <MenuButton
                                     as={FilterButton}

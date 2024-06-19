@@ -59,6 +59,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
             category: '',
             rating: 3,
         })
+        setPreviewImage([])
     }
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
