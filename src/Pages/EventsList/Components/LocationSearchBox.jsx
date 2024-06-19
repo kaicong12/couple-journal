@@ -6,11 +6,11 @@ import {
     InputLeftElement,
     List, 
     ListItem,
-    ListIcon, 
+    Text, 
     Box 
 } from '@chakra-ui/react';
-import LocationIcon from '../../../Icons/Location.svg'
-import { MdLocationOn } from 'react-icons/md';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 
 export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
@@ -67,7 +67,7 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
             <InputGroup>
                 <InputLeftElement
                     pointerEvents="none"
-                    children={<LocationIcon color="gray.500" />}
+                    children={<FontAwesomeIcon icon={faLocationDot} />}
                 />
                 <Input
                     placeholder="Search for locations..."
@@ -83,8 +83,11 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
                 <List spacing={3} mt={2} bg="white" p={4} boxShadow="md" borderRadius="md" maxH="300px" overflowY="auto">
                     {results.map(({ placePrediction }, index) => (
                         <ListItem key={index} cursor="pointer" onClick={() => handleOnSelectLocation(placePrediction)}>
-                            <ListIcon as={MdLocationOn} color="green.500" />
-                            { placePrediction.text.text ?? '' }
+                            <Box display="flex" alignItems="center" gap="6px">
+                                <FontAwesomeIcon icon={faLocationDot} />
+                                <Text>{ placePrediction.text.text ?? '' }</Text>
+                            </Box>
+                            
                         </ListItem>
                     ))}
                 </List>

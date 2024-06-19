@@ -1,6 +1,5 @@
 import {
     Box,
-    Flex,
     Image,
     Modal, 
     Button,
@@ -17,20 +16,16 @@ import {
     FormErrorMessage
 } from '@chakra-ui/react';
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { useMemo, useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { StarRating } from './StarRating'; 
 import { LocationSearchBox } from './LocationSearchBox';
+
+import { Timestamp } from "firebase/firestore";
+
 
 export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen, onAddModalClose, handleAddEvent }) => {
     const [previewImage, setPreviewImage] = useState([])
     const [errors, setErrors] = useState({});
-
-    const menuListWithoutAll = useMemo(() => {
-        return menuLists.slice(1, menuLists.length)
-    }, [menuLists])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -41,9 +36,10 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
     };
 
     const handleDateChange = (date) => {
+        const formattedDate = Timestamp.fromDate(new Date(date));
         setNewEvent(prev => ({
             ...prev,
-            date: date
+            date: formattedDate
         }));
     };
 
@@ -104,6 +100,17 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         handleAddEvent(newEvent);
     }, [handleAddEvent])
 
+    useEffect(() => {
+        const dateInput = document.querySelector('.react-datepicker__input-container input');
+        if (errors.date && dateInput) {
+            dateInput.style.borderColor = '#E53E3E';
+            dateInput.style.boxShadow = '0 0 0 1px #E53E3E';
+        } else if (dateInput) {
+            dateInput.style.borderColor = '';
+            dateInput.style.boxShadow = '';
+        }
+    }, [errors.date]);
+
     return (
         <Modal isOpen={isAddModalOpen} onClose={handleOnClose}>
             <ModalOverlay />
@@ -156,7 +163,8 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                     <FormControl mt={4} isInvalid={errors.category}>
                         <FormLabel>Category</FormLabel>
                         <Select name="category" value={newEvent.category} onChange={handleInputChange}>
-                            { menuListWithoutAll.map(({ label }) => <option key={label} value={label}>{label}</option>) }
+                            <option value="">Select a category</option>
+                            { menuLists.map(({ label }) => <option key={label} value={label}>{label}</option>) }
                         </Select>
                         { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
                     </FormControl>
@@ -165,25 +173,15 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
                         <LocationSearchBox onSelectLocation={handleLocationChange} />
                         { errors.location && <FormErrorMessage>{errors.location}</FormErrorMessage> }
                     </FormControl>
-                    <Flex mt={4} justifyContent="space-between" alignItems="center">
-                        <FormControl flex="1" mr={2} isInvalid={errors.date}>
-                            <FormLabel>Date of Event</FormLabel>
-                            <DatePicker
-                                selected={newEvent.date}
-                                onChange={handleDateChange}
-                                dateFormat="MMMM d, yyyy"
-                                className="chakra-input css-1es6f7d"
-                                wrapperClassName="date-picker"
-                                calendarClassName="chakra-calendar"
-                                as={Input}
-                            />
-                            { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
-                        </FormControl>
-                        <FormControl>
-                        <FormLabel>Rating</FormLabel>
-                            <StarRating rating={newEvent.rating} setRating={(rating) => setNewEvent(prev => ({ ...prev, rating }))} />
-                        </FormControl>
-                    </Flex>
+                    <FormControl mt={4} isInvalid={errors.date}>
+                        <FormLabel>Date of Event</FormLabel>
+                        <Input 
+                            placeholder='Date of event'
+                            type='date' 
+                            onChange={(e) => handleDateChange(e.target.value)}
+                        />
+                        { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
+                    </FormControl>
                 </ModalBody>
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={() => handleSave(newEvent)}>
