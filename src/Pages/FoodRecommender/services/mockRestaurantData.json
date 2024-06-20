@@ -1,411 +1,711 @@
 {
   "places": [
     {
-      "id": "ChIJL2O5jHAX2jERNzV1ixCa0HU",
-      "formattedAddress": "53 Ang Mo Kio Ave 3, #B1-51, Singapore 569933",
-      "rating": 3.7,
+      "id": "ChIJ9bT_inYb2jERmbc0Nkz17B8",
+      "formattedAddress": "12 Telok Blangah Cres, #01-91, Singapore 090012",
+      "rating": 3.4,
+      "googleMapsUri": "https://maps.google.com/?cid=2300483217355224985",
+      "userRatingCount": 21,
       "displayName": {
-        "text": "A&W AMK HUB",
+        "text": "L & A Western Food",
         "languageCode": "en"
       },
       "primaryTypeDisplayName": {
-        "text": "Fast food restaurant",
+        "text": "Restaurant",
         "languageCode": "en-GB"
       },
+      "reviews": [
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/reviews/ChZDSUhNMG9nS0VJQ0FnSUM5MkpEd0x3EAE",
+          "relativePublishTimeDescription": "3 months ago",
+          "rating": 1,
+          "text": {
+            "text": "Ordered wings and told to wait SEVEN MINUTES. Fine.\nWhile waiting, went to order duck rice next door, and this uneducated uncouth big fat dirty looking worker rudely told me don’t step over her hor, queue to that side.\nAppetite ruined, thinking the previous time my food must have been done in a rush that’s why tasted bad, and give them a second chance and see how.\nDISGUSTING STALL DISGUSTING ATTITUDE.\nBe thankful you even got ONE star from me.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Ordered wings and told to wait SEVEN MINUTES. Fine.\nWhile waiting, went to order duck rice next door, and this uneducated uncouth big fat dirty looking worker rudely told me don’t step over her hor, queue to that side.\nAppetite ruined, thinking the previous time my food must have been done in a rush that’s why tasted bad, and give them a second chance and see how.\nDISGUSTING STALL DISGUSTING ATTITUDE.\nBe thankful you even got ONE star from me.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Mark Macadangdang",
+            "uri": "https://www.google.com/maps/contrib/102706199472546935193/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjU5iGoSzozLoe2QVCPyXE1fbQ_Z5vNfsuTlXpWA2eJRRhsFbi6E=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2024-03-01T11:26:05Z"
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/reviews/ChdDSUhNMG9nS0VJQ0FnSUN1Nk03WjRBRRAB",
+          "relativePublishTimeDescription": "a year ago",
+          "rating": 5,
+          "text": {
+            "text": "Was worried initially when I saw the previous reviews. Thankfully the service that I have gotten was great.. although both guys might have the “fierce” look(really not their fault😂) but they gave me nice thankful smiles even though I just ordered a chicken chop. The food taste great for me but I don’t quite like the vegetables with myo though. I will definitely eat again if I am around this area. Keep it up! 😊",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Was worried initially when I saw the previous reviews. Thankfully the service that I have gotten was great.. although both guys might have the “fierce” look(really not their fault😂) but they gave me nice thankful smiles even though I just ordered a chicken chop. The food taste great for me but I don’t quite like the vegetables with myo though. I will definitely eat again if I am around this area. Keep it up! 😊",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Larry & Jenny Acc",
+            "uri": "https://www.google.com/maps/contrib/110649623197033950311/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocI_NnDgRU7UEVgrgD69cG7XD3-sVCQwVBKZIVyBw08ysKbdxgU=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2022-07-20T04:55:21Z"
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/reviews/ChdDSUhNMG9nS0VJQ0FnSURSX0stQzVnRRAB",
+          "relativePublishTimeDescription": "a year ago",
+          "rating": 5,
+          "text": {
+            "text": "2 guys looks fierce who runs the stall. Man they are super super nice people. Ordered chicken chop and salmon set. One of guy bring the food gave me a bigger portion of chicken, and said he worried i was hungry. Food wise nicer than some other western food out there. The past reviews dont do justice to them. I have never met any hawkers who are as nice as them. Jia you guys dont give up. You done a great job!!!!!!",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "2 guys looks fierce who runs the stall. Man they are super super nice people. Ordered chicken chop and salmon set. One of guy bring the food gave me a bigger portion of chicken, and said he worried i was hungry. Food wise nicer than some other western food out there. The past reviews dont do justice to them. I have never met any hawkers who are as nice as them. Jia you guys dont give up. You done a great job!!!!!!",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "lohyw2",
+            "uri": "https://www.google.com/maps/contrib/105877975338119509588/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocLPKECKI_RmBKv5GNL-1xCJOQhxfNGOaDiai7vnEbHXUaBceg=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2023-04-20T17:39:10Z"
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/reviews/ChdDSUhNMG9nS0VJQ0FnSURSNHNuVDRnRRAB",
+          "relativePublishTimeDescription": "a year ago",
+          "rating": 3,
+          "text": {
+            "text": "Good and well cooked. The guys are really quite nice. Service is fast.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Good and well cooked. The guys are really quite nice. Service is fast.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Joanne Koo",
+            "uri": "https://www.google.com/maps/contrib/112905022887760925981/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocI4RYE6WTCsiHs6ye14Lm92biPel3y1eEEV7n-QjiMe_HHEng=s128-c0x00000000-cc-rp-mo-ba5"
+          },
+          "publishTime": "2023-04-21T11:27:04Z"
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/reviews/ChdDSUhNMG9nS0VJQ0FnSUNLcXBIcF9RRRAB",
+          "relativePublishTimeDescription": "3 years ago",
+          "rating": 2,
+          "text": {
+            "text": "You can count the number of baked beans on your plate, and the sticks of fries. Taste wise sorry to say nothing special, better to go over to Rejoicings at next door hawker centre. It would be good for the Boss to eat at various western food stalls, get a feel of how is the general market like and compared what they sell.\n\nJust my personal thoughts.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "You can count the number of baked beans on your plate, and the sticks of fries. Taste wise sorry to say nothing special, better to go over to Rejoicings at next door hawker centre. It would be good for the Boss to eat at various western food stalls, get a feel of how is the general market like and compared what they sell.\n\nJust my personal thoughts.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Seng",
+            "uri": "https://www.google.com/maps/contrib/115286833059951155793/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocIh5GhIEavV3khJO5qATXijW80pbylBz9gJ9TzeQUbrHVf-UA=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2021-04-01T15:46:17Z"
+        }
+      ],
       "photos": [
         {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXU89xhf_ZuSajAv798ee0o-ghbIvqXruZPLejQ7xORrHgDmwhTcgKXPDgOopfCWZeJHyXKcYPm1h-o-uf9T6JuQo8bHbt-fEZI8cO9SvguHcEh-Tbb_8vox6qrT5QBKXzroNn7_HXdNAL067Ho6uiiPD5pfdRCv4F-7",
-          "widthPx": 4000,
-          "heightPx": 3000,
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXV-g0ny9mEQ41yZ99Ms44UfOL37r2FOMthPXTb_4gqT4Z2zpTHX_bMOrHxp2IlTiV-CYmPkoyr0aHkEAIaS00wXNDjejtwK9K4kBv8jyXi1JOES0FwJu_r0rdAWAmtV6y-nLqQDyvBxlvW6OsbDmsJDTGCFLzjLh4mv",
+          "widthPx": 1920,
+          "heightPx": 1080,
           "authorAttributions": [
             {
-              "displayName": "Daniel Sin",
-              "uri": "//maps.google.com/maps/contrib/112598854240446452449",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXjYddoPyTukQbnkjgdSPb3EweF2OKgkxriQvGYsYqZ5VOqgVJO=s100-p-k-no-mo"
+              "displayName": "CHUAN SENG LIM",
+              "uri": "//maps.google.com/maps/contrib/104965686500086479751",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKfGLLbBhGss2tcHbtDKZPhAR4HlktZpZnxD7rRqcKwKggDLQ=s100-p-k-no-mo"
             }
           ]
         },
         {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXWpwn4CvvAAqTdTv2sKClGHxQRHN7f4BWtU_HrA6OGuPo1MXS25bCKwFViAFpRT86_ehqzyfKs6kgWHOWDGo6dnEBIke5-DAqB7bapj4UABPfA-Wn4usBZBnUXDHbTW7k2S5u70OtY0XW8FCIVCdZTeY8c8c-Yj-ZXj",
-          "widthPx": 4032,
-          "heightPx": 3024,
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXXZ8VPVpramSiqqIyV3b3uGri-PGwcH0v-eiKCpGpnlFQ0o8wIuSXVgbcnzdoeXudBizRAu8gqlxElH0NzdVaN2jZUy_ffxiJhdFB1QF_nO7D68PXY7zsjgn6aTaf4MSm1wk2J8YgGTpC9A4Aq3T_IQnFWfdf_gst84",
+          "widthPx": 3968,
+          "heightPx": 2976,
           "authorAttributions": [
             {
-              "displayName": "Young Choo",
-              "uri": "//maps.google.com/maps/contrib/111802448595187405859",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjW3GAReEKqo5Og6cSJQVvsboC5lO_xywpIsG3l55ABfJVczYan2=s100-p-k-no-mo"
+              "displayName": "Gnab Gnab (Gnabster)",
+              "uri": "//maps.google.com/maps/contrib/105498223825690331319",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocJyggDwbwzaSrEj3DirNjEjp2KrUkO5LbVd_uBSnpkXxcGELdfe=s100-p-k-no-mo"
             }
           ]
         },
         {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXVRlKMPH8k_KkkukOGtDZiRAxyrOatidpxi8pkrMNa-WFgd4ngngw4EUUmC7GUxCcP41D4COL8xFVKVnjtpcvizO9zdWfKZiLBAPhxMxxXO-tZpIZg9oVeaZ8FNye3l0VWWGREykKLS1d5SQDOoMswZvWfX-AUTGx7Q",
-          "widthPx": 2736,
-          "heightPx": 3648,
-          "authorAttributions": [
-            {
-              "displayName": "Kerk Chia Cun",
-              "uri": "//maps.google.com/maps/contrib/106700093012955117723",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVmObUx08lKrBSxL755qBu0-6mcd7yfZTSvSImXhmqkTMGmW5I=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXXwMeUpmzELepwMNHbMtOJGJv6JRDK95qNzaVNE7sSeqhcodHIpO_t1oB0uYaRwvJ9y0yieWvTrBYDK-kBI2QhGthiYrc1-6GeNfUwdvDUAiydbX9g0oNK4IoQiSh-G1DOl3Vwur8nlWsCvvd7Y8jmaaJZqcV9_6ovo",
-          "widthPx": 3755,
-          "heightPx": 3024,
-          "authorAttributions": [
-            {
-              "displayName": "Prestige Consultants",
-              "uri": "//maps.google.com/maps/contrib/109411046914478799533",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXGXhiy9ssuuAv-r-3dW6RmQnKrXbB2o1RHS5u1g_0xmCQY1BXqBw=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXWSceEoeEopS97NB9Ucnw8lgYWBpg5-u15qxbbK-y0eNmU05dJ7CwglVZttkI-MQLO6ZaPpxdUl7pYes6kbRrktdeMM4RQUJfSeoqvObqPIud9g3nyQyWYezuzxIfHO8d24ta7EsfHXD3oJr29kf--YzHlNcmmAWhoM",
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXXvN8LYqFrT1qtjI1-WkxUhy2yfeNoecudxoo4LW32W0iZab4-oXDcrQVRTRkVbqwIh0ML_1CYuIzYryWp9w2l6UicHQpk51EJJDwhiR6usxhHRWXBmZMTzioy9n-878BNo8WcpvBAH2rXOAleABXlmXACMokYAgKh1",
           "widthPx": 3024,
           "heightPx": 4032,
           "authorAttributions": [
             {
-              "displayName": "LOUIS HENG",
-              "uri": "//maps.google.com/maps/contrib/107194949757146606599",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXfpWXWuCuLbIJbMNgwT8hJidmZoyqj0k3aTpG6a9nB1Uu0Je7N=s100-p-k-no-mo"
+              "displayName": "Kwok Kam Wah",
+              "uri": "//maps.google.com/maps/contrib/108874029879640634247",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKkkjZykMLeOz8UIxC4fm0Z5E_FWYrwTWzf62abksvUTkoteA=s100-p-k-no-mo"
             }
           ]
         },
         {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXVJhJkT4pAggf949bV4ckI_tppYW8OvPdoYShZ_NE6jshm-jvTwDa03jg4ccD__dwFuzPoZnEkbh5Flk3LtBCHs9Uv7RxvDJo7g73fjVhFrMrz8Q7DwQw3r2YvimUtgv94CLeVI9kLR0qbnMWbA2z7B3BRynY-oyTin",
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXVUpFBRCQa8XFkgjVsMBjuLlEsD3hjcwFowvmyAm37FR09-nnrgzj-MYBZDbkLBXfJeSpluHt1rXSD8U0cFrgTxrR479gDmdVyb7iPCyjRH2YDSwamK9FO7kq6nk6M7dnjcbHOo-z1gGycS0wvpcjkF0tMQ-halDyHq",
+          "widthPx": 3024,
+          "heightPx": 4032,
+          "authorAttributions": [
+            {
+              "displayName": "Larry & Jenny Acc",
+              "uri": "//maps.google.com/maps/contrib/110649623197033950311",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocI_NnDgRU7UEVgrgD69cG7XD3-sVCQwVBKZIVyBw08ysKbdxgU=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXX3P8S1WqSZ2Sds-ZCV_qqiuxJtOof3x1_IsEkHzV7SpmNa3a3sjDZ84j1E6oXSaCwk_quyfsLO3IagSXiadpVB1HdhgCrVeVDsHkKeDq26bZ81sZSa00EfhM3tDunErfKTIjzRGpFrt9epiJqGPOEKenG_sfOzRms0",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Joanne Koo",
+              "uri": "//maps.google.com/maps/contrib/112905022887760925981",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocI4RYE6WTCsiHs6ye14Lm92biPel3y1eEEV7n-QjiMe_HHEng=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXXZ4EASLCw98oC8INc8BaKfvPvIYjzSgZe7P03aKZ4SetdDBa9kYlUr7IXs_LGPrBKDiOyZot7wE-6hGMGiwTtfYUKxUjv0yHuOw2sIZ-5ZLXrXSzTK1Q5L1ZBt2Ks1att6qR4VrfHpvzSoJuHZGgDC6Id7Ufvs8qby",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Peter Chong",
+              "uri": "//maps.google.com/maps/contrib/115086655103873779488",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjWfvdywKpEAqY55kfXAIcuJoqhS4OyIsODJngepfnjrTaQEiQU55Q=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXUa3rLH65BpeUuAee4FLkMVdy2ISJavU02XvEdoZPLQFZk30s3_7unTKCd-Gj9LjIfTxkGT0O3yFfTXupwdrGzExa5bJYjfgc19kEjMXksUry9yTRy0AJtz8lcWSHfjRYYBeO5fdTVlfrZQjoQTHj1GjCYXOT6y11IM",
+          "widthPx": 3024,
+          "heightPx": 4032,
+          "authorAttributions": [
+            {
+              "displayName": "Mandino Tan",
+              "uri": "//maps.google.com/maps/contrib/103621902530263784348",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUXM_Jylc_sfM7sgIYaaoALa0LbYWIsc1DhvchSTJN2go8-OUMHCw=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXU129xskwaqojufwvqp_FZg_VEyz30pjKuxk0KXdA15hw4criZdPgWtT-w1AyfhxseKqwPjp3H90gHZVI6IpevAi7ddcjGxhQUyNgWFRx2w-06C1s0Xo-4q4v-CD9qOLt_K_yRVmwz0IQKMqTydYj-htFqsOyKrsald",
+          "widthPx": 3024,
+          "heightPx": 4032,
+          "authorAttributions": [
+            {
+              "displayName": "Kwok Kam Wah",
+              "uri": "//maps.google.com/maps/contrib/108874029879640634247",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKkkjZykMLeOz8UIxC4fm0Z5E_FWYrwTWzf62abksvUTkoteA=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXXseaSBtTwzQbToIh2Yt1dTIMz2uQ0BBhKa-0f2X6R5F1GcM-hFSTlJbEwpLBCpCGtjd3eD_DYem10e559HqZ03FkTQnwgHcVOdT3PZ8uKKax9HFmQB6bDKZxs6ToUjIbbuAi55hKZZ6njnFyKMgXna-6RLNJpW1i7K",
+          "widthPx": 3072,
+          "heightPx": 4080,
+          "authorAttributions": [
+            {
+              "displayName": "Shaun Chen",
+              "uri": "//maps.google.com/maps/contrib/100614872550276211441",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXZzeEvuJBA6k3ugbdu44A3IwNUh7XTWo1-8lE6rYu6YRL4BgdkSQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJ9bT_inYb2jERmbc0Nkz17B8/photos/AUc7tXVVfAuQ4sdCX0OSdCa6M_7dpVTD1sVKSG5iFUl9g67SjFelnhG0zCI4CVv7NbmZTPhKmCZU4WlS-5bJCoratnExJbLWBEzr7DLbA8bDDr9xASIbQowYSLuHyh9z3nUZlUuIhXoD3OqhLgfO1YjiUudv4kYFaMFJsIGf",
+          "widthPx": 1920,
+          "heightPx": 1080,
+          "authorAttributions": [
+            {
+              "displayName": "CHUAN SENG LIM",
+              "uri": "//maps.google.com/maps/contrib/104965686500086479751",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKfGLLbBhGss2tcHbtDKZPhAR4HlktZpZnxD7rRqcKwKggDLQ=s100-p-k-no-mo"
+            }
+          ]
+        }
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/places/ANXAkqGgSLl9lvGuw-uhxzl8aVOx5-i_EiY6fQKSED7Ijh0uwuCeLUdmz7r8f5WhRoVjy9d_nXIydJDickwAOVuRgRfO0aB_o991l44=s4800-h1080"
+    },
+    {
+      "id": "ChIJYWkz_tgb2jERlEU5uR_0-Y4",
+      "formattedAddress": "Singapore",
+      "rating": 4.8,
+      "googleMapsUri": "https://maps.google.com/?cid=10302534039675422100",
+      "userRatingCount": 14,
+      "displayName": {
+        "text": "Konak Western Delights",
+        "languageCode": "en"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Restaurant",
+        "languageCode": "en-GB"
+      },
+      "reviews": [
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/reviews/ChdDSUhNMG9nS0VJQ0FnSUNocm9lVzlBRRAB",
+          "relativePublishTimeDescription": "a year ago",
+          "rating": 5,
+          "text": {
+            "text": "Food presentation was good, food taste was amazing (black pepper sauce was very flavourful) pricing was fair in a hawker and good variation of selection but no pork.   Queue is long though. Good food must always have patience.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Food presentation was good, food taste was amazing (black pepper sauce was very flavourful) pricing was fair in a hawker and good variation of selection but no pork.   Queue is long though. Good food must always have patience.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Adrian Tan",
+            "uri": "https://www.google.com/maps/contrib/113409539073643530650/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW4XO6WPcZViryfCbOEvyWdEhk3rLA8cl1MXO2E47EUjr4jJOrxKQ=s128-c0x00000000-cc-rp-mo-ba4"
+          },
+          "publishTime": "2023-02-13T12:25:49Z"
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/reviews/ChdDSUhNMG9nS0VJQ0FnSURkeHJiUHVRRRAB",
+          "relativePublishTimeDescription": "3 months ago",
+          "rating": 4,
+          "text": {
+            "text": "Chicken chop in mushroom sauce",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Chicken chop in mushroom sauce",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Nick Koh",
+            "uri": "https://www.google.com/maps/contrib/109956087041534450854/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWg6sY3HjhhUdZhAA5R43hgn5gvWh_5Uq29Or3t59Unjq3n6hfjaQ=s128-c0x00000000-cc-rp-mo-ba7"
+          },
+          "publishTime": "2024-02-23T04:35:44Z"
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/reviews/ChZDSUhNMG9nS0VJQ0FnSURpMk0tUUx3EAE",
+          "relativePublishTimeDescription": "3 years ago",
+          "rating": 5,
+          "text": {
+            "text": "Served better steak than many steakhouses, at remarkable price of only $10",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Served better steak than many steakhouses, at remarkable price of only $10",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Jeffrey Jiang",
+            "uri": "https://www.google.com/maps/contrib/102464939151659001764/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjUvnImspan02ccgsU98l5qFBfG6NDopxHBkgHFvGtWVOLoEuewv=s128-c0x00000000-cc-rp-mo-ba3"
+          },
+          "publishTime": "2020-11-24T12:18:27Z"
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/reviews/ChdDSUhNMG9nS0VJQ0FnSUNxak9xcl9BRRAB",
+          "relativePublishTimeDescription": "2 years ago",
+          "rating": 5,
+          "text": {
+            "text": "Chef was a young person.. old auntie does the front customer service.. the cooking is fast and organized... chicken chop not over burnt... The dishes setting is nicely done.. Come and support them if u are crave for western food.\nOpposite the stall was another western food stall. I tried both. Both have its own better options to go... I prefer the chicken cutlet from this stall.. thicker meat and not over fried...  Anyway, both stalls are there, it means u won't miss western food. Both just have different rest day.. I have been trying different western stalls at AV, ABC, henderson, Bukit purmei.. these 2 stalls here are better choices to go....",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Chef was a young person.. old auntie does the front customer service.. the cooking is fast and organized... chicken chop not over burnt... The dishes setting is nicely done.. Come and support them if u are crave for western food.\nOpposite the stall was another western food stall. I tried both. Both have its own better options to go... I prefer the chicken cutlet from this stall.. thicker meat and not over fried...  Anyway, both stalls are there, it means u won't miss western food. Both just have different rest day.. I have been trying different western stalls at AV, ABC, henderson, Bukit purmei.. these 2 stalls here are better choices to go....",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Fang Diang (FD)",
+            "uri": "https://www.google.com/maps/contrib/109363845264248954194/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocJvVfzhRz79ic5TmPltgFrQ_N7qqfsfid1q-VE18SmVz0pxTw=s128-c0x00000000-cc-rp-mo-ba4"
+          },
+          "publishTime": "2021-06-29T06:49:42Z"
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/reviews/ChdDSUhNMG9nS0VJQ0FnSURpMklfVjJBRRAB",
+          "relativePublishTimeDescription": "3 years ago",
+          "rating": 5,
+          "text": {
+            "text": "The steak is nice and done to the wellness u wan. Wedges are a must have.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "The steak is nice and done to the wellness u wan. Wedges are a must have.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Pck isaac",
+            "uri": "https://www.google.com/maps/contrib/116414721522719426062/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocKfnYh6Fp2ckcAcEAboiZZmXG1kyLlxnKXNg9gk29VEfwvneA=s128-c0x00000000-cc-rp-mo-ba5"
+          },
+          "publishTime": "2020-11-24T12:18:25Z"
+        }
+      ],
+      "photos": [
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXVOtt4mOmPsI9LbovPiIEavUtN6WBH5nPk4LqTE1gnJOLK6CkDE7Ip3bmDYUOzy62OpBC2aJV22yximv_SCRhjOBm4UBJ7TlK2beOySAkVB9oaM2oAfSxBW56DM1yxdkKY-f2F6Ja6z0JtCCIaYgAATO8wgSdyyM0UI",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Adrian Tan",
+              "uri": "//maps.google.com/maps/contrib/113409539073643530650",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjW4XO6WPcZViryfCbOEvyWdEhk3rLA8cl1MXO2E47EUjr4jJOrxKQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXWjre-l2VxwMDByNtwnr_5ZOjlFq1poEdAVOa_nQC6Nb_DcCoBrMgshQz48ZUVsNM4s1TrVJXniBVteytEMIeLz1AMNKeCaqfKm7PS_aFTpbFmy42x0ODTtA8avxIG0gi5ujxGNDFLiIfq5OABRHAxQEXQL6bV6r9M8",
+          "widthPx": 3024,
+          "heightPx": 3683,
+          "authorAttributions": [
+            {
+              "displayName": "Xuan",
+              "uri": "//maps.google.com/maps/contrib/106067631618597810084",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLtrdz9W0jR6BcBGZWNrNLnUoAa-Nyi900OqK6xAmDjrUNHcg=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXWnCiN_kfu9k3iTdaUzlhklyjz4rfTb7zLwlPDiOT_AOfFgghRcFEk17lUEXRpTQ0EFO0gD89nTSSyu2DQS8kYCquoKhwKcs0kPDYY1qaEl4ZUMFOPn2xFuYWnUvmPYFJ5Km417BnHGTYd59HGlt3WBeORq1fdb_V1Q",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Adrian Tan",
+              "uri": "//maps.google.com/maps/contrib/113409539073643530650",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjW4XO6WPcZViryfCbOEvyWdEhk3rLA8cl1MXO2E47EUjr4jJOrxKQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXUnSiO5-P3Xe8y3RCVoY2C55hyDobPdYy-RreemzYxRUDQzMZPxI4rn1x_5xoT1coPnONkGEaU87kDAZoMPM5RvRmrUC0zkNbR05FlB0jgD4rDb3oCjoGGDIjj0F5-qL_xFGxrUSVVvBblqJOYZh3pZhCOhfD-9fGWM",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Adrian Tan",
+              "uri": "//maps.google.com/maps/contrib/113409539073643530650",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjW4XO6WPcZViryfCbOEvyWdEhk3rLA8cl1MXO2E47EUjr4jJOrxKQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXUb0XItkVP703yI9kgQV3wDEX50qmxWsuFHD-iw8NNS0q39earyv5moEr5hnyZJB6m-nz8G8SpDg0ABtn5lx_wCFozGfv_U-gA6kEQ31uqTyCb5abOJkpV7lrVyLbGbFsqPBNd0EcY7CT7dYct3G_KREQFU0RTyu7-C",
+          "widthPx": 3000,
+          "heightPx": 4000,
+          "authorAttributions": [
+            {
+              "displayName": "Fang Diang (FD)",
+              "uri": "//maps.google.com/maps/contrib/109363845264248954194",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocJvVfzhRz79ic5TmPltgFrQ_N7qqfsfid1q-VE18SmVz0pxTw=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXXZ2w0KV-TTT7k7JjuuRaSlgDvDZY_fMG-H9VcCr47AdQCEQXQpjCmrQBRpaXSU2t7KFL1yesIep2uh3A5R7VnBIAkI6SXraRHmi_PnZ4mxoEK4ncLeky6fmkbevcRrZzB-kydYrIA2Y0EOqYpZSPJCb9qHizsQFsI1",
+          "widthPx": 3024,
+          "heightPx": 4032,
+          "authorAttributions": [
+            {
+              "displayName": "Nick Koh",
+              "uri": "//maps.google.com/maps/contrib/109956087041534450854",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjWg6sY3HjhhUdZhAA5R43hgn5gvWh_5Uq29Or3t59Unjq3n6hfjaQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXW3uOhK9nMJNbJsMFyzBHOJ2vddfFdlLZXkQzxD7N6fbrSE5YLrO0Wn5bcBbkRF0hiLWDfSsOlq8gCEtdAlsNm5RD556cgNrF-J63XDB8jgv-eBoi0zis3LsV-hc5OnnJR1_ahsa1YdZ-WYc8N2qEZIuLTLKJ6Y9aMX",
+          "widthPx": 3000,
+          "heightPx": 4000,
+          "authorAttributions": [
+            {
+              "displayName": "J Michiko",
+              "uri": "//maps.google.com/maps/contrib/105569305488471372476",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjWizvorkqbnIafD-LD0yL5sdTGrd0YuMlqMgtbVZ8Z7GMc3sZL2=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXXcsA2hmvQEW_VdTFzZINYTk973yCBgFMCy4XioHvVISQZvCDf_fU2Hf7rEA050zQFxn--lYy_YTT_TKwQrGUIR05Iy2IqggoOc7HtNOXFsqr9GATiZlm3Z60UY3HiM3KuBw33Ip_FUGS5JsyoA-jAqW05higk-BKlL",
+          "widthPx": 2755,
+          "heightPx": 2066,
+          "authorAttributions": [
+            {
+              "displayName": "Adrian Tan",
+              "uri": "//maps.google.com/maps/contrib/113409539073643530650",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjW4XO6WPcZViryfCbOEvyWdEhk3rLA8cl1MXO2E47EUjr4jJOrxKQ=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXX2NzVNDhgNsNXKGicqVvat-f6pMwhVoSEuoVtTr509bBhVyXcqgJ5-sB_zzv3Ffon7oa1n3g52YX7NXIuwTBSjlRVvGgDdQw-d0FUYWZ4PfltHUV0KPChi41rz80actiEVpwJYC4-d33QcfoG7Ej5AruycBRT0uzRX",
+          "widthPx": 2268,
+          "heightPx": 4032,
+          "authorAttributions": [
+            {
+              "displayName": "Pck isaac",
+              "uri": "//maps.google.com/maps/contrib/116414721522719426062",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKfnYh6Fp2ckcAcEAboiZZmXG1kyLlxnKXNg9gk29VEfwvneA=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJYWkz_tgb2jERlEU5uR_0-Y4/photos/AUc7tXVSor0n_nCJPuUMeJ-W8R8iaY5ke8jORDaoKfUCnNNHU-yoWCoPQO4fKQJzEZ-oKYCOqPJSeY8f3ERZD8asVwAVqEEVUZni6E4dr-jfAURfGjkBjNePJYXNQzBcDZNxm19LgXuV2go_EnKf4aGW3EtnhQgJdKBi9-zL",
+          "widthPx": 3840,
+          "heightPx": 2160,
+          "authorAttributions": [
+            {
+              "displayName": "Jeffrey Jiang",
+              "uri": "//maps.google.com/maps/contrib/102464939151659001764",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUvnImspan02ccgsU98l5qFBfG6NDopxHBkgHFvGtWVOLoEuewv=s100-p-k-no-mo"
+            }
+          ]
+        }
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/places/ANXAkqHwaURwkAG8-i7X9l4KR0rU7H3xyXD9UCecZmfdaTyTZtMjVq4SH9-g-h4oIklbtPauQnyUG2-AXLitaqYVoD1zANzB7f7w9S0=s4800-h1600"
+    },
+    {
+      "id": "ChIJiU9mL2AZ2jER07ZospknPBk",
+      "formattedAddress": "2 Telok Blangah Way, Mt Faber, #01-04 Next to the Swimming Pool, SAFRA, Singapore 098803",
+      "rating": 4.6,
+      "googleMapsUri": "https://maps.google.com/?cid=1818371890627524307",
+      "priceLevel": "PRICE_LEVEL_MODERATE",
+      "userRatingCount": 1009,
+      "displayName": {
+        "text": "Old Habits Cafe",
+        "languageCode": "en"
+      },
+      "primaryTypeDisplayName": {
+        "text": "Cafe",
+        "languageCode": "en-GB"
+      },
+      "reviews": [
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/reviews/ChZDSUhNMG9nS0VJQ0FnSURqbWJDRlpREAE",
+          "relativePublishTimeDescription": "a month ago",
+          "rating": 4,
+          "text": {
+            "text": "Found this place from Google Maps when we were in the area. It's in the SAFRA club house. Charming, wildly eclectic collection of vintage stuff from the 70s in Singapore. The second of chicken chop was very generous. The staff were courteous and friendly and attentive. My wife and I opted for the two piece option and shared. The coffee was not bad. Great interesting find in the Henderson area",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Found this place from Google Maps when we were in the area. It's in the SAFRA club house. Charming, wildly eclectic collection of vintage stuff from the 70s in Singapore. The second of chicken chop was very generous. The staff were courteous and friendly and attentive. My wife and I opted for the two piece option and shared. The coffee was not bad. Great interesting find in the Henderson area",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Chi Hong Hwang",
+            "uri": "https://www.google.com/maps/contrib/103614009093464438172/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVJ9LzwdwHivI7QqQLHM4IPpVLxzpiyTnPJPbNbxBmlMjmafHXe=s128-c0x00000000-cc-rp-mo-ba5"
+          },
+          "publishTime": "2024-05-04T23:34:38Z"
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/reviews/ChdDSUhNMG9nS0VJQ0FnSURqN3NQcjNBRRAB",
+          "relativePublishTimeDescription": "a month ago",
+          "rating": 5,
+          "text": {
+            "text": "Good food at really affordable prices. Pleasant and courteous service. Love the decor of the place too. Food wise, cumulatively 4 stars but the remaining 1 star would definitely easy fixes). The grilled chicken on the kids menu was tender and flavourful and my kid loved every bit of it (the rice was unfortunately a tad dry perhaps a too long in the cooker/microwave); the burger tasted great (although the bottom half of the charcoal bun got a tad soggy); the beef stew was packed full of flavour  (the beef could do with a few more hours). The platter, which we did not order but saw another table having it), was a sight to behold. Having said all that, I would definitely return!",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Good food at really affordable prices. Pleasant and courteous service. Love the decor of the place too. Food wise, cumulatively 4 stars but the remaining 1 star would definitely easy fixes). The grilled chicken on the kids menu was tender and flavourful and my kid loved every bit of it (the rice was unfortunately a tad dry perhaps a too long in the cooker/microwave); the burger tasted great (although the bottom half of the charcoal bun got a tad soggy); the beef stew was packed full of flavour  (the beef could do with a few more hours). The platter, which we did not order but saw another table having it), was a sight to behold. Having said all that, I would definitely return!",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Glenn",
+            "uri": "https://www.google.com/maps/contrib/113447464522132235816/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocIrTYqgj5Sms7Udm4pz4x-rW1lwUce8V5_XvWJZVOlOsUi7suY3=s128-c0x00000000-cc-rp-mo-ba3"
+          },
+          "publishTime": "2024-05-03T12:53:46Z"
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/reviews/ChdDSUhNMG9nS0VJQ0FnSUNUckpMMHBnRRAB",
+          "relativePublishTimeDescription": "a month ago",
+          "rating": 4,
+          "text": {
+            "text": "The meat options were disappointing. The lamb rack was raw inside while the outside was already charred and the beef was dry. Carbonara didn’t taste good too. Chicken was however tender and worth recommending. Mushroom soup and the walnut garlic bread was very good, as well as the salmon pasta! Overall quite a nice place to visit and reminisce your childhood but honestly felt the quality of food wasn’t worth the price.",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "The meat options were disappointing. The lamb rack was raw inside while the outside was already charred and the beef was dry. Carbonara didn’t taste good too. Chicken was however tender and worth recommending. Mushroom soup and the walnut garlic bread was very good, as well as the salmon pasta! Overall quite a nice place to visit and reminisce your childhood but honestly felt the quality of food wasn’t worth the price.",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Markus",
+            "uri": "https://www.google.com/maps/contrib/116929885102483880042/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWLbnu7sTN6Zgu-8RCfDwo4kG1JIdnNiBe6XeoOWPBziSzOke6G=s128-c0x00000000-cc-rp-mo-ba3"
+          },
+          "publishTime": "2024-05-11T22:05:16Z"
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/reviews/ChZDSUhNMG9nS0VJQ0FnSUN6cnJYVkd3EAE",
+          "relativePublishTimeDescription": "2 weeks ago",
+          "rating": 5,
+          "text": {
+            "text": "Visited the cafe on Saturday with a booking for a larger group of people. Cafe was quick to respond and even though we were there earlier, the seats were ready for us. The food delivery was very quick and we enjoyed our food. The cafe is full of nostalgic elements that engaged everyone and we had fun taking photos inside the cafe. The staff were very kind and also helped us to write a special message on the dessert, with some complimentary cakes, for a friend who was leaving Singapore. We hope more people will visit this cafe to see the wide collection of retro toys and items that are mostly not found in Singapore anymore (most are for sale!).",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "Visited the cafe on Saturday with a booking for a larger group of people. Cafe was quick to respond and even though we were there earlier, the seats were ready for us. The food delivery was very quick and we enjoyed our food. The cafe is full of nostalgic elements that engaged everyone and we had fun taking photos inside the cafe. The staff were very kind and also helped us to write a special message on the dessert, with some complimentary cakes, for a friend who was leaving Singapore. We hope more people will visit this cafe to see the wide collection of retro toys and items that are mostly not found in Singapore anymore (most are for sale!).",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "Sherry Soon",
+            "uri": "https://www.google.com/maps/contrib/112055706997397475159/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjXPUa_4MFh9pgosEbJSpFuQNrfmxMeCVTUSb_AjRQB9M0nttaXPEw=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2024-06-02T05:10:01Z"
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/reviews/ChZDSUhNMG9nS0VJQ0FnSUNMbkpDZE5REAE",
+          "relativePublishTimeDescription": "in the last week",
+          "rating": 5,
+          "text": {
+            "text": "The Old Habits Cafe atmosphere is so nostalgic! Suitable for all age groups!\nThe food was yummilicious, we love the Sirloin Steak, Lamb rack, Salmon, Truffles mushroom soup, fries, coleslaw, mash potatoes were all fantastic!\nThank you for the cozy place, good food and  the entire crew showing hospitality to us.\nWe all enjoyed our gathering even my 87years old mum,  and will return for more certainly! 😀 Thumbs Up!!",
+            "languageCode": "en"
+          },
+          "originalText": {
+            "text": "The Old Habits Cafe atmosphere is so nostalgic! Suitable for all age groups!\nThe food was yummilicious, we love the Sirloin Steak, Lamb rack, Salmon, Truffles mushroom soup, fries, coleslaw, mash potatoes were all fantastic!\nThank you for the cozy place, good food and  the entire crew showing hospitality to us.\nWe all enjoyed our gathering even my 87years old mum,  and will return for more certainly! 😀 Thumbs Up!!",
+            "languageCode": "en"
+          },
+          "authorAttribution": {
+            "displayName": "angel angel",
+            "uri": "https://www.google.com/maps/contrib/102117334699775703062/reviews",
+            "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWtWVsL3BJ-ZL92zbLnwEKKU90oFgswoUp_4KKNgr697MBMzGRP=s128-c0x00000000-cc-rp-mo"
+          },
+          "publishTime": "2024-06-18T06:50:39Z"
+        }
+      ],
+      "photos": [
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXX81ql2ezHlabJde2R7_CITUhUCHCP_Jt_aejc8SBBhRhAvlYFeg_wKzcwYSqxX9Oc_3-U4AwF6RIY9Akq2dzLTemAxNZwiK_z-F7btBG2LDzIfJzxGgME5SAs3PxOcqHABqqmUwqfYrjlv4GekTymMug7o9azhr42x",
+          "widthPx": 6256,
+          "heightPx": 4171,
+          "authorAttributions": [
+            {
+              "displayName": "Old Habits Cafe",
+              "uri": "//maps.google.com/maps/contrib/113881329388253985722",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUCa_HNLgd5phBqmsX4V6lOPDdTJWKrrpBSRrgPAX76QZc6la5b=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXWD8JCLOMAA1d4dGtzH64I0QM8BRlUe20PdAdH24QXLHtui6IbO63miK-BMFk1RX17pZicukVev3qa-gCHWFNY3juSuup3-yzYd_PxMNoHeTK3w7Z1vlw11pVhL6fZRyIQGfEALWWBpbAqE5Nsra0dO4H03h53II6CB",
+          "widthPx": 3000,
+          "heightPx": 2446,
+          "authorAttributions": [
+            {
+              "displayName": "Chris Koh",
+              "uri": "//maps.google.com/maps/contrib/110140186706826086199",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLVGZH9I2PvDHQKHr4pMfE6duoqxOIR480-k772xpiFYU-n0g=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXUwKOGqr5q5-XxvU2Lcwh2CdVzTPx3NgfOmb6nwWFQr554RcqnJPQ9l7p9b2YhmGp_ovbVsi2Bf-hFF-x6i4DEk5Ys1vmLwHyV9RXDPOTK_gruCMSVMBNiBQV5P9jVQ02lQqcp0y8y9arRxvz5dhM_hfs9-oNpTzI9N",
+          "widthPx": 2048,
+          "heightPx": 1152,
+          "authorAttributions": [
+            {
+              "displayName": "Old Habits Cafe",
+              "uri": "//maps.google.com/maps/contrib/113881329388253985722",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUCa_HNLgd5phBqmsX4V6lOPDdTJWKrrpBSRrgPAX76QZc6la5b=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXW0-TjC1VkWgg1PjS3VpPTM189uXynYug87QWlo0q7zpImaJQauPWBy0cbDhU3kh9rTLzyAl9tIVqL3Fkqrpul_hL-7zwdEugn_WWi6nhrfDnLasMFDW0cTIPcynMcnnCb-299lTUpW6MeCeAr5nZh6u98YLCddMS4E",
+          "widthPx": 4032,
+          "heightPx": 2268,
+          "authorAttributions": [
+            {
+              "displayName": "Josephine Lim",
+              "uri": "//maps.google.com/maps/contrib/110417353334119871221",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocIq9pQ0yFZ4m2X7onTwjqv8IE5JPptPZ0W29883AqXCuMepCg=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXXjykuuQQiENufsMXeuzD5wl4JTkpeKdGedtxp2aM8QG-spbAkpFeeY-9236KmxUz9gaIgoSAJDK2guB98sFxVfHpVKjrcOkv9Fnu2Dp47MABh29zkEq-wcQAImTBo_8dvh4LlSzahuWwR0bTTJ5qWjAVxvaHqWnVDy",
+          "widthPx": 1199,
+          "heightPx": 764,
+          "authorAttributions": [
+            {
+              "displayName": "Sherry Soon",
+              "uri": "//maps.google.com/maps/contrib/112055706997397475159",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXPUa_4MFh9pgosEbJSpFuQNrfmxMeCVTUSb_AjRQB9M0nttaXPEw=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXXRZO1aqU_r9-Nl0iMbrgOJRmfeapX1ClUHLOyku6UJ1L_iz3r8wm0_8kK5iLqHbE0-BmhE5JHusFRELQWQ03zMlLuJq92L7udm_ks9GNlBHgNf3lFIuWkDzG7vu2p_tEKd1u2gOsNyAepWtu8b7wZY34_Nd7fRGema",
+          "widthPx": 1440,
+          "heightPx": 810,
+          "authorAttributions": [
+            {
+              "displayName": "Old Habits Cafe",
+              "uri": "//maps.google.com/maps/contrib/113881329388253985722",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUCa_HNLgd5phBqmsX4V6lOPDdTJWKrrpBSRrgPAX76QZc6la5b=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXUVMsQNM905w8zobh-OxDOjAmCOkKavCAMas4CY-5ck4CN2i0dFsbTx7CNgMd9sgodZvXIXLR8M_LLt-ioBV0e1PCA_otYZudNywa6-QNM65fsVD-HayDbM7_0mRhScX3-aNsoVM8Ou2TbeTLygAIrs5M4lM7Uj1E0C",
+          "widthPx": 4000,
+          "heightPx": 3000,
+          "authorAttributions": [
+            {
+              "displayName": "Aheian",
+              "uri": "//maps.google.com/maps/contrib/102095381365239886987",
+              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjX1m-opXea8xzYxI86Ko4WcDMteRfvUVbabROL0Yv9ad6tGosOw=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXXiznQtt6Wsg7whRuFMCqGsOxmcp8slNdL5QalB1eCoQ4WRp_EETUcX7iYvhw8XJJiLyiygj_HK83zteZf0wxXmh2bILUmMLptVI9uVnIfEjPZBKkvVskYOU-Jm4Wr220EQBIyBkraLe6fNEFl_t7_2FAtDu49MoN5N",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "Gina Tan",
+              "uri": "//maps.google.com/maps/contrib/117074974303790095825",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKlZ-4RyHbKH_uO0OHw9jnsnWM4OwsBqtDLO9NXZwjtS0Kafw=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXWZ813DVg87yZ8dQvx7sBSN3wO3DZF9jwMhijdi4381XNhM08osmUfaVm5VMVutgGWDqzRdPLPZfcKyQiZ_a4mbKNAG9vr9ZkN9rTxO0V_lk5eLlhCgnfIWhyyhT-LNvz5hWdvF2wMNdmUsyoAWDIgr1nSwu70lMRkC",
+          "widthPx": 4032,
+          "heightPx": 3024,
+          "authorAttributions": [
+            {
+              "displayName": "ho mf",
+              "uri": "//maps.google.com/maps/contrib/111003775071451435315",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLM-LJws5nzllBpzFcxKOqpGRLdadZWeDiGzmrp1CtuBUe6HA=s100-p-k-no-mo"
+            }
+          ]
+        },
+        {
+          "name": "places/ChIJiU9mL2AZ2jER07ZospknPBk/photos/AUc7tXX55HvQjT3TEwGU82zF1JwZCXYTR7W5t9GpVI9x8QBOBcy0m04s38_KDgnRG_1TpSaTmD0lq51daWXSMcE1zR45BgW6z5uwTWMO6PJYwnFv8EN-4q1V_ShV_tx_p68Pi6A4tYY_s_FZTavlOhFQjSZ6vbTsnFY40lRu",
           "widthPx": 4624,
-          "heightPx": 3472,
+          "heightPx": 3468,
           "authorAttributions": [
             {
-              "displayName": "Z Ong",
-              "uri": "//maps.google.com/maps/contrib/100995158974633407890",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLrTJ6X4NFs0eaP_GxhjdyrP8rgqjJnTM2iQwOPkZQNTRqyMQ=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXXtULjNXt_OOTKXdXAG-cqDbQ7IYzhyc6k2W7i6sgkS2ulDdH1EGoX2u3tR6yujMYasiE6QVQPW2NbkzsRqS7bDWonsFarWyOAVGONgqc7ZCLUUtfan0aimqmsHphSIR05VY8j1Zro0K2TB_1iDorl2WLYW24_EYJ4l",
-          "widthPx": 3024,
-          "heightPx": 3024,
-          "authorAttributions": [
-            {
-              "displayName": "Damien Tc",
-              "uri": "//maps.google.com/maps/contrib/106188692550402533814",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocIk680Yc4SjMgRi4oMPbc9H6NPqs6ETlMoqfXUVIWaCe3gIeg=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXV5aXGNSFjDKQvaSf3JRWgUoRyjFC08Tu1dntDcAyv0WLz8yFNsTeA--u_24LXkaeMiTsRVZpXPffYpHQW4ze2t3espesSroGESjALHFNpyMaej8bECmynKrl3TnvRDa8WU8e_t_YU1Z-tElEOxdyC8b6d88ARY9kkv",
-          "widthPx": 4032,
-          "heightPx": 3024,
-          "authorAttributions": [
-            {
-              "displayName": "Royal Pears",
-              "uri": "//maps.google.com/maps/contrib/108275532362304111934",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocI7fWXYs74WHcXX9QkvI86GlbDyQ-pr1RmiDBEiTfZqq38Z6w=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXWGecV1uR-SugwQ361P73y_xvuAMXwMVEeEDAgi3xwUDLHb6FA95DOUuvOtQxJYrBf5HscNhVoJWgkP6KGhSEUYsv-u7N1CctHR_vUhE9dYm5ahHUHaNw0AAl64IwU7yqAY6o3bbycUIRjixT-a9yhhXqvmYD-aJqqb",
-          "widthPx": 4000,
-          "heightPx": 3000,
-          "authorAttributions": [
-            {
-              "displayName": "snake 101",
-              "uri": "//maps.google.com/maps/contrib/106968419092596740306",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocJk3ZXrunTi2qzepVgH8SMUaW7Tft_idPsKtc7mtDwK5jVLIg=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJL2O5jHAX2jERNzV1ixCa0HU/photos/AUc7tXVmlxd6yMDzJiughhiuq3w4JQe9Upfq2NZfwMd4w30Pqfai0cehe6Ws9y4xQMvfwlt4Ik6ZzMKyGf3gUwNSHRg1uPgXViCK2ZARfMHRHr169NBiR2qWhSIp8dXP39ZCkeTNG3PT-_G7c57iV98t8R5oLWoGCR2H9J6p",
-          "widthPx": 3024,
-          "heightPx": 4032,
-          "authorAttributions": [
-            {
-              "displayName": "Eunice Hannah Lim",
-              "uri": "//maps.google.com/maps/contrib/105250079964786451078",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUf8MLXhl_qp1AQeQxyyNDfIZi_XXailNFQA6oc7I9pbMMUKqBPtQ=s100-p-k-no-mo"
+              "displayName": "Freddy Seah",
+              "uri": "//maps.google.com/maps/contrib/106982359046525669406",
+              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocIKhC3za65cf6TmTWOo9i1SSLLb4ykqjfQelGtShG0K6JOx-Q=s100-p-k-no-mo"
             }
           ]
         }
-      ]
-    },
-    {
-      "id": "ChIJXR7HSdsW2jER8P2FaKx4hQc",
-      "formattedAddress": "216 Ang Mo Kio Ave 4, #01-01 Kebun Baru Community Club, Singapore 569897",
-      "rating": 3.9,
-      "priceLevel": "PRICE_LEVEL_INEXPENSIVE",
-      "displayName": {
-        "text": "Burger King Kebun Baru CC",
-        "languageCode": "en"
-      },
-      "primaryTypeDisplayName": {
-        "text": "Fast food restaurant",
-        "languageCode": "en-GB"
-      },
-      "photos": [
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXVlXiLe1aC8-3gPfp3KfYcN0AiDgb666E-yd-m2F_vJYelqUuWZZoyuHnLCPuZV8q93MHWbX3bDX5EM6e1iahD6u53a-F7rtX87hYsqNE2QJEHvytWkXkkmDm0f-3J33wc3k5fHV7cuqCIqo7TKA9puksitaGHyh7mC",
-          "widthPx": 4000,
-          "heightPx": 3000,
-          "authorAttributions": [
-            {
-              "displayName": "Faris Aslah",
-              "uri": "//maps.google.com/maps/contrib/117856029445309455647",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjWcp52Wp961bcNEvWmbq3-kjzSkTICVY_zmzBYvmigi03Xo5WSQHA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXVUhiRIulRS9iKoHUNAXq6OI1uG_5MbKwh6jLf6ucYzwmiU94R0G3MmYFbfPQGhP3jcV2cTRuq9K5FlF2z7as7wdPkiIfjpFSE3pJS4tg8UVgW4_TsEI34eR7yX2nSfnDcl_DekWyAHeeOXaFxJhaGr0eY94ieV5MSz",
-          "widthPx": 4080,
-          "heightPx": 3060,
-          "authorAttributions": [
-            {
-              "displayName": "Shing Low",
-              "uri": "//maps.google.com/maps/contrib/100909888758969919559",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocIJbem6IRzBg9ho0nkDmqc6SabN-OEtQ_TLdr8hq4LOEb2XXA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXWahJoZppzh133AVCsmKjYjc7BmiGsbONhNpZKJnE1pkSRTiRiXlCgJ_99-bG6KYj4F_2G4o7ozY2pvLSc9V2xECLRRVlLi12hExepOHQMC2ZPQP6fDK6C_tfwyA31NENztWamVuxq_YlrazOP__DOxgJUn3HQJlcRt",
-          "widthPx": 4032,
-          "heightPx": 3024,
-          "authorAttributions": [
-            {
-              "displayName": "Max liew",
-              "uri": "//maps.google.com/maps/contrib/110071556691308057335",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjV93ylgGCoDNM_aUjJ3xWQG_TKN4z-nMevnzC-ZC_iTNVEbf84=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXXcrH6S9ybOD4zraYnSzeqoB-auTw6ju59aFd9G2EruJt9rjsCmAEgiQUlfLJYV_Exe3a4tn17naF2LbgThiuLgihWCTtzCglBVQXiJSmNB84--KobRDMff5dxrQL5M5ImYVd-boDytGN9-KIGYkA8sEWQgTFKPHoSQ",
-          "widthPx": 4032,
-          "heightPx": 2268,
-          "authorAttributions": [
-            {
-              "displayName": "Jude Lee",
-              "uri": "//maps.google.com/maps/contrib/115198719580707884598",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLZfy2Wl5TqgmHKinschdWmwsQqcgpKgtDqpAlw_TDwI0uRGgWn=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXX-CNa4DpTNkkNb16oYGhSAEh0PmcuscILZuXB7LINWAmUA4rzS8Cxg2ea2ii19CK5kG4QtB2N-a-FnpIxL6M6_1X4grSoAsLCT6_QARP-8zvRL9O1ZsLGu0yZBBj2jn4XxDy81Yk3-C3HM_X9DuBLPxrblPzB65hHH",
-          "widthPx": 3000,
-          "heightPx": 4000,
-          "authorAttributions": [
-            {
-              "displayName": "Funn .YK",
-              "uri": "//maps.google.com/maps/contrib/116040191558382015344",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjV5zKiNLCKsM0S9LypTf7F-8HEKQgad_cS16bKJ2cp_vAbm2YHhoQ=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXWfJtpGaEgAVthTm8gL4ffmb30S9ffYfC2ji1exre8KHEBorerZS92yps3etcEcKtgaVPvi9FykQJZ96Hd4bVGx0q0F4ymkz2LbB2zmAZ6s0uOYTlLbsf_4ePC_kZmt1a5c54DibXI0xYGT3TdRTfNh92eyaIpi5jaZ",
-          "widthPx": 4000,
-          "heightPx": 3000,
-          "authorAttributions": [
-            {
-              "displayName": "Faris Aslah",
-              "uri": "//maps.google.com/maps/contrib/117856029445309455647",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjWcp52Wp961bcNEvWmbq3-kjzSkTICVY_zmzBYvmigi03Xo5WSQHA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXWe_YZCpsZY5_10sDuJ61-qq95XJyiA1qK1Q3S9EozrM4NLFIVtiOhP0iU4QJGNKsNAQbY-sr13FFA0KwYcN5wW5HGykH-TeTSYqznxDiOPwrbEPR7KGRctuoCiYkFxZ0uQ175cm9o0ZpCoN-E2WsjFXQlO6vRXQpy6",
-          "widthPx": 3000,
-          "heightPx": 4000,
-          "authorAttributions": [
-            {
-              "displayName": "Kelvin Chye",
-              "uri": "//maps.google.com/maps/contrib/117999709976505884094",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVbsb_XIGXOmHBUY0JITaak-MPWSnqYjAPvsQHiA5Iw1z3750Bk=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXXW2yWutK04zkd10wUNTpXdYUW7o7ZSM74Tr-iCmzH7cM1X-llAoEi_QqU9Ohde8yDshrG46FqcQN8X6UyhjnG0xyYDvpkuPw88C06yYG-iKNdACjNy-EFo3W-P51mVeG0CS9PiZpRBpy_mTVZWj2rlyl5lX_vbtbm8",
-          "widthPx": 4032,
-          "heightPx": 3024,
-          "authorAttributions": [
-            {
-              "displayName": "Max liew",
-              "uri": "//maps.google.com/maps/contrib/110071556691308057335",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjV93ylgGCoDNM_aUjJ3xWQG_TKN4z-nMevnzC-ZC_iTNVEbf84=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXUXNJMrfRZ8I8i0TxSlElGZjIKvbKWwcbYElSfGzCcQAJr9ll4JLt1PBSIHLAucXzqY_C0K0f7rJ5jum89sQw11RzHS-xpYioTIG5TQsABUP_giUTRknl-LXU0X2tbZhyigIEGE2u0NIcKXzLrCwFHPsYYhKQQmAjFs",
-          "widthPx": 3024,
-          "heightPx": 4032,
-          "authorAttributions": [
-            {
-              "displayName": "Shireen Taj",
-              "uri": "//maps.google.com/maps/contrib/115973494073311686980",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjUayd0B7pqucgJpwQnEUEzYt12acq63y_Er-BXfXIKtnlNZ_6p7Hg=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJXR7HSdsW2jER8P2FaKx4hQc/photos/AUc7tXWjIKLn4BgiGzTOk54-hDMVIcKLWlY3uIA03LYO7B7UlgMNzSfKmKVRn7NV5OzI7-A1vZImZlbUvK5bKjAD6BHd6TWx9qoaDt_piLlrfSAuh2ycOJCICeazozM-1BoY9GYGHa9WySrSvc-Ke_cAjYWV9pc_CCeWOKfV",
-          "widthPx": 4032,
-          "heightPx": 2268,
-          "authorAttributions": [
-            {
-              "displayName": "Jude Lee",
-              "uri": "//maps.google.com/maps/contrib/115198719580707884598",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocLZfy2Wl5TqgmHKinschdWmwsQqcgpKgtDqpAlw_TDwI0uRGgWn=s100-p-k-no-mo"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "ChIJR-vywLYX2jERo1YXtxTWGJw",
-      "formattedAddress": "Block 632 Ang Mo Kio Ave 4, #01-964, Singapore 560632",
-      "rating": 4.1,
-      "displayName": {
-        "text": "Subway",
-        "languageCode": "en"
-      },
-      "primaryTypeDisplayName": {
-        "text": "Fast food restaurant",
-        "languageCode": "en-GB"
-      },
-      "photos": [
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXWyOPBbm06peyzjkyZoLxnPthvGD_xHW7YI58yIxfweq8jmX4tC0qsq7B3ZGfCOJYE22Kn5zSfNJ-Qe8GZLHs0uiJ4JtXUrrj1YhoUJJY8fJPysozTUwc-RWnhYus_c1rBOAT__7cGHZhOI4NzBEj36e3jb3PsUgWnx",
-          "widthPx": 4096,
-          "heightPx": 3072,
-          "authorAttributions": [
-            {
-              "displayName": "Kyaw Kyaw Thein",
-              "uri": "//maps.google.com/maps/contrib/106465900279261476286",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocKiJhzSbIDAaktgk9npFtPpz3QsWofSFYRU_vZDVciild3j4Q=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXVbjMuQb-g1LgWKoy1zeKq7qFEMRCHs37JKWU8xOj4_4CB5S3hmBgA3jjVYDGzy4tcVFMwhhjol5kD7gB3ZaT6nWZqTI_sfw-qr5gBNQLQ72WsSYiYeIs16JnEqW8J7ZU4Xocir0_5Uona22WICH1IogBHB5eLw67CN",
-          "widthPx": 4608,
-          "heightPx": 3456,
-          "authorAttributions": [
-            {
-              "displayName": "Prasanna Brabourame",
-              "uri": "//maps.google.com/maps/contrib/110455545376630974003",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVkL45fdNQ50lf19UfDGqEkC5fLG2X-9yEeGZBSOgepBD3gKvYJDA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXW64q1A9VU3cMAVH7TaHBL-Lt5HglqwdfA9lrB_VicpyqokJAiLWyNh2p_HXcNz9seARrW7zGEOO9E5eZOH4z0ZGj1VTAAfw8A0dJjWFrsMDz_Rs6PysJ1SlIGyUvjz4pFhr-Vrlsu5JhnWed_k-aFAP5xCVHvJs0YJ",
-          "widthPx": 3024,
-          "heightPx": 4032,
-          "authorAttributions": [
-            {
-              "displayName": "JC",
-              "uri": "//maps.google.com/maps/contrib/105403312120201214630",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXjcmpvwYnFueps6yyYVka16jXheI2FrGp4CU7W2zPHjHUKPUp27w=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXXfnGLcAogCxAF85vuhkcclDmv_X7AuCYptHHxkBYxtWYhcXpK6nycSkGVR7qnUGV4-5FtJindTPwLmndtrEIpDtwkZP_VZmTtvthwyVBdTjf5l2iHpr3i9CLSD5bSQYL0Nezgk6jURq50KgBCMvvtSyqLEEKE5sZIu",
-          "widthPx": 3752,
-          "heightPx": 2814,
-          "authorAttributions": [
-            {
-              "displayName": "JC",
-              "uri": "//maps.google.com/maps/contrib/105403312120201214630",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjXjcmpvwYnFueps6yyYVka16jXheI2FrGp4CU7W2zPHjHUKPUp27w=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXU1oSIH7LLWYjPF3VKpv4cOPz6aeLi_vId8quTbauxD5CXCAhgm0lpV0NHpz1NNrq2lNCoTdxIbzdRLi82D83tlwV6lGWIU82WJDloayQhTUDoLlylBCnt34P1Hg1TPZDOXuhAsdwpJcpn_ePnYlva3EmATtc4c-TJM",
-          "widthPx": 1200,
-          "heightPx": 1600,
-          "authorAttributions": [
-            {
-              "displayName": "Sn Nsjs",
-              "uri": "//maps.google.com/maps/contrib/118037144286623692942",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocJlcbeH849niSF5nN8eIiKR9n23fOHFpN6LraBnUvKWJ7X8-w=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXVGnZvnLe-Lg58CHT99nINfCQrmIfjPtnw17Dqyva5B4BIlGssgdGX1J1pinvtHNp8hBXMsZYUNqyYACjNDPFCKZka7iMC__pI_vmTpnzfZrTpRi4cAxUMunDNx8BYk7aSFqeWgdYBmzp029JqoEk40n8WWjuwuUWrw",
-          "widthPx": 4608,
-          "heightPx": 3456,
-          "authorAttributions": [
-            {
-              "displayName": "Prasanna Brabourame",
-              "uri": "//maps.google.com/maps/contrib/110455545376630974003",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVkL45fdNQ50lf19UfDGqEkC5fLG2X-9yEeGZBSOgepBD3gKvYJDA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXWfSQNxxW3uSRifivscm2pjOLCGtGenhiczwKJbSWt1uDnQJ3OTCLpIUHgUSUVrNU2elYU9hlHHidOHe6y96hCNSI6B-rYaKArc-Qw03lmF1lh0qMg5uqc7RiNUdSNsUYBtQUB5kjbUy3jzlm6ZzEqactyQTwftaSS8",
-          "widthPx": 3456,
-          "heightPx": 4608,
-          "authorAttributions": [
-            {
-              "displayName": "Prasanna Brabourame",
-              "uri": "//maps.google.com/maps/contrib/110455545376630974003",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVkL45fdNQ50lf19UfDGqEkC5fLG2X-9yEeGZBSOgepBD3gKvYJDA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXUhJqk90MGg3t0WNfDWkIhApZ36X7kLS9fxFzr60L4zJz1nIDkqSoxB8HSp-p48UUK5WKfH7mCYfmlitLSot3nCXnbctoJrPeotsRxIS3z7aSAjkOaiHAGww3erq2W7GDaQquOb7u1OaEFCqU9nhK9oTzasAW2iOfRy",
-          "widthPx": 4608,
-          "heightPx": 3456,
-          "authorAttributions": [
-            {
-              "displayName": "Prasanna Brabourame",
-              "uri": "//maps.google.com/maps/contrib/110455545376630974003",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVkL45fdNQ50lf19UfDGqEkC5fLG2X-9yEeGZBSOgepBD3gKvYJDA=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXWL2ui9i4L3JwDbVjJWZkrJsOPwj73802F5Xdr3ZhmScjwR0_lEQHHkTiPRFPVQWkkpxNlRXcpLm_W3_-rqgiGPGC3AwMNau7mFJmwBfhQwf5bvAbAd6Q-I37xmEEgdRzQVe-2Lpxuporuhz4W92xCnC-sgI-LL9V-E",
-          "widthPx": 1200,
-          "heightPx": 1600,
-          "authorAttributions": [
-            {
-              "displayName": "Sn Nsjs",
-              "uri": "//maps.google.com/maps/contrib/118037144286623692942",
-              "photoUri": "//lh3.googleusercontent.com/a/ACg8ocJlcbeH849niSF5nN8eIiKR9n23fOHFpN6LraBnUvKWJ7X8-w=s100-p-k-no-mo"
-            }
-          ]
-        },
-        {
-          "name": "places/ChIJR-vywLYX2jERo1YXtxTWGJw/photos/AUc7tXUqN6Z4GSnIq_LI16JrEihan4di75K4CYFGkrhq21PvQtVhrZeTW6l2wMUIkhvROD1G__v7EPmL9r0wkt5JqWIBAqP_KVpOGUGxC2MxB1PTtn80YOTPK4UeVjPDgKtg2TBYyfKAIpTDr_O7itA6o5HunivGvAHKx-h4",
-          "widthPx": 3456,
-          "heightPx": 4608,
-          "authorAttributions": [
-            {
-              "displayName": "Prasanna Brabourame",
-              "uri": "//maps.google.com/maps/contrib/110455545376630974003",
-              "photoUri": "//lh3.googleusercontent.com/a-/ALV-UjVkL45fdNQ50lf19UfDGqEkC5fLG2X-9yEeGZBSOgepBD3gKvYJDA=s100-p-k-no-mo"
-            }
-          ]
-        }
-      ]
+      ],
+      "thumbnailUrl": "https://lh3.googleusercontent.com/places/ANXAkqEVnvl7UuSowaAItX-FKhjNCd0HQwgtdn-zwGYeKx5slWZUy4zj8cUPyzeM9zVafF1K0J-FgHBo9uifkFNKe_w5a2HYlxRaj80=s4800-h1600"
     }
   ],
-  "nextPageToken": "AUc7tXUuVOIHPgtxTxr4MTJkMrHd6lwjhh5kuGhXEnwtzMYsY0dkyn9HYf-cG6k9Q9z0CWOvN4WXzYaJ_xJnFomPfUPOIxGnt7yMSTOvZJqbtCd3iW3KlEI09i3qMxx6BWJ-4IsFLy6ekrGAYfRUVh3e3ZwmJSWoiTZ1g0YWkWaU8hvBTmhZKDyRSo-gRdokVpH2Dp9hHA53g6pldADqZy9rtwh3JnL9l3WOetUGVORdAQUxd4UFkrBv-8gOuoRM29lOUy37s9DTNF2n7fzpVzYvfIasDgfRuML6VDt46IBayjaI34M"
+  "nextPageToken": "AUc7tXVW7NjjUEPhGTI1Z59kN0OGy0pmLLvYiUOuxeyyzSWsOUAR9RHU7Ps0yamArindJbsgWiutvIe5XPZej6ks_Ft8bO-ZjP3W6d6TGcpg6V-SdoOSZY01InH7nnZWet3_yrsbkj6P7XyRqs9EEZhwsyoKoaR2kTDUFq08SqDI2GmEU4osNooid20roA"
 }

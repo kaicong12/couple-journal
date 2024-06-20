@@ -88,7 +88,7 @@ const fetchRestaurantImage = async (imageName) => {
     return imageFetchRes.url
 }
 
-export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, pageToken, pageSize = 5 }) => {
+export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, pageToken, pageSize = 5, useCatImagesDuringMock = false }) => {
     const bodyData = {
         'textQuery': textQuery ?? "Popular restaurants near me",
         'includedType': (cuisineCategories[cuisine] || "restaurant"),
@@ -113,6 +113,10 @@ export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, page
     if (process.env.NODE_ENV === "development") {
         const data = await fetchMockRestaurantData(1000)
 
+        if (!useCatImagesDuringMock) {
+            return data.places
+        }
+
         const restaurantImagePromise = data?.places?.map(async (place) => {
             const [catImageUrl] = await fetchCatImages()
             return {
@@ -128,11 +132,14 @@ export const fetchRestaurants = async ({ cuisine, textQuery, locationCoord, page
         const fieldMasksArray = [
             'places.id',
             'places.rating',
+            'places.userRatingCount',
+            'places.reviews',
             'places.displayName',
             'places.formattedAddress',
             'places.photos',
             'places.priceLevel',
             'places.primaryTypeDisplayName',
+            'places.googleMapsUri',
             'nextPageToken'
         ]
 

@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,7 +10,7 @@ import { multiUpdate } from "../../../db/rtdb";
 
 
 
-const RestaurantTag = ({ leftIcon, leftMessage, upperCaseText}) => {
+export const RestaurantTag = ({ leftIcon, leftMessage, upperCaseText}) => {
     return (
         <Box p="8px" bg="#EAD9BF" borderRadius="10px">
             <Text isTruncated color="#8F611B" fontSize="14px" fontWeight="semibold">
@@ -20,8 +21,8 @@ const RestaurantTag = ({ leftIcon, leftMessage, upperCaseText}) => {
     )
 }
 
-const RestaurantTags = {
-    "PRICE_LEVEL_UNSPECIFIED": <RestaurantTag leftIcon={<FontAwesomeIcon icon={faQuestion} />} upperCaseText="unspecified" />,
+export const RestaurantTags = {
+    "PRICE_LEVEL_UNSPECIFIED": <RestaurantTag leftIcon={<FontAwesomeIcon icon={faQuestion} />} upperCaseText="price unspecified" />,
     "PRICE_LEVEL_FREE": <RestaurantTag leftMessage="$" upperCaseText="free" />,
     "PRICE_LEVEL_INEXPENSIVE": <RestaurantTag leftMessage="$" upperCaseText="affordable" />,
     "PRICE_LEVEL_MODERATE": <RestaurantTag leftMessage="$$" upperCaseText="moderate" />,
@@ -30,6 +31,7 @@ const RestaurantTags = {
 }
 
 export const RestaurantCard = ({ restaurant, isBookmarked }) => {
+    const navigate = useNavigate();
     const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
         const updates = {}
         if (currentlyIsBookmarked) {
@@ -43,6 +45,10 @@ export const RestaurantCard = ({ restaurant, isBookmarked }) => {
         await multiUpdate(pathToUpdate, updates)
     }, [])
 
+    const handleCardClick = () => {
+        navigate(`/food/${restaurant.id}`, { state: { restaurant } });
+    };
+
     return (
         <Box
             display="flex"
@@ -53,6 +59,7 @@ export const RestaurantCard = ({ restaurant, isBookmarked }) => {
             maxWidth="500px"
             boxShadow="lg"
             position="relative"
+            onClick={handleCardClick}
         >
             <Box
                 aspectRatio="1.96"
@@ -98,7 +105,10 @@ export const RestaurantCard = ({ restaurant, isBookmarked }) => {
                 width="40px" 
                 justifyContent="center" 
                 alignItems="center"
-                onClick={() => { toggleBookmark(isBookmarked, restaurant) }}
+                onClick={(e) => { 
+                    e.stopPropagation();
+                    toggleBookmark(isBookmarked, restaurant) 
+                }}
             >
                 <FontAwesomeIcon icon={isBookmarked ? saved : unSaved} />
             </Box>

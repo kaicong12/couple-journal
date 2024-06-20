@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import OurStory from './Pages/OurStory'
 import Events from './Pages/EventsList';
 import FoodRecommender from './Pages/FoodRecommender';
+import { RestaurantDetails } from './Pages/FoodRecommender/RestaurantDetails';
 import { AllPopularFood } from './Pages/FoodRecommender/ViewAllPopular'
 import { AllBookmarkedRestaurants } from './Pages/FoodRecommender/ViewAllBookmarked'
 
@@ -41,6 +42,7 @@ function App() {
               <Route path="/" element={<OurStory />} />
               <Route path="events" element={<Events />} />
               <Route path="food" element={<FoodRecommender />} />
+              <Route path="food/:restaurantId" element={<RestaurantDetails />} />
               <Route path="food/viewAllPopular" element={<AllPopularFood />} />
               <Route path="food/viewAllBookmarked" element={<AllBookmarkedRestaurants />} />
           </Routes>
