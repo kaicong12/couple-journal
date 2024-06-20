@@ -1,127 +1,167 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRecoilValue } from 'recoil';
-import { bookmarkedRestaurantState } from '../../recoil/restaurantAtoms';
+import { popularRestaurantsCache } from '../../recoil/restaurantAtoms';
+
 import { 
     Box, 
+    Flex,
+    forwardRef,
+    Spinner, 
+    Text, 
     Button, 
-    Flex, 
-    Input, 
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
+    ButtonGroup, 
+    Menu, 
+    MenuButton, 
+    MenuList, 
+    MenuOptionGroup, 
+    MenuItemOption,
+    Input,
+    InputGroup, 
+    InputLeftElement,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons'
-import { useSearchParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort, faPizzaSlice } from '@fortawesome/free-solid-svg-icons';
 
+import { SearchBar } from "../../Components/SearchBar";
+import { RestaurantCard } from './Components/RestaurantCard';
 import { RestaurantSkeleton } from './Components/RestaurantSkeleton';
-import { fetchRestaurants } from "./services/places"
+import { EmptySearchState } from './EmptyState';
+import { fetchRestaurants, getLocation } from "./services/places";
+import { cuisineCategories } from "./services/cuisineList";
+import { flatten } from 'lodash'
 
+
+const FilterButton = forwardRef((props, ref) => {
+    const { rightIcon, buttontext } = props;
+    return (
+        <Button {...props} rightIcon={rightIcon} ref={ref}>
+            { buttontext }
+        </Button>
+    );
+});
 
 export const AllPopularFood = () => {
-    const bookmarkedRestaurants = useRecoilValue(bookmarkedRestaurantState);
-    const [searchParams] = useSearchParams();
-    const search = searchParams.get('search') ?? ''
-    const [searchQuery, setSearchArea] = useState(search);
-    const [searchType, setSearchType] = useState('area');
-    const [restaurants, setRestaurants] = useState([]);
-    const [nextPageToken, setNextPageToken] = useState(null);
+    const popularRestaurants = useRecoilValue(popularRestaurantsCache);
+    const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingNew, setIsLoadingNew] = useState(false);
+    const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+    const [restaurantSort, setRestaurantSort] = useState('Name (A to Z)');
+    const [selectedCategories, setSelectedCategories] = useState(['Popular']);
 
-    const fetchAndSetRestaurants = useCallback(async  (textQuery, pageToken, isLoadMore = false) => {
-        if (isLoadMore) {
-            setIsLoadingNew(true);
-        } else {
-            setIsLoading(true);
+    const renderRestaurants = (restaurantsToRender) => {
+        if (!restaurantsToRender.length) {
+            return <EmptySearchState />;
         }
-
-        const data = await fetchRestaurants({ 
-            textQuery,
-            pageToken,
-        });
-
-        const newRestaurants = data.places ?? [];
-        setRestaurants(prevRestaurants => [ ...prevRestaurants, ...newRestaurants ]);
-        setNextPageToken(data.nextPageToken ?? null);
-
-        if (isLoadMore) {
-            setIsLoadingNew(false);
-        } else {
-            setIsLoading(false);
-        }
-    }, [])
-
-    useEffect(() => {
-        if (search && search?.length) {
-            fetchAndSetRestaurants(search, null, false);
-        }
-    }, [fetchAndSetRestaurants, search]);
-
-    const handleSearchButtonClick = async () => {
-        await fetchAndSetRestaurants(searchQuery, null, false)
+        return (
+            <>
+                {restaurantsToRender.map((restaurant, idx) => (
+                    <RestaurantCard restaurant={restaurant} key={`restaurant-card-${idx}`} isBookmarked={false} />
+                ))}
+            </>
+        );
     };
 
-    const handleSearchChange = (event) => {
-        setSearchArea(event.target.value);
-    };
+    const handleSearchChange = useCallback((event) => {
+        setSearchQuery(event.target.value);
+    }, []);
 
-    const handleLoadMore = async () => {
-        await fetchAndSetRestaurants(searchQuery, nextPageToken, true)
+    const handleSearch = () => {
+
     }
 
+    const handleSortChange = (value) => {
+        setRestaurantSort(value);
+        setFilteredRestaurants(prev => {
+            const sortedRestaurants = [...prev];
+            if (value === 'Name (A to Z)') {
+                sortedRestaurants.sort((a, b) => a.displayName.text.localeCompare(b.displayName.text));
+            } else {
+                sortedRestaurants.sort((a, b) => b.displayName.text.localeCompare(a.displayName.text));
+            }
+            return sortedRestaurants;
+        });
+    };
+
+    const handleCategoryChange = (categories) => {
+        setSelectedCategories(categories);
+    };
+
+    const sortOptions = useMemo(() => [
+        'Name (A to Z)', 
+        'Name (Z to A)'
+    ], []);
+
+    useEffect(() => {
+        const restaurantData = flatten(Object.values(popularRestaurants).map(({ data }) =>  data))
+        setFilteredRestaurants(restaurantData)
+    }, [popularRestaurants])
 
     return (
-        <Box padding="12px" display="flex">
-            <Menu>
-                <MenuButton 
-                    bg="#EAD9BF"
-                    color="#8F611B"
-                    fontWeight="bold" 
-                    as={Button} 
-                    rightIcon={<ChevronDownIcon />}
-                    textTransform="capitalize"
-                    mr={2}
-                >
-                    { searchType }
-                </MenuButton>
-                <MenuList>
-                    <MenuItem onClick={() => { setSearchType('food') }}>Food</MenuItem>
-                    <MenuItem onClick={() => { setSearchType('area') }}>Area</MenuItem>
-                </MenuList>
-            </Menu>
-            <Flex>
-                <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search by Area" mr={2} />
-            </Flex>
-            <Button 
-                bg="#EAD9BF"
-                color="#8F611B"
-                fontWeight="bold" 
-                onClick={handleSearchButtonClick}
-            >
-                Search
-            </Button>
-
-            <Box>
-                { isLoading ? (
-                    <Flex>
-                        { Array(3).map((idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} /> )}
-                    </Flex>
-                ) : null }
-
-                {/* <RestaurantList restaurants={restaurants} /> */}
-                {isLoadingNew ? (
-                    <Flex>
-                        { Array(3).map((idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} /> )}
-                    </Flex>
-                ) : (
-                    nextPageToken && (
-                        <Button onClick={handleLoadMore} mt="4">
-                            Load More
-                        </Button>
-                    )
+        <Box>
+            <SearchBar 
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchChange}
+                displayActionButton={true}
+                onSearch={handleSearch}
+            />
+            <ButtonGroup display="flex" mt="10px" px="20px">
+                <Menu>
+                    <MenuButton
+                        as={FilterButton}
+                        buttontext={'Sort By'}
+                        bg='#EAD9BF'
+                        color='#8F611B'
+                        leftIcon={<FontAwesomeIcon icon={faSort} />}
+                    >
+                    </MenuButton>
+                    <MenuList>
+                        <MenuOptionGroup defaultValue={restaurantSort} onChange={handleSortChange}>
+                            {sortOptions.map(sortOpt => (
+                                <MenuItemOption key={sortOpt} value={sortOpt}>
+                                    <Box display="flex" gap="10px" alignItems="center">
+                                        <Text>{sortOpt}</Text>
+                                    </Box>
+                                </MenuItemOption>
+                            ))}
+                        </MenuOptionGroup>
+                    </MenuList>
+                </Menu>
+                <Menu closeOnSelect={false}>
+                    <MenuButton
+                        as={FilterButton}
+                        buttontext={'Cuisines'}
+                        bg='#EAD9BF'
+                        color='#8F611B'
+                        leftIcon={<FontAwesomeIcon icon={faPizzaSlice} />}
+                    >
+                    </MenuButton>
+                    <MenuList>
+                        <MenuOptionGroup 
+                            defaultValue={selectedCategories} 
+                            onChange={(value) => { handleCategoryChange(value) }} 
+                            type="checkbox"
+                        >
+                            <MenuItemOption key={'Popular'} value={'Popular'} >
+                                <Box display="flex" gap="10px" alignItems="center">
+                                    <Text>{'Popular'}</Text>
+                                </Box>
+                            </MenuItemOption>
+                            {Object.keys(cuisineCategories).map(cuisineName => (
+                                <MenuItemOption key={cuisineName} value={cuisineName} >
+                                    <Box display="flex" gap="10px" alignItems="center">
+                                        <Text>{cuisineName}</Text>
+                                    </Box>
+                                </MenuItemOption>
+                            ))}
+                        </MenuOptionGroup>
+                    </MenuList>
+                </Menu>
+            </ButtonGroup>
+            <Flex flexWrap="wrap" justifyContent="center" gap="24px" mt="10px" px="20px">
+                {isLoading ? Array.from({ length: 3 }, (_, idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} />) : (
+                    renderRestaurants(filteredRestaurants)
                 )}
-            </Box>
+            </Flex>
         </Box>
-    )
-}
+    );
+};

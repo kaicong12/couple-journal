@@ -5,6 +5,11 @@ export const bookmarkedRestaurant = atom({
     default: [],
 });
 
+export const popularRestaurantsCache = atom({
+    key: "popularRestaurantsCacheAtom",
+    default: {},
+})
+
 export const bookmarkedRestaurantState = selector({
     key: 'bookmarkedRestaurantState',
     get: ({get}) => {
