@@ -31,7 +31,7 @@ export const CuisineList = ({ handleCuisineClick, selectedCuisine }) => {
         <Flex 
             overflowX="auto" 
             gap="12px" 
-            padding="12px" 
+            padding="0 12px 12px 12px" 
             sx={{ 
                 '::-webkit-scrollbar': {
                     display:'none'

@@ -291,6 +291,7 @@ const EventPage = () => {
                                             <HStack>
                                                 <Text>Start Date:</Text>
                                                 <Input 
+                                                    width="100%"
                                                     type="date" 
                                                     value={dateFilterParam?.startDate || ''} 
                                                     onChange={(e) => updateDateFilterParam({ ...dateFilterParam, startDate: e.target.value, dateFilterApplied: true })} 
@@ -299,6 +300,7 @@ const EventPage = () => {
                                             <HStack>
                                                 <Text>End Date:</Text>
                                                 <Input 
+                                                    width="100%"
                                                     type="date" 
                                                     value={dateFilterParam?.endDate || ''} 
                                                     onChange={(e) => updateDateFilterParam({ ...dateFilterParam, endDate: e.target.value, dateFilterApplied: true })} 

@@ -1,16 +1,15 @@
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useRecoilState } from "recoil"
-import { bookmarkedRestaurant } from "../../recoil/restaurantAtoms";
+import { bookmarkedRestaurant, popularRestaurantsCache } from "../../recoil/restaurantAtoms";
 import { Link, useNavigate } from "react-router-dom";
 import { 
     Box, 
-    Button, 
     Flex, 
-    Input,
     Text,
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
+import { SearchBar } from '../../Components/SearchBar' 
 import { CuisineList } from "./Components/CuisineList";
 import { RestaurantCard } from "./Components/RestaurantCard";
 import { RestaurantSkeleton } from "./Components/RestaurantSkeleton";
@@ -39,8 +38,7 @@ const FoodRecommendations = () => {
     const [bookmarkedRestaurants, setBookmarkedRestaurants] = useRecoilState(bookmarkedRestaurant)
     const [restaurants, setRestaurants] = useState([]);
 
-
-    const cuisineCache = useRef({});
+    const [cuisineCache, setCuisineCache] = useRecoilState(popularRestaurantsCache);
     const cacheTimeout = 15 * 60 * 1000; // 15 minutes in milliseconds
 
     const handleSearchChange = (event) => {
@@ -59,9 +57,9 @@ const FoodRecommendations = () => {
         }
 
         const currentTime = new Date().getTime();
-        if (cuisineCache.current[cuisine] && (currentTime - cuisineCache.current[cuisine].timestamp < cacheTimeout)) {
+        if (cuisineCache[cuisine] && (currentTime - cuisineCache[cuisine].timestamp < cacheTimeout)) {
             // Use cached data if it's not expired
-            setRestaurants(cuisineCache.current[cuisine].data);
+            setRestaurants(cuisineCache[cuisine].data);
         } else {
             setIsLoading(true);
 
@@ -70,11 +68,11 @@ const FoodRecommendations = () => {
                     cuisine,
                     locationCoord: userLocation
                 })
-    
-                cuisineCache.current[cuisine] = {
-                    data,
-                    timestamp: new Date().getTime()
-                };
+                
+                setCuisineCache(cuisineCache => ({ 
+                    ...cuisineCache, 
+                    [cuisine]: { data, timestamp: currentTime } 
+                }));
     
                 setRestaurants(data || []);
             } catch (error) {
@@ -118,28 +116,35 @@ const FoodRecommendations = () => {
             setIsLoading(true)
             setUserLocationError(null)
     
-            const position = await getLocation()
-            try {
-                const location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }
-
-                const data = await fetchRestaurants({
-                    cuisine: 'Popular',
-                    locationCoord: location,
-                })
-
-                cuisineCache.current['Popular'] = {
-                    data,
-                    timestamp: new Date().getTime()
-                };
-
-                setUserLocation(location)
-                setRestaurants(data || []);
+            const currentTime = new Date().getTime();
+            if (cuisineCache['Popular'] && (currentTime - cuisineCache['Popular'].timestamp < cacheTimeout)) {
+                // Use cached data if it's not expired
+                setRestaurants(cuisineCache['Popular'].data);
                 setIsLoading(false);
-            } catch (error) {
-                setUserLocationError(error.message);
+            } else {
+                const position = await getLocation()
+                try {
+                    const location = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }
+    
+                    const data = await fetchRestaurants({
+                        cuisine: 'Popular',
+                        locationCoord: location,
+                    })
+    
+                    setCuisineCache(cuisineCache => ({ 
+                        ...cuisineCache, 
+                        'Popular': { data, timestamp: new Date().getTime() } 
+                    }));
+    
+                    setUserLocation(location)
+                    setRestaurants(data || []);
+                    setIsLoading(false);
+                } catch (error) {
+                    setUserLocationError(error.message);
+                }
             }
         }
 
@@ -162,17 +167,13 @@ const FoodRecommendations = () => {
     return (
         <Box>
             <Box bg="#F2F2F2">
-                <Box padding="12px" display="flex">
-                    <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search for food" mr={2} />
-                    <Button 
-                        bg="#EAD9BF"
-                        color="#8F611B"
-                        fontWeight="bold" 
-                        onClick={handleSearchButtonClick}
-                    >
-                        Search
-                    </Button>
-                </Box>
+                <SearchBar
+                    searchQuery={searchQuery}
+                    onSearchChange={handleSearchChange}
+                    displayActionButton={true}
+                    onSearch={handleSearchButtonClick}
+                />
+                
                 <CuisineList handleCuisineClick={handleCuisineClick} selectedCuisine={selectedCuisine} />
             
                 <Box padding={'0 1rem'}>
