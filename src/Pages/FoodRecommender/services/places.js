@@ -81,7 +81,7 @@ const fetchMockRestaurantData = (delay) => {
     })
 }
 
-const fetchRestaurantImage = async (imageName) => {
+export const fetchRestaurantImage = async (imageName) => {
     const photoUrl = `https://places.googleapis.com/v1/${imageName}/media?maxHeightPx=400&key=${apiKey}`;
     const imageFetchRes = await fetch(photoUrl)
 

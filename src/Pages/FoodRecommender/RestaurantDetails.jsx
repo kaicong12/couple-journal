@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react' 
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex, IconButton } from '@chakra-ui/react';
-import { ArrowBackIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faStar, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { RestaurantTag, RestaurantTags } from './Components/RestaurantCard';
 import { ReviewCard } from './ReviewCard';
+import { fetchRestaurantImage } from './services/places';
 
 export const RestaurantDetails = () => {
     const location = useLocation();
@@ -14,6 +14,7 @@ export const RestaurantDetails = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const carouselRef = useRef(null);
     const restaurant = location.state?.restaurant;
+    const [carouselImgLink, setCarouselImgLink]  = useState([])
     
     const handleScroll = () => {
         const carousel = carouselRef.current;
@@ -24,6 +25,22 @@ export const RestaurantDetails = () => {
     };
 
     useEffect(() => {
+        const fetchImages = async () => {
+            const imagesToDisplay = await Promise.all(
+                restaurant.photos.slice(0, 5).map(async (photo, index) => {
+                    if (index === 0) {
+                        return restaurant.thumbnailUrl
+                    }
+
+                    const url = await fetchRestaurantImage(photo.name);
+                    return url;
+                })
+            );
+            setCarouselImgLink(imagesToDisplay);
+        };
+
+        fetchImages();
+
         const carousel = carouselRef.current;
         if (carousel) {
             carousel.addEventListener('scroll', handleScroll);
@@ -40,13 +57,13 @@ export const RestaurantDetails = () => {
     return (
         <Box position="relative" height="calc(100vh - 80px)">
             <IconButton
-                icon={<ArrowBackIcon />}
+                icon={<FontAwesomeIcon icon={faArrowLeft} />}
                 position="absolute"
                 top="15px"
                 left="15px"
                 onClick={() => navigate(-1)}
-                bg="white"
-                borderRadius="50%"
+                bg="#EAD9BF"
+                color="#8F611B"
             />
 
             <Box
@@ -60,28 +77,38 @@ export const RestaurantDetails = () => {
                 height="300px"
                 ref={carouselRef}
             >
-                {restaurant.photos.map((photo, index) => (
-                    <Box
-                        key={index}
-                        minWidth="100%"
-                        height="100%"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        scrollSnapAlign="center"
-                    >
-                        <img
-                        //   src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.name}`}
-                            src={'/foodRecommendations/Placeholder.svg'}
-                            alt={`placeholder ${index + 1}`}
-                            style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                        />
-                    </Box>
-                ))}
+                {carouselImgLink.map((link, index) => {
+                    return (
+                        <Box
+                            key={index}
+                            minWidth="100%"
+                            height="100%"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            scrollSnapAlign="center"
+                        >
+                            <img
+                                src={link || 'https://via.placeholder.com/150'}
+                                alt={`placeholder ${index + 1}`}
+                                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                            />
+                        </Box>
+                    )
+                })}
             </Box>
 
-            <Text position="absolute" top="15px" right="15px" bg="white" p="5px 10px" borderRadius="10px">
-                {currentIndex + 1}/{restaurant.photos.length}
+            <Text 
+                bg="#EAD9BF"
+                color="#8F611B"
+                position="absolute" 
+                top="240px" 
+                right="15px" 
+                p="5px 10px" 
+                borderRadius="10px"
+                fontWeight="semibold"
+            >
+                {currentIndex + 1}/{carouselImgLink.length}
             </Text>
             
             <Box p="20px" bg="brown.50" textAlign="left">

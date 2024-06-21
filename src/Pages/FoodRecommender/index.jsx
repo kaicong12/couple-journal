@@ -116,28 +116,35 @@ const FoodRecommendations = () => {
             setIsLoading(true)
             setUserLocationError(null)
     
-            const position = await getLocation()
-            try {
-                const location = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
-                }
-
-                const data = await fetchRestaurants({
-                    cuisine: 'Popular',
-                    locationCoord: location,
-                })
-
-                setCuisineCache(cuisineCache => ({ 
-                    ...cuisineCache, 
-                    'Popular': { data, timestamp: new Date().getTime() } 
-                }));
-
-                setUserLocation(location)
-                setRestaurants(data || []);
+            const currentTime = new Date().getTime();
+            if (cuisineCache['Popular'] && (currentTime - cuisineCache['Popular'].timestamp < cacheTimeout)) {
+                // Use cached data if it's not expired
+                setRestaurants(cuisineCache['Popular'].data);
                 setIsLoading(false);
-            } catch (error) {
-                setUserLocationError(error.message);
+            } else {
+                const position = await getLocation()
+                try {
+                    const location = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }
+    
+                    const data = await fetchRestaurants({
+                        cuisine: 'Popular',
+                        locationCoord: location,
+                    })
+    
+                    setCuisineCache(cuisineCache => ({ 
+                        ...cuisineCache, 
+                        'Popular': { data, timestamp: new Date().getTime() } 
+                    }));
+    
+                    setUserLocation(location)
+                    setRestaurants(data || []);
+                    setIsLoading(false);
+                } catch (error) {
+                    setUserLocationError(error.message);
+                }
             }
         }
 
