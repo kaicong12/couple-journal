@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
@@ -30,18 +30,21 @@ export const RestaurantTags = {
     "PRICE_LEVEL_VERY_EXPENSIVE": <RestaurantTag leftMessage="$" upperCaseText="very expensive" />
 }
 
-export const RestaurantCard = ({ restaurant, isBookmarked }) => {
+export const RestaurantCard = ({ restaurant, _isBookmarked }) => {
     const navigate = useNavigate();
+    const [isBookmarked, setIsBookmarked] = useState(_isBookmarked)
     const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
         const updates = {}
         if (currentlyIsBookmarked) {
             // clicking on this should remove the restaurant from bookmark list
             updates[restaurant.id] = null
+            setIsBookmarked(false)  
         } else {
             updates[restaurant.id] = restaurant
+            setIsBookmarked(true)
         }
 
-        const pathToUpdate = "bookmarkedLocations"
+        const pathToUpdate = "/bookmarkedLocations"
         await multiUpdate(pathToUpdate, updates)
     }, [])
 

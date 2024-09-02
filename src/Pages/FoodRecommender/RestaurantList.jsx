@@ -6,25 +6,23 @@ import {
     Box, 
     Button,
     Flex,
-    Spinner, 
+    Heading,
     ButtonGroup, 
     Menu, 
     MenuButton, 
     MenuList, 
     MenuOptionGroup, 
     MenuItemOption,
-    Input,
-    InputGroup, 
-    InputLeftElement,
     forwardRef,
     Text
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faPizzaSlice, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faPizzaSlice } from '@fortawesome/free-solid-svg-icons';
 
 import Fuse from 'fuse.js';
 import { flatten } from 'lodash';
 
+import { RestaurantSearchBar } from './Components/RestaurantSearcBar';
 import { RestaurantCard } from './Components/RestaurantCard';
 import { RestaurantSkeleton } from './Components/RestaurantSkeleton';
 import { EmptySearchState } from './EmptyState';
@@ -43,6 +41,9 @@ const FilterButton = forwardRef((props, ref) => {
 export const RestaurantListView = () => {
     const location = useLocation();
     const isBookmarked = location.pathname.includes('viewAllBookmarked');
+    const pageHeading = isBookmarked ? 'Your Bookmarked Restaurants' : 'Popular Near You';
+    const pageSubheading = isBookmarked ? 'Your favorite spots, all in one place. Discover something delicious from your saved list.' 
+    : 'Explore trending dining options near you, recommended by our vibrant community.';
 
     const restaurants = useRecoilValue(isBookmarked ? bookmarkedRestaurant : popularRestaurantsCache);
     const [searchQuery, setSearchQuery] = useState('');
@@ -50,10 +51,6 @@ export const RestaurantListView = () => {
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [restaurantSort, setRestaurantSort] = useState('Name (A to Z)');
     const [selectedCategories, setSelectedCategories] = useState(isBookmarked ? [] : ['Popular']);
-
-    const handleSearchChange = useCallback((event) => {
-        setSearchQuery(event.target.value);
-    }, []);
 
     const fuzzySearch = useCallback((restaurants, query) => {
         const options = {
@@ -127,14 +124,16 @@ export const RestaurantListView = () => {
 
     return (
         <Box padding="24px">
-            <InputGroup>
-                <InputLeftElement pointerEvents='none'>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </InputLeftElement>
-                <Input value={searchQuery} onChange={handleSearchChange} placeholder="Search" mr={2} />
-            </InputGroup>
+            <Box mb="16px">
+                <Heading size="lg">{ pageHeading }</Heading>
+                <Text fontSize="md" color="gray.600">
+                    { pageSubheading }
+                </Text>
+            </Box>
 
-            <ButtonGroup display="flex" mt="10px">
+            <RestaurantSearchBar />
+
+            <ButtonGroup display="flex" mt="16px">
                 <Menu>
                     <MenuButton
                         as={FilterButton}
