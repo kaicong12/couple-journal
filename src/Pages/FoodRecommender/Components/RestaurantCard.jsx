@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
@@ -6,8 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark as unSaved } from '@fortawesome/free-regular-svg-icons';
 import { faBookmark as saved, faLocationDot, faQuestion } from '@fortawesome/free-solid-svg-icons';
 
-import { multiUpdate } from "../../../db/rtdb";
-
+import { checkIfBookmarked, toggleBookmark } from "../../../utils";
 
 
 export const RestaurantTag = ({ leftIcon, leftMessage, upperCaseText}) => {
@@ -30,27 +29,26 @@ export const RestaurantTags = {
     "PRICE_LEVEL_VERY_EXPENSIVE": <RestaurantTag leftMessage="$" upperCaseText="very expensive" />
 }
 
-export const RestaurantCard = ({ restaurant, _isBookmarked }) => {
+export const RestaurantCard = ({ restaurant }) => {
     const navigate = useNavigate();
-    const [isBookmarked, setIsBookmarked] = useState(_isBookmarked)
-    const toggleBookmark = useCallback(async (currentlyIsBookmarked, restaurant) => {
-        const updates = {}
-        if (currentlyIsBookmarked) {
-            // clicking on this should remove the restaurant from bookmark list
-            updates[restaurant.id] = null
-            setIsBookmarked(false)  
-        } else {
-            updates[restaurant.id] = restaurant
-            setIsBookmarked(true)
-        }
+    const [isBookmarked, setIsBookmarked] = useState(false);
 
-        const pathToUpdate = "/bookmarkedLocations"
-        await multiUpdate(pathToUpdate, updates)
-    }, [])
+    const handleToggleBookmark = useCallback(async () => {
+        await toggleBookmark(isBookmarked, restaurant);
+        setIsBookmarked(!isBookmarked);
+    }, [isBookmarked, restaurant]);
 
     const handleCardClick = () => {
         navigate(`/food/${restaurant.id}`, { state: { restaurant } });
     };
+
+    useEffect(() => {
+        const checkBookmarkStatus = async () => {
+            const bookmarked = await checkIfBookmarked(restaurant.id);
+            setIsBookmarked(bookmarked);
+        };
+        checkBookmarkStatus();
+    }, [restaurant.id]);
 
     return (
         <Box
@@ -110,7 +108,7 @@ export const RestaurantCard = ({ restaurant, _isBookmarked }) => {
                 alignItems="center"
                 onClick={(e) => { 
                     e.stopPropagation();
-                    toggleBookmark(isBookmarked, restaurant) 
+                    handleToggleBookmark();
                 }}
             >
                 <FontAwesomeIcon icon={isBookmarked ? saved : unSaved} />

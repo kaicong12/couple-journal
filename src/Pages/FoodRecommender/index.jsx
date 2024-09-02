@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
-import { SearchBar } from '../../Components/SearchBar' 
+import { RestaurantSearchBar } from './Components/RestaurantSearchBar'; 
 import { CuisineList } from "./Components/CuisineList";
 import { RestaurantCard } from "./Components/RestaurantCard";
 import { RestaurantSkeleton } from "./Components/RestaurantSkeleton";
@@ -96,20 +96,17 @@ const FoodRecommendations = () => {
             )
         }
 
-        const bookmarkedRestaurantIds = bookmarkedRestaurants.map(restaurant => restaurant.id)
-
         return restaurantsToRender.length ? (
             <Flex overflow="auto" gap="20px" padding="10px" pb="20px">
                 { restaurantsToRender.map(restaurant => (
                     <RestaurantCard 
                         key={restaurant.id} 
-                        restaurant={restaurant} 
-                        _isBookmarked={bookmarkedRestaurantIds.includes(restaurant.id)}
+                        restaurant={restaurant}
                     />
                 ))}
             </Flex>
         ) : <NoRestaurantSection noRestaurantMessage={noRestaurantMessage} />
-    }, [bookmarkedRestaurants])
+    }, [])
 
     useEffect(() => {
         const fetchPopularRestaurants = async () => {
@@ -167,12 +164,9 @@ const FoodRecommendations = () => {
     return (
         <Box>
             <Box bg="#F2F2F2">
-                <SearchBar
-                    searchQuery={searchQuery}
-                    onSearchChange={handleSearchChange}
-                    displayActionButton={true}
-                    onSearch={handleSearchButtonClick}
-                />
+                <Box padding={'1rem'}>
+                    <RestaurantSearchBar />
+                </Box>
                 
                 <CuisineList handleCuisineClick={handleCuisineClick} selectedCuisine={selectedCuisine} />
             

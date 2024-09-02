@@ -5,6 +5,15 @@ import { fetchRestaurants } from '../services/places';
 import debounce from 'lodash.debounce';
 import { CustomOption } from './CustomOption';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+
+const SingleValue = ({ data }) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FontAwesomeIcon icon={faMagnifyingGlass} style={{ marginRight: 8 }} />
+        {data.label}
+    </div>
+);
 
 export const RestaurantSearchBar = () => {
     const [loading, setLoading] = useState(false);
@@ -48,15 +57,24 @@ export const RestaurantSearchBar = () => {
             placeholder="Search for a restaurant..."
             noOptionsMessage={() => (loading ? 'Searching...' : 'No results found')}
             isLoading={loading}
-            components={{ Option: CustomOption }}
+            components={{ 
+                Option: CustomOption, 
+                SingleValue,
+                DropdownIndicator: () => null
+            }}
             styles={{
                 control: (provided) => ({
                     ...provided,
+                    padding: '4px', // Add padding to the control
                     boxShadow: 'none',
                     borderColor: 'lightgray',
                     ':hover': {
                         borderColor: 'gray',
                     },
+                }),
+                indicatorSeparator: (provided) => ({
+                    ...provided,
+                    display: 'none',
                 }),
             }}
         />

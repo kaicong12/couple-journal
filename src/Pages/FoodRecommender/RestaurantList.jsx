@@ -22,7 +22,7 @@ import { faSort, faPizzaSlice } from '@fortawesome/free-solid-svg-icons';
 import Fuse from 'fuse.js';
 import { flatten } from 'lodash';
 
-import { RestaurantSearchBar } from './Components/RestaurantSearcBar';
+import { RestaurantSearchBar } from './Components/RestaurantSearchBar';
 import { RestaurantCard } from './Components/RestaurantCard';
 import { RestaurantSkeleton } from './Components/RestaurantSkeleton';
 import { EmptySearchState } from './EmptyState';
@@ -85,26 +85,6 @@ export const RestaurantListView = () => {
         'Name (Z to A)'
     ], []);
 
-    useEffect(() => {
-        setIsLoading(true);
-        let restaurantData;
-        if (isBookmarked) {
-            restaurantData = restaurants;
-        } else {
-            restaurantData = flatten(Object.values(restaurants).map(({ data }) =>  data));
-        }
-
-        let result;
-        if (searchQuery) {
-            result = fuzzySearch(restaurantData, searchQuery);
-        } else {
-            result = restaurantData;
-        }
-
-        setFilteredRestaurants(result);
-        setIsLoading(false);
-    }, [restaurants, searchQuery, fuzzySearch, isBookmarked]);
-
     const renderRestaurants = (restaurantsToRender) => {
         if (!restaurantsToRender.length) {
             return <EmptySearchState />;
@@ -114,8 +94,7 @@ export const RestaurantListView = () => {
                 {restaurantsToRender.map((restaurant, idx) => (
                     <RestaurantCard 
                         restaurant={restaurant} 
-                        key={`restaurant-card-${idx}`} 
-                        isBookmarked={isBookmarked} 
+                        key={`restaurant-card-${idx}`}
                     />
                 ))}
             </>

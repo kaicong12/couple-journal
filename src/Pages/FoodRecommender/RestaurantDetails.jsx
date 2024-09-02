@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Button, Text, Flex, IconButton } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faStar, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faStar, faArrowLeft, faBookmark as saved, } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as unSaved } from '@fortawesome/free-regular-svg-icons';
 
 import { RestaurantTag, RestaurantTags } from './Components/RestaurantCard';
 import { ReviewCard } from './ReviewCard';
 import { fetchRestaurantImage } from './services/places';
+import { checkIfBookmarked, toggleBookmark } from '../../utils';
 
 export const RestaurantDetails = () => {
     const location = useLocation();
@@ -15,6 +17,7 @@ export const RestaurantDetails = () => {
     const carouselRef = useRef(null);
     const restaurant = location.state?.restaurant;
     const [carouselImgLink, setCarouselImgLink]  = useState([])
+    const [isBookmarked, setIsBookmarked] = useState(false);
     
     const handleScroll = () => {
         const carousel = carouselRef.current;
@@ -22,6 +25,11 @@ export const RestaurantDetails = () => {
             const index = Math.round(carousel.scrollLeft / carousel.clientWidth);
             setCurrentIndex(index);
         }
+    };
+    
+    const handleToggleBookmark = async () => {
+        await toggleBookmark(isBookmarked, restaurant);
+        setIsBookmarked(!isBookmarked);
     };
 
     useEffect(() => {
@@ -39,7 +47,15 @@ export const RestaurantDetails = () => {
             setCarouselImgLink(imagesToDisplay);
         };
 
+        const checkBookmarkStatus = async () => {
+            if (restaurant) {
+                const bookmarked = await checkIfBookmarked(restaurant.id);
+                setIsBookmarked(bookmarked);
+            }
+        };
+
         fetchImages();
+        checkBookmarkStatus();
 
         const carousel = carouselRef.current;
         if (carousel) {
@@ -48,7 +64,7 @@ export const RestaurantDetails = () => {
                 carousel.removeEventListener('scroll', handleScroll);
             };
         }
-    }, []);
+    }, [restaurant]);
 
     if (!restaurant) {
         return <Box>Restaurant not found</Box>;
@@ -65,6 +81,25 @@ export const RestaurantDetails = () => {
                 bg="#EAD9BF"
                 color="#8F611B"
             />
+
+            <Box 
+                position="absolute" 
+                top="20px"
+                right="15px"
+                display="flex" 
+                bg="white" 
+                borderRadius="100" 
+                height="40px"
+                width="40px" 
+                justifyContent="center" 
+                alignItems="center"
+                onClick={(e) => { 
+                    e.stopPropagation();
+                    handleToggleBookmark() 
+                }}
+            >
+                <FontAwesomeIcon icon={isBookmarked ? saved : unSaved} />
+            </Box>
 
             <Box
                 id="carousel"
@@ -138,9 +173,16 @@ export const RestaurantDetails = () => {
                 
                 <Box mt="24px">
                     <Text fontSize="24px" textAlign="left" fontWeight="bold" mb="12px">Top Reviews</Text>
-                    { restaurant.reviews.map((review, index) => (
-                        <ReviewCard key={index} review={review} />
-                    ))}
+                    <Box
+                        display="flex"
+                        overflowX="auto"
+                        gap="20px"
+                        p="10px"
+                    >
+                        {restaurant.reviews.map((review, index) => (
+                            <ReviewCard key={index} review={review} />
+                        ))}
+                    </Box>
                 </Box>
             </Box>
             

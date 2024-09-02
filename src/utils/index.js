@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+import { multiUpdate, getValue } from "../db/rtdb";
 
 export const convertFbTimestampToDate = (firestoreTimestamp) => {
     if (!firestoreTimestamp) return 'This event does not have a date';
@@ -21,3 +22,18 @@ export const convertFbTimestampToDate = (firestoreTimestamp) => {
 export const convertInputDateToFbTimestamp = (date) => {
     return Timestamp.fromDate(new Date(date))
 }
+
+export const checkIfBookmarked = async (restaurantId) => {
+    const snapshot = await getValue(`/bookmarkedLocations/${restaurantId}`);
+    return Object.keys(snapshot).length;
+};
+
+export const toggleBookmark = async (isBookmarked, restaurant) => {
+    const updates = {};
+    if (isBookmarked) {
+        updates[`/bookmarkedLocations/${restaurant.id}`] = null;
+    } else {
+        updates[`/bookmarkedLocations/${restaurant.id}`] = restaurant;
+    }
+    await multiUpdate("/", updates);
+};
