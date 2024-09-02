@@ -1,34 +1,32 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRecoilValue } from 'recoil';
-import { popularRestaurantsCache } from '../../recoil/restaurantAtoms';
-
+import { useLocation } from 'react-router-dom';
+import { bookmarkedRestaurant, popularRestaurantsCache } from '../../recoil/restaurantAtoms';
 import { 
     Box, 
+    Button,
     Flex,
-    forwardRef,
-    Spinner, 
-    Text, 
-    Button, 
+    Heading,
     ButtonGroup, 
     Menu, 
     MenuButton, 
     MenuList, 
     MenuOptionGroup, 
     MenuItemOption,
-    Input,
-    InputGroup, 
-    InputLeftElement,
+    forwardRef,
+    Text
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faPizzaSlice } from '@fortawesome/free-solid-svg-icons';
 
-import { SearchBar } from "../../Components/SearchBar";
+import Fuse from 'fuse.js';
+import { flatten } from 'lodash';
+
+import { RestaurantSearchBar } from './Components/RestaurantSearcBar';
 import { RestaurantCard } from './Components/RestaurantCard';
 import { RestaurantSkeleton } from './Components/RestaurantSkeleton';
 import { EmptySearchState } from './EmptyState';
-import { fetchRestaurants, getLocation } from "./services/places";
 import { cuisineCategories } from "./services/cuisineList";
-import { flatten } from 'lodash'
 
 
 const FilterButton = forwardRef((props, ref) => {
@@ -40,34 +38,30 @@ const FilterButton = forwardRef((props, ref) => {
     );
 });
 
-export const AllPopularFood = () => {
-    const popularRestaurants = useRecoilValue(popularRestaurantsCache);
+export const RestaurantListView = () => {
+    const location = useLocation();
+    const isBookmarked = location.pathname.includes('viewAllBookmarked');
+    const pageHeading = isBookmarked ? 'Your Bookmarked Restaurants' : 'Popular Near You';
+    const pageSubheading = isBookmarked ? 'Your favorite spots, all in one place. Discover something delicious from your saved list.' 
+    : 'Explore trending dining options near you, recommended by our vibrant community.';
+
+    const restaurants = useRecoilValue(isBookmarked ? bookmarkedRestaurant : popularRestaurantsCache);
     const [searchQuery, setSearchQuery] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [restaurantSort, setRestaurantSort] = useState('Name (A to Z)');
-    const [selectedCategories, setSelectedCategories] = useState(['Popular']);
+    const [selectedCategories, setSelectedCategories] = useState(isBookmarked ? [] : ['Popular']);
 
-    const renderRestaurants = (restaurantsToRender) => {
-        if (!restaurantsToRender.length) {
-            return <EmptySearchState />;
-        }
-        return (
-            <>
-                {restaurantsToRender.map((restaurant, idx) => (
-                    <RestaurantCard restaurant={restaurant} key={`restaurant-card-${idx}`} isBookmarked={false} />
-                ))}
-            </>
-        );
-    };
-
-    const handleSearchChange = useCallback((event) => {
-        setSearchQuery(event.target.value);
+    const fuzzySearch = useCallback((restaurants, query) => {
+        const options = {
+            keys: ['displayName.text', 'formattedAddress', 'primaryTypeDisplayName.text'],
+            includeScore: true,
+            threshold: 0.4,
+        };
+    
+        const fuse = new Fuse(restaurants, options);
+        return fuse.search(query).map(result => result.item);
     }, []);
-
-    const handleSearch = () => {
-
-    }
 
     const handleSortChange = (value) => {
         setRestaurantSort(value);
@@ -92,19 +86,54 @@ export const AllPopularFood = () => {
     ], []);
 
     useEffect(() => {
-        const restaurantData = flatten(Object.values(popularRestaurants).map(({ data }) =>  data))
-        setFilteredRestaurants(restaurantData)
-    }, [popularRestaurants])
+        setIsLoading(true);
+        let restaurantData;
+        if (isBookmarked) {
+            restaurantData = restaurants;
+        } else {
+            restaurantData = flatten(Object.values(restaurants).map(({ data }) =>  data));
+        }
+
+        let result;
+        if (searchQuery) {
+            result = fuzzySearch(restaurantData, searchQuery);
+        } else {
+            result = restaurantData;
+        }
+
+        setFilteredRestaurants(result);
+        setIsLoading(false);
+    }, [restaurants, searchQuery, fuzzySearch, isBookmarked]);
+
+    const renderRestaurants = (restaurantsToRender) => {
+        if (!restaurantsToRender.length) {
+            return <EmptySearchState />;
+        }
+        return (
+            <>
+                {restaurantsToRender.map((restaurant, idx) => (
+                    <RestaurantCard 
+                        restaurant={restaurant} 
+                        key={`restaurant-card-${idx}`} 
+                        isBookmarked={isBookmarked} 
+                    />
+                ))}
+            </>
+        );
+    };
 
     return (
-        <Box>
-            <SearchBar 
-                searchQuery={searchQuery}
-                onSearchChange={handleSearchChange}
-                displayActionButton={true}
-                onSearch={handleSearch}
-            />
-            <ButtonGroup display="flex" mt="10px" px="20px">
+        <Box padding="24px">
+            <Box mb="16px">
+                <Heading size="lg">{ pageHeading }</Heading>
+                <Text fontSize="md" color="gray.600">
+                    { pageSubheading }
+                </Text>
+            </Box>
+
+            <RestaurantSearchBar />
+
+            <ButtonGroup display="flex" mt="16px">
                 <Menu>
                     <MenuButton
                         as={FilterButton}
@@ -157,10 +186,11 @@ export const AllPopularFood = () => {
                     </MenuList>
                 </Menu>
             </ButtonGroup>
-            <Flex flexWrap="wrap" justifyContent="center" gap="24px" mt="10px" px="20px">
-                {isLoading ? Array.from({ length: 3 }, (_, idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} />) : (
-                    renderRestaurants(filteredRestaurants)
-                )}
+
+            <Flex flexWrap="wrap" justifyContent="center" gap="24px" mt="10px">
+                {isLoading 
+                    ? Array.from({ length: 3 }, (_, idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} />) 
+                    : renderRestaurants(filteredRestaurants)}
             </Flex>
         </Box>
     );

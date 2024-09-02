@@ -9,8 +9,7 @@ import OurStory from './Pages/OurStory'
 import Events from './Pages/EventsList';
 import FoodRecommender from './Pages/FoodRecommender';
 import { RestaurantDetails } from './Pages/FoodRecommender/RestaurantDetails';
-import { AllPopularFood } from './Pages/FoodRecommender/ViewAllPopular'
-import { AllBookmarkedRestaurants } from './Pages/FoodRecommender/ViewAllBookmarked'
+import { RestaurantListView } from './Pages/FoodRecommender/RestaurantList';
 
 const theme = extendTheme({
   colors: {
@@ -43,8 +42,8 @@ function App() {
               <Route path="events" element={<Events />} />
               <Route path="food" element={<FoodRecommender />} />
               <Route path="food/:restaurantId" element={<RestaurantDetails />} />
-              <Route path="food/viewAllPopular" element={<AllPopularFood />} />
-              <Route path="food/viewAllBookmarked" element={<AllBookmarkedRestaurants />} />
+              <Route path="food/viewAllPopular" element={<RestaurantListView />} />
+              <Route path="food/viewAllBookmarked" element={<RestaurantListView />} />
           </Routes>
         </div>
         <Analytics />

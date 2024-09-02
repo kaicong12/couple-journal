@@ -27,7 +27,7 @@ export const RestaurantDetails = () => {
     useEffect(() => {
         const fetchImages = async () => {
             const imagesToDisplay = await Promise.all(
-                restaurant.photos.slice(0, 5).map(async (photo, index) => {
+                restaurant?.photos.slice(0, 5).map(async (photo, index) => {
                     if (index === 0) {
                         return restaurant.thumbnailUrl
                     }
