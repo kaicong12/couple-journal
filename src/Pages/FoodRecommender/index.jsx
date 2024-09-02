@@ -104,7 +104,7 @@ const FoodRecommendations = () => {
                     <RestaurantCard 
                         key={restaurant.id} 
                         restaurant={restaurant} 
-                        isBookmarked={bookmarkedRestaurantIds.includes(restaurant.id)}
+                        _isBookmarked={bookmarkedRestaurantIds.includes(restaurant.id)}
                     />
                 ))}
             </Flex>
