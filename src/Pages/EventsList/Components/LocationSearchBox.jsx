@@ -1,31 +1,24 @@
-import { useState, useEffect } from "react"
-import { useDebounce } from '../../../hooks/useDebounce'
-import { 
-    Input, 
-    InputGroup,
-    InputLeftElement,
-    List, 
-    ListItem,
-    Text, 
-    Box 
-} from '@chakra-ui/react';
+import { useState, useEffect } from "react";
+import AsyncSelect from 'react-select/async';
+import { components } from 'react-select';
+import { useDebounce } from '../../../hooks/useDebounce';
+import { Box } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
-
 export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
-    const [searchInput, setSearchInput] = useState('')
-    const [displayInput, setDisplayInput] = useState(currentLocation)
-    const debouncedSearch = useDebounce(searchInput, 500)
+    const [searchInput, setSearchInput] = useState(currentLocation);
+    const [displayInput, setDisplayInput] = useState(currentLocation);
+    const debouncedSearch = useDebounce(searchInput, 500);
     const [results, setResults] = useState([]);
 
     const handleOnSelectLocation = (location) => {
-        setDisplayInput(location.text.text)
+        setDisplayInput(location.label);
         setResults([]);
         if (onSelectLocation) {
             onSelectLocation(location);
         }
-    }
+    };
 
     const fetchAutocomplete = async (search) => {
         const myHeaders = new Headers();
@@ -62,36 +55,48 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
         }
     }, [debouncedSearch]);
 
+    const loadOptions = (inputValue, callback) => {
+        fetchAutocomplete(inputValue).then(() => {
+            console.log(results);
+            const options = results.map((result) => ({
+                label: result.placePrediction.text.text,
+                value: result.placePrediction.placeId
+            }));
+            callback(options);
+        });
+    };
+
     return (
         <Box>
-            <InputGroup>
-                <InputLeftElement
-                    pointerEvents="none"
-                    children={<FontAwesomeIcon icon={faLocationDot} />}
-                />
-                <Input
-                    placeholder="Search for locations..."
-                    value={displayInput}
-                    onChange={(e) => {
-                        setDisplayInput(e.target.value);
-                        setSearchInput(e.target.value); // This triggers the search
-                    }}
-                />
-            </InputGroup>
-            
-            {results.length > 0 && (
-                <List spacing={3} mt={2} bg="white" p={4} boxShadow="md" borderRadius="md" maxH="300px" overflowY="auto">
-                    {results.map(({ placePrediction }, index) => (
-                        <ListItem key={index} cursor="pointer" onClick={() => handleOnSelectLocation(placePrediction)}>
-                            <Box display="flex" alignItems="center" gap="6px">
-                                <FontAwesomeIcon icon={faLocationDot} />
-                                <Text>{ placePrediction.text.text ?? '' }</Text>
-                            </Box>
-                            
-                        </ListItem>
-                    ))}
-                </List>
-            )}
+            <AsyncSelect
+                cacheOptions
+                loadOptions={loadOptions}
+                onInputChange={(value) => setSearchInput(value)}
+                onChange={handleOnSelectLocation}
+                placeholder="Search for locations..."
+                defaultInputValue={displayInput}
+                components={{
+                    DropdownIndicator: (props) => (
+                        <components.DropdownIndicator {...props}>
+                            <FontAwesomeIcon icon={faLocationDot} style={{ padding: '0 8px' }} />
+                        </components.DropdownIndicator>
+                    )
+                }}
+                styles={{
+                    control: (provided) => ({
+                        ...provided,
+                        padding: '4px',
+                        boxShadow: 'none',
+                        borderColor: 'lightgray',
+                        ':hover': {
+                            borderColor: 'gray',
+                        },
+                    }),
+                    indicatorSeparator: () => ({
+                        display: 'none',
+                    }),
+                }}
+            />
         </Box>
     );
-}   
+};

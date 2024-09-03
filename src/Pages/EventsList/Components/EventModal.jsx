@@ -211,7 +211,10 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                 <FontAwesomeIcon color="#8F611B" icon={faLocationDot} />
                                 {editMode ? (
                                     <Box width="100%">
-                                        <LocationSearchBox onSelectLocation={(location) => handleChange('location', location.text.text)} />
+                                        <LocationSearchBox 
+                                            onSelectLocation={(location) => handleChange('location', location.text.text)} 
+                                            currentLocation={event.location}
+                                        />
                                     </Box>
                                 ) : (
                                     <Text maxW="90%" isTruncated color="#333333">{event.location || "Unknown Location"}</Text>
