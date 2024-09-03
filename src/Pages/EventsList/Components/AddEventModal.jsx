@@ -44,7 +44,7 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
     };
 
     const handleLocationChange = (location) => {
-        const locationText = location?.text?.text ?? ''
+        const locationText = location?.label ?? ''
         setNewEvent(prev => ({
             ...prev,
             location: locationText,

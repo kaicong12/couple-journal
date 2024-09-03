@@ -16,6 +16,7 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
         setDisplayInput(location.label);
         setResults([]);
         if (onSelectLocation) {
+            console.log('setting', location)
             onSelectLocation(location);
         }
     };

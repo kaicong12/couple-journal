@@ -212,7 +212,7 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                 {editMode ? (
                                     <Box width="100%">
                                         <LocationSearchBox 
-                                            onSelectLocation={(location) => handleChange('location', location.text.text)} 
+                                            onSelectLocation={(location) => handleChange('location', location.label)} 
                                             currentLocation={event.location}
                                         />
                                     </Box>
