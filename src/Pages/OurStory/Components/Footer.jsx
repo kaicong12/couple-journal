@@ -1,9 +1,7 @@
 import React from 'react';
-import { Text, Box, Button } from '@chakra-ui/react'
+import { Text, Box } from '@chakra-ui/react'
 
-import { ArrowForwardIcon} from '@chakra-ui/icons'
-
-function Footer({ setActiveTab }) {
+function Footer() {
   return (
     <Box 
       bg="#F2F2F2"
@@ -19,24 +17,6 @@ function Footer({ setActiveTab }) {
       <Text mt="15px" fontSize="20px" fontFamily="actor" px="10px">
         Thank you for being part of my journey. Here's to many more years of love, laughter, and happiness.
       </Text>
-
-      <Box mt="20px" width="100%" display="flex" justifyContent="flex-end">
-        <Button 
-          bg="#EAD9BF" 
-          size='md' 
-          onClick={() => {
-            setActiveTab(1)
-            window.scrollTo({
-              top: 0,
-            })
-          }}  
-        >
-          <ArrowForwardIcon color="#8F611B" mr="5px" fontWeight="600" /> 
-          <Text color="#8F611B" fontFamily="actor">
-            Gallery
-          </Text>
-        </Button>
-      </Box>
     </Box>
   );
 }

@@ -10,12 +10,11 @@ import { convertFbTimestampToDate } from '../../../utils'
 
 export const EventCard = ({ event, onOpen }) => (
     <Box 
-        width="sm" 
         borderWidth="1px" 
         borderRadius="lg" 
         overflow="hidden" 
         onClick={onOpen} 
-        p="16px" 
+        p="25px" 
         background="#D9D9D9"
         display="flex"
         flexDir="column"
@@ -42,7 +41,7 @@ export const EventCard = ({ event, onOpen }) => (
             </Box>
             <Box mt="2" display="flex" alignItems="center" justifyContent="center" gap="4px">
                 <Icon as={FontAwesomeIcon} icon={faLocationDot} />
-                <Text isTruncated maxWidth="80%" color="#49516F">
+                <Text isTruncated maxWidth="200px" color="#49516F">
                     {event.location}
                 </Text>
             </Box>

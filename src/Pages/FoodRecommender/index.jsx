@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useRecoilState } from "recoil"
 import { bookmarkedRestaurant, popularRestaurantsCache } from "../../recoil/restaurantAtoms";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { 
     Box, 
     Flex, 
@@ -28,26 +28,16 @@ const NoRestaurantSection = ({ noRestaurantMessage }) => {
 }
 
 const FoodRecommendations = () => {
-    const navigate = useNavigate();
     const [userLocation, setUserLocation] = useState({ latitude: null, longitude: null })
     const [locationError, setUserLocationError] = useState(null)
     const [isLoading, setIsLoading] = useState(true);
     const [isBookmarkedLoading, setIsBookmarkedLoading] = useState(true)
-    const [searchQuery, setSearchArea] = useState('');
     const [selectedCuisine, setSelectedCuisine] = useState('Popular');
     const [bookmarkedRestaurants, setBookmarkedRestaurants] = useRecoilState(bookmarkedRestaurant)
     const [restaurants, setRestaurants] = useState([]);
 
     const [cuisineCache, setCuisineCache] = useRecoilState(popularRestaurantsCache);
-    const cacheTimeout = 15 * 60 * 1000; // 15 minutes in milliseconds
-
-    const handleSearchChange = (event) => {
-        setSearchArea(event.target.value);
-    };
-
-    const handleSearchButtonClick = () => {
-        navigate({ pathname: "/food/viewAll", search: `?search=${searchQuery}` });
-    };
+    const cacheTimeout = 15 * 60 * 1000;
 
     const handleCuisineClick = async (cuisine) => {
         if (selectedCuisine === cuisine) {

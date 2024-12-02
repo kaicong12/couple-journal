@@ -201,7 +201,22 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                         size='md' 
                                         value={formattedDate}
                                         onChange={(e) => handleChange('date', e.target.value)}
-                                        type='date' 
+                                        type='date'
+                                        sx={{
+                                            padding: "23px 12px",
+                                            borderColor: "lightgray",
+                                            '::-webkit-calendar-picker-indicator': {
+                                                display: 'none', // Hides the calendar icon for WebKit browsers
+                                            },
+                                            '::-webkit-inner-spin-button': {
+                                                display: 'none', // Hides spinner controls if present
+                                            },
+                                            '::-webkit-clear-button': {
+                                                display: 'none', // Hides clear button if present
+                                            },
+                                            MozAppearance: 'textfield', // Removes native styling for Firefox
+                                            appearance: 'none',
+                                        }}
                                     />
                                 ) : (
                                     <Text color="#333333">{event.date ? formatDate(event.date) : "Missing date for this event"}</Text>
@@ -214,6 +229,7 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                         <LocationSearchBox 
                                             onSelectLocation={(location) => handleChange('location', location.label)} 
                                             currentLocation={event.location}
+                                            editMode={editMode}
                                         />
                                     </Box>
                                 ) : (

@@ -6,7 +6,7 @@ import { Box } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
-export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
+export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode }) => {
     const [searchInput, setSearchInput] = useState(currentLocation);
     const [displayInput, setDisplayInput] = useState(currentLocation);
     const debouncedSearch = useDebounce(searchInput, 500);
@@ -16,7 +16,6 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
         setDisplayInput(location.label);
         setResults([]);
         if (onSelectLocation) {
-            console.log('setting', location)
             onSelectLocation(location);
         }
     };
@@ -77,11 +76,13 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation }) => {
                 placeholder="Search for locations..."
                 defaultInputValue={displayInput}
                 components={{
-                    DropdownIndicator: (props) => (
-                        <components.DropdownIndicator {...props}>
-                            <FontAwesomeIcon icon={faLocationDot} style={{ padding: '0 8px' }} />
-                        </components.DropdownIndicator>
-                    )
+                    DropdownIndicator: editMode
+                        ? null // Do not render the dropdown indicator in edit mode
+                        : (props) => (
+                            <components.DropdownIndicator {...props}>
+                                <FontAwesomeIcon icon={faLocationDot} style={{ padding: '0 8px' }} />
+                            </components.DropdownIndicator>
+                        ),
                 }}
                 styles={{
                     control: (provided) => ({

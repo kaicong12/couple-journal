@@ -10,6 +10,7 @@ import Events from './Pages/EventsList';
 import FoodRecommender from './Pages/FoodRecommender';
 import { RestaurantDetails } from './Pages/FoodRecommender/RestaurantDetails';
 import { RestaurantListView } from './Pages/FoodRecommender/RestaurantList';
+// import { Letter } from './Pages/Letter';
 
 const theme = extendTheme({
   colors: {
@@ -44,6 +45,7 @@ function App() {
               <Route path="food/:restaurantId" element={<RestaurantDetails />} />
               <Route path="food/viewAllPopular" element={<RestaurantListView />} />
               <Route path="food/viewAllBookmarked" element={<RestaurantListView />} />
+              {/* <Route path="letter" element={<Letter />} /> */}
           </Routes>
         </div>
         <Analytics />

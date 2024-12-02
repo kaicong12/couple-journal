@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import { 
     forwardRef,
     Box,
-    SimpleGrid,
+    Flex,
     Spinner,
     Text,
     Button,
@@ -253,7 +253,7 @@ const EventPage = () => {
     };
 
     // Generate the page numbers to display
-    const pageNumbersToShow = 5; // Number of page buttons to display
+    const pageNumbersToShow = 3; // Number of page buttons to display
     const startPage = Math.max(1, currentPage - Math.floor(pageNumbersToShow / 2));
     const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
     const hasActiveCategories = selectedCategories.length
@@ -364,11 +364,11 @@ const EventPage = () => {
 
                         {currentEvents.length ? (
                             <Box>
-                                <SimpleGrid columns={{ sm: 2, md: 3 }} spacing="10px" p="10px" justifyItems="center" alignItems="center">
+                                <Flex gap="20px" px="20px" pt="20px" flexWrap="wrap" justifyItems="center" alignItems="center">
                                     {currentEvents.map(event => (
                                         <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
                                     ))}
-                                </SimpleGrid>
+                                </Flex>
 
                                 <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
                                     <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
