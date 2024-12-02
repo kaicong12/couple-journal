@@ -4,13 +4,13 @@ import Footer from './Components/Footer';
 import Appreciation from './Components/Appreciation';
 import Whisper from './Components/Whisper';
 
-const OurStory = ({ setActiveTab }) => {
+const OurStory = () => {
     return (
         <Box>
             <HeroSection />
             <Appreciation />
             <Whisper />
-            <Footer setActiveTab={setActiveTab} />
+            <Footer />
         </Box>
     )
 }

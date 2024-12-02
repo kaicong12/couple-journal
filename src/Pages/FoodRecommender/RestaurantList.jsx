@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { useRecoilValue } from 'recoil';
 import { useLocation } from 'react-router-dom';
-import { bookmarkedRestaurant, popularRestaurantsCache } from '../../recoil/restaurantAtoms';
+import { bookmarkedRestaurant, popularRestaurants } from '../../recoil/restaurantAtoms';
 import { 
     Box, 
     Button,
@@ -20,7 +20,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort, faPizzaSlice } from '@fortawesome/free-solid-svg-icons';
 
 import Fuse from 'fuse.js';
-import { flatten } from 'lodash';
 
 import { RestaurantSearchBar } from './Components/RestaurantSearchBar';
 import { RestaurantCard } from './Components/RestaurantCard';
@@ -41,12 +40,11 @@ const FilterButton = forwardRef((props, ref) => {
 export const RestaurantListView = () => {
     const location = useLocation();
     const isBookmarked = location.pathname.includes('viewAllBookmarked');
-    const pageHeading = isBookmarked ? 'Your Bookmarked Restaurants' : 'Popular Near You';
+    const pageHeading = isBookmarked ? 'Bookmarked Spots' : 'Popular Near You';
     const pageSubheading = isBookmarked ? 'Your favorite spots, all in one place. Discover something delicious from your saved list.' 
     : 'Explore trending dining options near you, recommended by our vibrant community.';
-
-    const restaurants = useRecoilValue(isBookmarked ? bookmarkedRestaurant : popularRestaurantsCache);
-    const [searchQuery, setSearchQuery] = useState('');
+    
+    const restaurants = useRecoilValue(isBookmarked ? bookmarkedRestaurant : popularRestaurants);
     const [isLoading, setIsLoading] = useState(false);
     const [filteredRestaurants, setFilteredRestaurants] = useState([]);
     const [restaurantSort, setRestaurantSort] = useState('Name (A to Z)');
@@ -101,8 +99,29 @@ export const RestaurantListView = () => {
         );
     };
 
+    const sortRestaurants = useCallback((restaurants) => {
+        const sortedRestaurants = [...restaurants];
+        if (restaurantSort === "Name (A to Z)") {
+            sortedRestaurants.sort((a, b) =>
+                a.displayName.text.localeCompare(b.displayName.text)
+            );
+        } else {
+            sortedRestaurants.sort((a, b) =>
+                b.displayName.text.localeCompare(a.displayName.text)
+            );
+        }
+        return sortedRestaurants;
+    }, [restaurantSort]);
+
+    useEffect(() => {
+        const filteredByCategory = restaurants.filter((restaurant) =>
+          selectedCategories.includes("Popular") || selectedCategories.includes(restaurant.category) || isBookmarked
+        );
+        setFilteredRestaurants(sortRestaurants(filteredByCategory));
+    }, [restaurants, selectedCategories, sortRestaurants, fuzzySearch, isBookmarked]);
+
     return (
-        <Box padding="24px">
+        <Box padding="12px 24px">
             <Box mb="16px">
                 <Heading size="lg">{ pageHeading }</Heading>
                 <Text fontSize="md" color="gray.600">
@@ -166,7 +185,7 @@ export const RestaurantListView = () => {
                 </Menu>
             </ButtonGroup>
 
-            <Flex flexWrap="wrap" justifyContent="center" gap="24px" mt="10px">
+            <Flex flexWrap="wrap" justifyContent="center" gap="24px" mt="20px">
                 {isLoading 
                     ? Array.from({ length: 3 }, (_, idx) => <RestaurantSkeleton key={`restaurant-skeleton-${idx}`} />) 
                     : renderRestaurants(filteredRestaurants)}
