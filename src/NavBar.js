@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { routesWithinApp } from './routes';
 import { Link, useLocation } from 'react-router-dom';
-import { Box, Tabs, Text, TabList, Tab, IconButton } from '@chakra-ui/react';
+import { Box, Tabs, Text, TabList, Tab } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCalendarAlt, faUtensils, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from './AuthContext';
+import { faBookOpen, faCalendarAlt, faUtensils } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
-    const { loading: authChangeLoading, handleLogout } = useAuth();
     const location = useLocation();
     const [activeTab, setActiveTab] = useState(0);
 
@@ -25,17 +23,6 @@ const NavBar = () => {
 
   return (
         <Box bg="#D9D9D9" py="20px">
-            <IconButton
-                aria-label="Logout"
-                icon={<FontAwesomeIcon icon={faSignOutAlt} />}
-                position="absolute"
-                top="10px"
-                right="10px"
-                onClick={handleLogout}
-                bg="transparent"
-                _hover={{ bg: "gray.200" }}
-                fontSize="20px"
-            />
             <Tabs
                 variant="soft-rounded"
                 colorScheme="brown"
