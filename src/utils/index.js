@@ -24,7 +24,7 @@ export const convertInputDateToFbTimestamp = (date) => {
 }
 
 export const checkIfBookmarked = async (restaurantId) => {
-    const snapshot = await getValue(`/bookmarkedLocations/${restaurantId}`);
+    const snapshot = (await getValue(`/bookmarkedLocations/${restaurantId}`)) ?? {};
     return Object.keys(snapshot).length;
 };
 

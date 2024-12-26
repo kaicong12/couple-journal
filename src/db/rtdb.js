@@ -21,7 +21,7 @@ export const getValue = async (nodePath) => {
     const nodeRef = getNodeRef(nodePath)
     const snap = await get(nodeRef)
 
-    return snap.val() || {}
+    return snap.val()
 }
 
 const listenOnNodeRef = (ref, cb, type) => {

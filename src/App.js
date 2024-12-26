@@ -1,8 +1,6 @@
 import './App.css';
-import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from '@vercel/analytics/react';
-import { brownScheme} from './theme'
 
 import NavBar from './NavBar';
 import OurStory from './Pages/OurStory'
@@ -11,46 +9,56 @@ import FoodRecommender from './Pages/FoodRecommender';
 import { RestaurantDetails } from './Pages/FoodRecommender/RestaurantDetails';
 import { RestaurantListView } from './Pages/FoodRecommender/RestaurantList';
 // import { Letter } from './Pages/Letter';
-
-const theme = extendTheme({
-  colors: {
-    brown: brownScheme,
-  },
-  components: {
-    Input: {
-      baseStyle: {
-        field: {
-            _focus: {
-              boxShadow: '0 0 0 1px rgba(255, 181, 62, 0.6)', 
-              borderWidth: '2px', 
-              borderColor: 'brown.200',
-              outline: 'none' 
-          }
-        }
-      }
-    }
-  }
-});
+import { LoginPage } from './Pages/Login';
+import PrivateRoute from './PrivateRoute';
+import { useAuth } from './AuthContext';
 
 function App() {
+  const { user } = useAuth();
+  if (!user) {
+    return <LoginPage />;
+  }
+
   return (
-    <ChakraProvider theme={theme}>
-      <Router>
-        <div className="App">
-          <NavBar />
-          <Routes>
-              <Route path="/" element={<OurStory />} />
-              <Route path="events" element={<Events />} />
-              <Route path="food" element={<FoodRecommender />} />
-              <Route path="food/:restaurantId" element={<RestaurantDetails />} />
-              <Route path="food/viewAllPopular" element={<RestaurantListView />} />
-              <Route path="food/viewAllBookmarked" element={<RestaurantListView />} />
-              {/* <Route path="letter" element={<Letter />} /> */}
-          </Routes>
-        </div>
-        <Analytics />
-      </Router>
-    </ChakraProvider>
+    <Router>
+      <div className="App">
+        <NavBar />
+        <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<PrivateRoute>
+                <OurStory />
+              </PrivateRoute>
+            } />
+            <Route path="events" element={
+              <PrivateRoute>
+                <Events />
+              </PrivateRoute>
+            } />
+            <Route path="food" element={
+              <PrivateRoute>
+                <FoodRecommender />
+              </PrivateRoute>
+            } />
+            <Route path="food/:restaurantId" element={
+              <PrivateRoute>
+                <RestaurantDetails />
+              </PrivateRoute>
+            } />
+            <Route path="food/viewAllPopular" element={
+              <PrivateRoute>
+                <RestaurantListView />
+              </PrivateRoute>
+            } />
+            <Route path="food/viewAllBookmarked" element={
+              <PrivateRoute>
+                <RestaurantListView />
+              </PrivateRoute>
+            } />
+            {/* <Route path="letter" element={<Letter />} /> */}
+        </Routes>
+      </div>
+      <Analytics />
+    </Router>
   );
 }
 
