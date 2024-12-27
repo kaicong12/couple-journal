@@ -8,6 +8,7 @@ import Events from './Pages/EventsList';
 import FoodRecommender from './Pages/FoodRecommender';
 import { RestaurantDetails } from './Pages/FoodRecommender/RestaurantDetails';
 import { RestaurantListView } from './Pages/FoodRecommender/RestaurantList';
+import { ExpenseTracker } from './Pages/ExpenseTracker';
 // import { Letter } from './Pages/Letter';
 import { LoginPage } from './Pages/Login';
 import PrivateRoute from './PrivateRoute';
@@ -52,6 +53,11 @@ function App() {
             <Route path="food/viewAllBookmarked" element={
               <PrivateRoute>
                 <RestaurantListView />
+              </PrivateRoute>
+            } />
+            <Route path="expenseTracker" element={
+              <PrivateRoute>
+                <ExpenseTracker />
               </PrivateRoute>
             } />
             {/* <Route path="letter" element={<Letter />} /> */}
