@@ -1,6 +1,6 @@
 export const FemaleAvatar1 = () => {
     return (
-        <svg width="169" height="169" viewBox="0 0 169 169" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="100" height="100" viewBox="0 0 169 169" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <circle cx="84.706" cy="84.3063" r="84.2925" fill="url(#pattern0_0_1848)"/>
             <defs>
             <pattern id="pattern0_0_1848" patternContentUnits="objectBoundingBox" width="1" height="1">

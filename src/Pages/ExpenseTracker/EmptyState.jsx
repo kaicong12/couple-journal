@@ -13,7 +13,7 @@ export const EmptyState = ({ patternId }) => {
                 <NoTransactions patternId={patternId} height="200px" width="200px" />
             </Flex>
             <Box mt="10px" fontWeight="600">
-                <Text>No transactions yet</Text>
+                <Text>Not enough transactions for analytics</Text>
                 <Text>Start adding transactions to see them here</Text>
             </Box>
         </Box>
