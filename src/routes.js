@@ -2,5 +2,6 @@ export const routesWithinApp = [
     '/', 
     '/events', 
     '/food',
-    '/letter'
+    '/letter',
+    '/expenseTracker'
 ]

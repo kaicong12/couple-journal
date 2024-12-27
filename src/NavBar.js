@@ -3,7 +3,7 @@ import { routesWithinApp } from './routes';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Tabs, Text, TabList, Tab } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCalendarAlt, faUtensils } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faCalendarAlt, faUtensils, faTags } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
     const location = useLocation();
@@ -63,6 +63,14 @@ const NavBar = () => {
                             </Box>
                         </Link>
                     </Tab> */}
+                    <Tab>
+                        <Link to={`expenseTracker`}>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <FontAwesomeIcon icon={faTags} />
+                                <Text fontSize="12px" fontWeight="bold">Expenses</Text>
+                            </Box>
+                        </Link>
+                    </Tab>
                 </TabList>
             </Tabs>
         </Box>
