@@ -15,12 +15,22 @@ export const getCollectionValues = async (collectionName) => {
 
 export const updateFirestoreValue = async (collectionName, docId, data) => {
     const docRef = doc(db, collectionName, docId);
-    await updateDoc(docRef, data);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        await updateDoc(docRef, data);
+    } else {
+        console.log(`Document with ID ${docId} not found in collection ${collectionName}`);
+    }
 }
 
 export const deleteFirestoreValue = async (collectionName, docId) => {
     const docRef = doc(db, collectionName, docId);
-    await deleteDoc(docRef);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        await deleteDoc(docRef);
+    } else {
+        console.log(`Document with ID ${docId} not found in collection ${collectionName}`);
+    }
 }
 
 export const listenOnFirestore = (collectionName, cb) => {

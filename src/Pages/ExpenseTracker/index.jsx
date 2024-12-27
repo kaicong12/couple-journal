@@ -25,25 +25,31 @@ import { AddTransactions } from './AddTransactions';
 
 export const ExpenseTracker = () => {
     const { 
+        activeUser,
+        setActiveUser,
+        isDrawerOpen,
+        isDeleting,
         isSyncing,
         isSaving,
-        transactions, 
+        relevantTransactions, 
         expensesConfig,
         accountsConfig,
+        transactionToEdit,
         addTransaction,
+        updateTransaction,
+        setIsDrawerOpen,
+        handleDrawerClose,
+        handleEditTransaction,
+        handleDeleteTransaction
     } = useExpenseTracker();
     // 0 is Weekly, 1 is Monthly, 2 is Custom
     const [activeTab, setActiveTab] = useState(0);
-    const [activeUser, setActiveUser] = useState("Kai Cong");
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const totalExpenses = useMemo(() => {
-        return transactions.reduce((total, transaction) => {
-            // don't count transactions which are out of range
-            if (transaction.createdAt < Date.now() - 30 * 24 * 60 * 60 * 1000) return total;
+        return relevantTransactions.reduce((total, transaction) => {
             return total + Number(transaction.amount) ?? 0;
         }, 0);
-    }, [transactions])
+    }, [relevantTransactions])
 
     const userOptions = useMemo(() => {
         return [
@@ -53,10 +59,6 @@ export const ExpenseTracker = () => {
             { value: "Total", label: "Total" },
         ]
     }, []);
-
-    const handleDrawerClose = () => {
-        setIsDrawerOpen(false);
-    };
 
     return (
         <Box>
@@ -85,7 +87,7 @@ export const ExpenseTracker = () => {
                             </Flex>
                             <Flex flexWrap="wrap" w="full" gap="8px">
                                 <Flex flexDir="column" alignItems="flex-start">
-                                    <Text color="gray" fontSize="14px">Average Expenditure</Text>
+                                    <Text color="gray" fontSize="14px">Average Daily Expenditure</Text>
                                     <Text><span style={{ fontWeight: "800", fontSize: "24px"}}>${(totalExpenses / 30).toFixed(2)}</span> (Last 30 days)</Text>
                                 </Flex>
                                 <Flex flexDir="column" alignItems="flex-start">
@@ -102,18 +104,18 @@ export const ExpenseTracker = () => {
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    <WeeklyView transactions={transactions} />
+                                    <WeeklyView transactions={relevantTransactions} />
                                 </TabPanel>
                                 <TabPanel>
-                                    <MonthlyView transactions={transactions} />
+                                    <MonthlyView transactions={relevantTransactions} />
                                 </TabPanel>
                                 <TabPanel>
-                                    <CustomView transactions={transactions} />
+                                    <CustomView transactions={relevantTransactions} />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </Flex>    
-                    { transactions.length ? <Transactions transactions={transactions} /> : null }
+                    { relevantTransactions.length ? <Transactions transactions={relevantTransactions} onEdit={handleEditTransaction} /> : null }
                 </Box>
             )}
             <IconButton
@@ -128,11 +130,15 @@ export const ExpenseTracker = () => {
             />
             <AddTransactions 
                 isSaving={isSaving}
+                isDeleting={isDeleting}
                 expensesConfig={expensesConfig}
                 accountsConfig={accountsConfig}
                 isDrawerOpen={isDrawerOpen} 
                 addTransaction={addTransaction} 
+                updateTransaction={updateTransaction}
                 handleDrawerClose={handleDrawerClose} 
+                transactionToEdit={transactionToEdit}
+                handleDelete={handleDeleteTransaction}
             />
         </Box>  
     )

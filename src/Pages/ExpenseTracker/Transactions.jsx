@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlane, faBowlFood, faMoneyBill, faCartShopping, faUser } from '@fortawesome/free-solid-svg-icons';
 
-export const Transactions = ({ transactions }) => {
+export const Transactions = ({ transactions, onEdit }) => {
     // transaction.category includes (meal, travel, shopping, utilities, other)
     const iconMapping = {
         meal: {
@@ -36,10 +36,10 @@ export const Transactions = ({ transactions }) => {
             <Text fontWeight="600" fontSize="16px" textAlign="left" mb="16px">Transactions</Text>
             { transactions.map((transaction, index) => {
                 return (
-                    <Flex key={index} bg="#FFF0DA" p="10px" borderRadius="10px" alignItems="center" justifyContent="space-between" mb="10px">
+                    <Flex key={index} bg="#FFF0DA" p="10px" borderRadius="10px" alignItems="center" justifyContent="space-between" mb="10px" onClick={() => onEdit(transaction)}>
                         <Flex alignItems="center" gap="10px" maxW="75%">
-                            <Box bg={iconMapping[transaction.category]?.background} p="15px" borderRadius="16px">
-                                <FontAwesomeIcon icon={iconMapping[transaction.category]?.icon} size="xl" />
+                            <Box bg={iconMapping[transaction.category]?.background || iconMapping.other.background} p="15px" borderRadius="16px">
+                                <FontAwesomeIcon icon={iconMapping[transaction.category]?.icon || iconMapping.other.icon} size="xl" />
                             </Box>
                             <Box maxW="70%">
                                 <Text isTruncated fontWeight="600" fontSize="16px">{transaction.title}</Text>

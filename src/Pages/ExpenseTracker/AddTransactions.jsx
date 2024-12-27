@@ -15,18 +15,32 @@ import {
     Flex
 } from '@chakra-ui/react';
 import Select from 'react-select';
+import { useState, useCallback, useEffect } from 'react';
 
-import { useState, useCallback } from 'react';
+import { DeleteConfirmation } from './DeleteConfirmation';
 
 export const AddTransactions = ({ 
     isSaving,
+    isDeleting,
     expensesConfig,
     accountsConfig,
     isDrawerOpen, 
     addTransaction, 
-    handleDrawerClose 
+    updateTransaction,
+    handleDrawerClose,
+    transactionToEdit,
+    handleDelete
 }) => {
     const [newTransaction, setNewTransaction] = useState({})
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (transactionToEdit) {
+            setNewTransaction(transactionToEdit);
+        } else {
+            setNewTransaction({});
+        }
+    }, [transactionToEdit]);
 
     const [errors, setErrors] = useState({});
     const customSelectStyles = (isError) => ({
@@ -98,9 +112,17 @@ export const AddTransactions = ({
             return;
         }
 
-        await addTransaction(newTransaction);
+        if (transactionToEdit) {
+            await updateTransaction(newTransaction);
+        } else {
+            await addTransaction(newTransaction);
+        }
         handleClose();
-    }, [newTransaction, addTransaction, handleClose]);
+    }, [newTransaction, transactionToEdit, handleClose, updateTransaction, addTransaction]);
+
+    const onDeleteTransaction = useCallback(() => {
+        setIsDeleteModalOpen(true);
+    }, []);
 
     return (
         <Drawer isOpen={isDrawerOpen} placement="bottom" onClose={handleClose}>
@@ -113,7 +135,7 @@ export const AddTransactions = ({
                         <Flex alignItems="center">
                             <FormLabel width="25%">Date</FormLabel>
                             <Box width="75%">
-                                <Input name="date" type="date" onChange={handleInputChange} />
+                                <Input name="date" type="date" value={newTransaction.date || ''} onChange={handleInputChange} />
                                 { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
                             </Box>
                         </Flex>
@@ -127,6 +149,7 @@ export const AddTransactions = ({
                                     options={accountsConfig.map(name => ({ value: name, label: name }))}
                                     isClearable={true}
                                     styles={customSelectStyles(errors.account)}
+                                    value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
                                 />
                                 { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
                             </Box>
@@ -141,6 +164,7 @@ export const AddTransactions = ({
                                     onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'category')}
                                     options={expensesConfig.map(name => ({ value: name, label: name }))}
                                     isClearable={true}
+                                    value={newTransaction.category ? { value: newTransaction.category, label: newTransaction.category } : null}
                                     styles={customSelectStyles(errors.category)}
                                 />
                                 { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
@@ -151,7 +175,7 @@ export const AddTransactions = ({
                         <Flex alignItems="center">
                             <FormLabel width="25%">Amount</FormLabel>
                             <Box width="75%">
-                                <Input type="number" onChange={handleInputChange} name="amount" placeholder='E.g. 50'/>
+                                <Input type="number" value={newTransaction.amount || ''} onChange={handleInputChange} name="amount" placeholder='E.g. 50'/>
                                 { errors.amount && <FormErrorMessage>{errors.amount}</FormErrorMessage> }
                             </Box>
                         </Flex>
@@ -160,24 +184,49 @@ export const AddTransactions = ({
                         <Flex alignItems="center">
                             <FormLabel width="25%">Title</FormLabel>
                             <Box width="75%">
-                                <Input onChange={handleInputChange} name="title" placeholder="E.g. Dinner at Tiong Bahru" />
+                                <Input value={newTransaction.title || ''} onChange={handleInputChange} name="title" placeholder="E.g. Dinner at Tiong Bahru" />
                                 { errors.title && <FormErrorMessage>{errors.title}</FormErrorMessage> }
                             </Box>
                         </Flex>
                     </FormControl>
                 </DrawerBody>
                 <DrawerFooter>
-                    <Button 
-                        width="full" 
-                        isLoading={isSaving} 
-                        bg="#EAD9BF" 
-                        color="#8F611B"
-                        onClick={handleSave}
-                    >
-                        Save
-                    </Button>  
+                    <Flex width="full" gap="12px">
+                        { transactionToEdit ? (
+                            <Button 
+                                width="full" 
+                                bg="#FFD6DA" 
+                                color="#C53030"
+                                onClick={onDeleteTransaction}
+                                isLoading={isDeleting}
+                            >
+                                Delete
+                            </Button>
+                        ) : null }
+                        <Button 
+                            width="full" 
+                            isLoading={isSaving || isDeleting} 
+                            bg="#EAD9BF" 
+                            color="#8F611B"
+                            onClick={handleSave}
+                        >
+                            Save
+                        </Button>  
+                    </Flex>
                 </DrawerFooter>
             </DrawerContent>
+            { isDeleteModalOpen ? (
+                <DeleteConfirmation 
+                    isOpen={isDeleteModalOpen} 
+                    isDeleting={isDeleting}
+                    onClose={() => setIsDeleteModalOpen(false)} 
+                    onDelete={async () => {
+                        await handleDelete(newTransaction);
+                        setIsDeleteModalOpen(false);
+                        handleDrawerClose();
+                    }}
+                />
+            ) : null }
         </Drawer>
     )
 }
