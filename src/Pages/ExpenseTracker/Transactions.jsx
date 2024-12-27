@@ -17,7 +17,7 @@ import { EmptyWallet } from '../../Icons/EmptyWallet'
 
 const NoTransactions = () => {
     return (
-        <Flex alignItems="center" justifyContent="center" flexDir="column" p="20px">
+        <Flex alignItems="center" justifyContent="center" flexDir="column" p="20px" height="full">
             <EmptyWallet height="100px" width="100px" />
             <Text mt="12px" fontSize="16px" color="gray">You have no transaction on this day</Text>
         </Flex>
@@ -56,7 +56,7 @@ export const Transactions = ({ transactions, onEdit }) => {
     return (
         <Box padding="10px 30px">
             <Text fontWeight="600" fontSize="16px" textAlign="left" mb="16px">Transactions</Text>
-            <Box maxH="300px" overflowY="auto">
+            <Box height="300px" overflowY="auto">
                 { transactions.length ? (
                     <Box>
                         { transactions.map((transaction, index) => {

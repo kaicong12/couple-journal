@@ -16,7 +16,7 @@ export const MonthlyView = ({ transactions}) => {
         <Box>
             { transactions.length < 2 ? (
                 <EmptyState patternId="monthlyView" />
-            ) : <Text>Monthly View</Text> }
+            ) : <EmptyState patternId="monthlyView" /> }
         </Box>
     )
 }

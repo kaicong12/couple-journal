@@ -151,7 +151,7 @@ export const AddTransactions = ({
                                     isClearable={true}
                                     value={newTransaction.category ? { value: newTransaction.category, label: newTransaction.category } : null}
                                     styles={customSelectStyles(errors.category)}
-                                    maxMenuHeight={200}
+                                    maxMenuHeight={130}
                                     isSearchable={false}
                                 />
                                 { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
@@ -168,7 +168,7 @@ export const AddTransactions = ({
                                     isClearable={true}
                                     styles={customSelectStyles(errors.account)}
                                     value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
-                                    maxMenuHeight={100}
+                                    maxMenuHeight={110}
                                     isSearchable={false}
                                 />
                                 { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
