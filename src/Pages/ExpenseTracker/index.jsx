@@ -11,7 +11,7 @@ import {
     Spinner,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Select from 'react-select';
 
 import { useExpenseTracker } from './useExpenseTracker';
@@ -104,7 +104,9 @@ export const ExpenseTracker = () => {
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    <WeeklyView transactions={relevantTransactions} />
+                                    <WeeklyView 
+                                        transactions={relevantTransactions}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     <MonthlyView transactions={relevantTransactions} />

@@ -37,11 +37,11 @@ export const Transactions = ({ transactions, onEdit }) => {
             { transactions.map((transaction, index) => {
                 return (
                     <Flex key={index} bg="#FFF0DA" p="10px" borderRadius="10px" alignItems="center" justifyContent="space-between" mb="10px" onClick={() => onEdit(transaction)}>
-                        <Flex alignItems="center" gap="10px" maxW="75%">
+                        <Flex alignItems="center" gap="10px" maxW="70%">
                             <Box bg={iconMapping[transaction.category]?.background || iconMapping.other.background} p="15px" borderRadius="16px">
                                 <FontAwesomeIcon icon={iconMapping[transaction.category]?.icon || iconMapping.other.icon} size="xl" />
                             </Box>
-                            <Box maxW="70%">
+                            <Box maxW="60%">
                                 <Text isTruncated fontWeight="600" fontSize="16px">{transaction.title}</Text>
                                 <Text color="gray" fontSize="14px" textAlign="left" textTransform="capitalize">{ transaction.category }</Text>
                             </Box>
