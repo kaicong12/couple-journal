@@ -11,7 +11,7 @@ import {
     Spinner,
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import Select from 'react-select';
 
 import { useExpenseTracker } from './useExpenseTracker';
@@ -19,9 +19,9 @@ import { MaleAvatar1 } from '../../Icons/MaleAvatar';
 import { FemaleAvatar1 } from '../../Icons/FemaleAvatar';
 import { MonthlyView } from './MonthlyView';
 import { WeeklyView } from './WeeklyView';
-import { CustomView } from './CustomView';
 import { Transactions } from './Transactions';
 import { AddTransactions } from './AddTransactions';
+import { ExpenseBreakdown } from './ExpenseBreakdown';
 
 export const ExpenseTracker = () => {
     const { 
@@ -44,12 +44,20 @@ export const ExpenseTracker = () => {
     } = useExpenseTracker();
     // 0 is Weekly, 1 is Monthly, 2 is Custom
     const [activeTab, setActiveTab] = useState(0);
+    const [activeDate, setActiveDate] = useState(null);
 
     const totalExpenses = useMemo(() => {
         return relevantTransactions.reduce((total, transaction) => {
             return total + Number(transaction.amount) ?? 0;
         }, 0);
     }, [relevantTransactions])
+
+    const transactionWithinDateRange = useMemo(() => {
+        if (!activeDate) return relevantTransactions;
+        return relevantTransactions.filter((transaction) => {
+            return transaction.date === activeDate
+        });
+    }, [activeDate, relevantTransactions]);
 
     const userOptions = useMemo(() => {
         return [
@@ -100,24 +108,26 @@ export const ExpenseTracker = () => {
                             <TabList w="100vw" justifyContent="center">
                                 <Tab>Weekly</Tab>
                                 <Tab>Monthly</Tab>
-                                <Tab>Custom</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
                                     <WeeklyView 
                                         transactions={relevantTransactions}
+                                        setActiveDate={setActiveDate}
                                     />
                                 </TabPanel>
                                 <TabPanel>
                                     <MonthlyView transactions={relevantTransactions} />
                                 </TabPanel>
-                                <TabPanel>
-                                    <CustomView transactions={relevantTransactions} />
-                                </TabPanel>
                             </TabPanels>
                         </Tabs>
                     </Flex>    
-                    { relevantTransactions.length ? <Transactions transactions={relevantTransactions} onEdit={handleEditTransaction} /> : null }
+                    { relevantTransactions.length ? (
+                        <Box>
+                            <Transactions transactions={transactionWithinDateRange} onEdit={handleEditTransaction} />
+                            <ExpenseBreakdown transactions={relevantTransactions} />
+                        </Box>
+                    ) : null }
                 </Box>
             )}
             <IconButton

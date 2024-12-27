@@ -5,21 +5,19 @@ import { useRef, useEffect, useMemo } from 'react';
 
 Chart.register(...registerables);
 
-export const WeeklyView = ({ transactions }) => {
+export const WeeklyView = ({ transactions, setActiveDate }) => {
     const chartRef = useRef(null);
     const BAR_PERCENTAGE = 0.5
 
-    const currentWeekTransactions = useMemo(() => {
+    const past7DaysTransactions = useMemo(() => {
         const now = new Date();
-        const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay() + 1)); // Get Monday of the current week
-        startOfWeek.setHours(0, 0, 0, 0);
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        endOfWeek.setHours(23, 59, 59, 999);
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(now.getDate() - 6); // Calculate the date 6 days ago
+        sevenDaysAgo.setHours(0, 0, 0, 0);
 
         return transactions.filter((transaction) => {
             const transactionDate = new Date(transaction.date);
-            return transactionDate >= startOfWeek && transactionDate <= endOfWeek;
+            return transactionDate >= sevenDaysAgo && transactionDate <= now;
         });
     }, [transactions]);
 
@@ -27,26 +25,36 @@ export const WeeklyView = ({ transactions }) => {
         if (!chartRef.current) return;
         const ctx = chartRef.current.getContext("2d");
 
-        const getWeeklyData = (transactions) => {
-            const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-            const weeklyTotals = Array(7).fill(0);
-            const weeklyDates = Array(7).fill(null);
+        const getPast7DaysData = (transactions) => {
+            const now = new Date();
+            const dailyTotals = Array(7).fill(0);
+            const formattedDates = Array(7).fill(null);
+            const actualDates = Array(7).fill(null);
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(now.getDate() - (6 - i)); // Generate the past 7 days in order
+                date.setHours(0, 0, 0, 0);
+                formattedDates[i] = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                actualDates[i] = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+            }
 
             transactions.forEach((transaction) => {
                 const transactionDate = new Date(transaction.date);
-                const dayIndex = (transactionDate.getDay() + 6) % 7; // Adjust for Monday as the first day
-                weeklyTotals[dayIndex] += transaction.amount;
-                weeklyDates[dayIndex] = transaction.date;
+                const diffDays = Math.floor((transactionDate - (new Date(actualDates[0]))) / (1000 * 60 * 60 * 24));
+                if (diffDays >= 0 && diffDays < 7) {
+                    dailyTotals[diffDays] += transaction.amount;
+                }
             });
 
             return {
-                labels: weekDays,
-                data: weeklyTotals,
-                dates: weeklyDates
+                labels: formattedDates,
+                data: dailyTotals,
+                dates: actualDates
             };
         };
 
-        const weeklyData = getWeeklyData(currentWeekTransactions);
+        const weeklyData = getPast7DaysData(past7DaysTransactions);
 
         const chartData = {
             labels: weeklyData.labels,
@@ -62,12 +70,7 @@ export const WeeklyView = ({ transactions }) => {
                 {
                     label: "Expenses",
                     data: weeklyData.data,
-                    backgroundColor: (ctx) => {
-                        const maxValue = Math.max(...weeklyData.data);
-                        return weeklyData.data.map((value) =>
-                            value === maxValue ? "rgba(255, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)"
-                        );
-                    },
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
                     borderRadius: 10,
                     barPercentage: BAR_PERCENTAGE,
                     categoryPercentage: 1.0,
@@ -90,10 +93,16 @@ export const WeeklyView = ({ transactions }) => {
                 },
                 tooltip: {
                     callbacks: {
-                    label: function (context) {
-                            return `$${context.raw}`;
+                        label: function (context) {
+                            if (context.datasetIndex === 1) {
+                                return `$${context.raw}`;
+                            }
+                            return null;
                         },
                     },
+                    filter: function (tooltipItem) {
+                        return tooltipItem.datasetIndex === 1;
+                    }
                 },
             },
             scales: {
@@ -113,28 +122,35 @@ export const WeeklyView = ({ transactions }) => {
             onClick: (e, activeElements, chart) => {
                 if (activeElements.length) {
                     const index = activeElements[0].index;
-                    // const activeDate = weeklyData.dates[index];
-                    // onChangeActiveDay(activeDate);
+                    const activeDate = weeklyData.dates[index];
+                    setActiveDate(activeDate);
                     chart.data.datasets[1].backgroundColor = chart.data.datasets[1].data.map((_, i) =>
                         i === index ? "rgba(255, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.6)"
                     );
+                    chart.update();
+                } else {
+                    setActiveDate(null);
+                    chart.data.datasets[1].backgroundColor = chart.data.datasets[1].data.map(() => "rgba(0, 0, 0, 0.6)");
                     chart.update();
                 }
             },
         };
 
-        // Destroy the chart instance if it already exists
-        if (chartRef.current._chartInstance) {
-            chartRef.current._chartInstance.destroy();
-        }
+        const createChart = () => {
+            // Destroy the chart instance if it already exists
+            if (chartRef.current._chartInstance) {
+                chartRef.current._chartInstance.destroy();
+            }
 
-        // Create the Chart instance
-        chartRef.current._chartInstance = new Chart(ctx, {
-            type: "bar",
-            data: chartData,
-            options: chartOptions,
-        });
-    }, [currentWeekTransactions]);
+            // Create the Chart instance
+            chartRef.current._chartInstance = new Chart(ctx, {
+                type: "bar",
+                data: chartData,
+                options: chartOptions,
+            });
+        }
+        createChart();
+    }, [past7DaysTransactions, setActiveDate]);
 
     return (
         <Box>

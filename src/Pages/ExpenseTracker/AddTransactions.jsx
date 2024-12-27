@@ -140,21 +140,6 @@ export const AddTransactions = ({
                             </Box>
                         </Flex>
                     </FormControl>
-                    <FormControl mt={4} isInvalid={errors.account}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Account</FormLabel>
-                            <Box width="75%">
-                                <Select
-                                    onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'account')}
-                                    options={accountsConfig.map(name => ({ value: name, label: name }))}
-                                    isClearable={true}
-                                    styles={customSelectStyles(errors.account)}
-                                    value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
-                                />
-                                { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
-                            </Box>
-                        </Flex>
-                    </FormControl>
                     <FormControl mt={4} isInvalid={errors.category}>
                         <Flex alignItems="center">
                             <FormLabel width="25%">Category</FormLabel>
@@ -166,8 +151,27 @@ export const AddTransactions = ({
                                     isClearable={true}
                                     value={newTransaction.category ? { value: newTransaction.category, label: newTransaction.category } : null}
                                     styles={customSelectStyles(errors.category)}
+                                    maxMenuHeight={200}
+                                    isSearchable={false}
                                 />
                                 { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
+                            </Box>
+                        </Flex>
+                    </FormControl>
+                    <FormControl mt={4} isInvalid={errors.account}>
+                        <Flex alignItems="center">
+                            <FormLabel width="25%">Account</FormLabel>
+                            <Box width="75%">
+                                <Select
+                                    onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'account')}
+                                    options={accountsConfig.map(name => ({ value: name, label: name }))}
+                                    isClearable={true}
+                                    styles={customSelectStyles(errors.account)}
+                                    value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
+                                    maxMenuHeight={100}
+                                    isSearchable={false}
+                                />
+                                { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
                             </Box>
                         </Flex>
                     </FormControl>
