@@ -167,12 +167,16 @@ export const AddTransactions = ({
     }, []);
 
     return (
-        <Drawer isOpen={isDrawerOpen} placement="bottom" onClose={handleClose}>
+        <Drawer autoFocus={false} isOpen={isDrawerOpen} placement="bottom" onClose={handleClose}>
             <DrawerOverlay />
             <DrawerContent borderTopRadius={"16px"}>
                 <DrawerBody mt="25px">
                     <FormControl mt={4} isInvalid={errors.date}>
-                        <Input name="date" type="date" value={newTransaction.date || ''} onChange={handleInputChange} />
+                        <Input
+                            name="date" 
+                            type="date" 
+                            value={newTransaction.date || ''} onChange={handleInputChange} 
+                        />
                         { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
                     </FormControl>
                     <HStack mt="12px" spacing={4} justify="space-between">
