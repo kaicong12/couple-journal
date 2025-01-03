@@ -34,8 +34,7 @@ export const WeeklyView = ({ transactions, setActiveDate }) => {
             for (let i = 0; i < 7; i++) {
                 const date = new Date();
                 date.setDate(now.getDate() - (6 - i)); // Generate the past 7 days in order
-                date.setHours(0, 0, 0, 0);
-                formattedDates[i] = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                formattedDates[i] = date.toLocaleDateString('en', { month: 'short', day: 'numeric' });
                 actualDates[i] = date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
             }
 
@@ -95,7 +94,7 @@ export const WeeklyView = ({ transactions, setActiveDate }) => {
                     callbacks: {
                         label: function (context) {
                             if (context.datasetIndex === 1) {
-                                return `$${context.raw}`;
+                                return `$${(context.raw).toFixed(2)}`;
                             }
                             return null;
                         },

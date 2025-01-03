@@ -4,18 +4,20 @@ import {
     Drawer,
     DrawerBody,
     DrawerFooter,
-    DrawerHeader,
     DrawerOverlay,
     DrawerContent,
-    DrawerCloseButton,
     Input,
-    FormLabel,
+    Flex,
+    HStack,
+    Text,
     FormControl,
     FormErrorMessage,
-    Flex
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import { useState, useCallback, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDeleteLeft, faPlus, faMultiply, faEquals } from '@fortawesome/free-solid-svg-icons';
+
 
 import { DeleteConfirmation } from './DeleteConfirmation';
 
@@ -33,10 +35,13 @@ export const AddTransactions = ({
 }) => {
     const [newTransaction, setNewTransaction] = useState({})
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [expression, setExpression] = useState("");
+    const CALCULATOR_BUTTON_RADIUS = "16px";
 
     useEffect(() => {
         if (transactionToEdit) {
             setNewTransaction(transactionToEdit);
+            setExpression(transactionToEdit.amount.toString());
         } else {
             setNewTransaction({});
         }
@@ -50,6 +55,12 @@ export const AddTransactions = ({
             boxShadow: isError ? '0 0 0 1px red' : base.boxShadow,
         }),
     })
+
+    const evaluateExpression = useCallback((currentExpression) => {
+        const sanitisedExpression = currentExpression.replace(/x/g, '*');
+        const result = new Function(`return ${sanitisedExpression}`)();
+        setExpression(result.toString());
+    }, [])
 
     const handleSelectInputChange = (selectedOption, name) => {
         if (selectedOption) {
@@ -68,11 +79,40 @@ export const AddTransactions = ({
         }
     };
 
+    const handleExpressionChange = useCallback((value) => {
+        const isValidValue = /^[0-9+\x]*\.?[0-9]{0,2}$/.test(value);
+        if (isValidValue) {
+            setErrors(prev => ({
+                ...prev,
+                amount: null
+            }))
+            setExpression(value.toString());
+        }
+    }, [])
+
+    const handleButtonClick = useCallback((number) => {
+        let newExpression 
+        if (number === "=") {
+            evaluateExpression(expression);
+            return;
+        } else if (number === "backspace") {
+            newExpression = expression.slice(0, -1);
+        } else {
+            newExpression = expression + number;
+        }
+
+        handleExpressionChange(newExpression)
+    }, [expression, handleExpressionChange, evaluateExpression])
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        if (name === "amount") {
+            handleExpressionChange(value);
+            return
+        }
         setNewTransaction(prev => ({
             ...prev,
-            [name]: name === "amount" ? Number(value) : value
+            [name]: value
         }));
 
         if (errors[name]) {
@@ -84,6 +124,7 @@ export const AddTransactions = ({
     }
 
     const handleClose = useCallback(() => {
+        setExpression("");
         setNewTransaction({})
         setErrors({});
         handleDrawerClose();
@@ -91,6 +132,9 @@ export const AddTransactions = ({
 
     const handleSave = useCallback(async () => {
         const newErrors = {};
+        if (!expression.length) {
+            newErrors.amount = 'Please key in an amount';
+        }
         if (!newTransaction.title || !newTransaction.title.length) {
             newErrors.title = 'Title is required'
         }
@@ -101,10 +145,7 @@ export const AddTransactions = ({
             newErrors.date = 'Date is required';
         }
         if (!newTransaction.account) {
-            newErrors.account = 'Specify who made the transaction';
-        }
-        if (newTransaction.amount === undefined) {
-            newErrors.amount = 'Amount is required';
+            newErrors.account = 'Account is required';
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -112,13 +153,14 @@ export const AddTransactions = ({
             return;
         }
 
+        newTransaction.amount = parseFloat(expression);
         if (transactionToEdit) {
             await updateTransaction(newTransaction);
         } else {
             await addTransaction(newTransaction);
         }
         handleClose();
-    }, [newTransaction, transactionToEdit, handleClose, updateTransaction, addTransaction]);
+    }, [expression, newTransaction, transactionToEdit, handleClose, updateTransaction, addTransaction]);
 
     const onDeleteTransaction = useCallback(() => {
         setIsDeleteModalOpen(true);
@@ -127,72 +169,174 @@ export const AddTransactions = ({
     return (
         <Drawer isOpen={isDrawerOpen} placement="bottom" onClose={handleClose}>
             <DrawerOverlay />
-            <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>Add new transaction</DrawerHeader>
-                <DrawerBody>
+            <DrawerContent borderTopRadius={"16px"}>
+                <DrawerBody mt="25px">
                     <FormControl mt={4} isInvalid={errors.date}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Date</FormLabel>
-                            <Box width="75%">
-                                <Input name="date" type="date" value={newTransaction.date || ''} onChange={handleInputChange} />
-                                { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
-                            </Box>
-                        </Flex>
+                        <Input name="date" type="date" value={newTransaction.date || ''} onChange={handleInputChange} />
+                        { errors.date && <FormErrorMessage>{errors.date}</FormErrorMessage> }
                     </FormControl>
-                    <FormControl mt={4} isInvalid={errors.category}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Category</FormLabel>
-                            <Box width="75%">
-                                <Select
-                                    name="category" 
-                                    onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'category')}
-                                    options={expensesConfig.map(name => ({ value: name, label: name }))}
-                                    isClearable={true}
-                                    value={newTransaction.category ? { value: newTransaction.category, label: newTransaction.category } : null}
-                                    styles={customSelectStyles(errors.category)}
-                                    maxMenuHeight={130}
-                                    isSearchable={false}
-                                />
-                                { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
-                            </Box>
+                    <HStack mt="12px" spacing={4} justify="space-between">
+                        <FormControl flex="1" isInvalid={errors.account}>
+                            <Select
+                                onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'account')}
+                                options={accountsConfig.map(name => ({ value: name, label: name }))}
+                                isClearable={true}
+                                styles={customSelectStyles(errors.account)}
+                                value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
+                                isSearchable={false}
+                                placeholder="Account..."
+                            />
+                            { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
+
+                        </FormControl>
+                        <FormControl flex="1" isInvalid={errors.account}>
+                            <Select
+                                name="category" 
+                                onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'category')}
+                                options={expensesConfig.map(name => ({ value: name, label: name }))}
+                                isClearable={true}
+                                value={newTransaction.category ? { value: newTransaction.category, label: newTransaction.category } : null}
+                                styles={customSelectStyles(errors.category)}
+                                isSearchable={false}
+                                maxMenuHeight={200}
+                                placeholder="Category..."
+                            />
+                            { errors.category && <FormErrorMessage>{errors.category}</FormErrorMessage> }
+                        </FormControl>
+                    </HStack>
+
+                    <Flex flexDir="column" justifyContent="center" alignItems="center" my="16px" gap="12px">
+                        <Text fontSize="16px" color="gray">
+                            Expenses
+                        </Text>
+                        <Flex gap="6px" alignItems="center" paddingLeft="30%">
+                            <Text display="inline" color="gray" fontSize="24px">$</Text>
+                            <Input 
+                                type="text"
+                                value={expression || ''} 
+                                onChange={handleInputChange} 
+                                name="amount" 
+                                placeholder='0.00'
+                                border="none"
+                                _placeholder={{
+                                    color: "black",
+                                    fontWeight: "bold",
+                                    fontSize: "36px",
+                                }}
+                                _focus={{
+                                    outline: "none", // Removes the default outline
+                                    boxShadow: "none",// Removes any shadow that might be applied on focus
+                                }}
+                                color="black"
+                                fontSize="36px"
+                                fontWeight="bold"
+                            />
                         </Flex>
-                    </FormControl>
-                    <FormControl mt={4} isInvalid={errors.account}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Account</FormLabel>
-                            <Box width="75%">
-                                <Select
-                                    onChange={(selectedOption) => handleSelectInputChange(selectedOption, 'account')}
-                                    options={accountsConfig.map(name => ({ value: name, label: name }))}
-                                    isClearable={true}
-                                    styles={customSelectStyles(errors.account)}
-                                    value={newTransaction.account ? { value: newTransaction.account, label: newTransaction.account } : null}
-                                    maxMenuHeight={110}
-                                    isSearchable={false}
-                                />
-                                { errors.account && <FormErrorMessage>{errors.account}</FormErrorMessage> }
-                            </Box>
+                        { errors.amount && <Text color="red" fontSize="16px">{errors.amount}</Text> }
+                        <Input 
+                            width="80%"
+                            value={newTransaction.title || ''} 
+                            onChange={handleInputChange} 
+                            name="title" 
+                            placeholder="Add a title..."
+                            border="none"
+                            _placeholder={{
+                                color: "black",
+                                fontWeight: "bold",
+                                textAlign: "center"
+                            }}
+                            _focus={{
+                                outline: "none", // Removes the default outline
+                                boxShadow: "none",// Removes any shadow that might be applied on focus
+                                _placeholder: {
+                                    color: "transparent", // Hides the placeholder on focus
+                                },
+                            }}
+                            color="black"
+                            fontSize="18px"
+                            textAlign="center"
+                        />
+                        { errors.title && <Text color="red" fontSize="16px">{errors.title}</Text> }
+                    </Flex>
+                    <Flex gap="4px">
+                        <Box flex="3">
+                            <Flex flexWrap="wrap" gap="4px">
+                                {[...Array(9).keys()].map(number => (
+                                    <Button
+                                        key={number + 1}
+                                        onClick={() => handleButtonClick((number + 1).toString())}
+                                        size="lg"
+                                        colorScheme="gray"
+                                        borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                        flex={"1 1 calc(33.333% - 4px)"}
+                                    >
+                                        {number + 1}
+                                    </Button>
+                                ))}
+                            </Flex>
+                            <Flex flexWrap="wrap" gap="4px" mt="2px">
+                                <Button
+                                    key="button-0"
+                                    onClick={() => handleButtonClick("0")}
+                                    size="lg"
+                                    colorScheme="gray"
+                                    borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                    flex={"1 1 calc(66.666% - 4px)"}
+                                >
+                                    {"0"}
+                                </Button>
+                                <Button
+                                    key="button-dot"
+                                    onClick={() => handleButtonClick(".")}
+                                    size="lg"
+                                    colorScheme="gray"
+                                    borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                    flex={"1 1 calc(33.333% - 4px)"}
+                                >
+                                    {"."}
+                                </Button>
+                            </Flex>
+                        </Box>
+                        
+                        <Flex flex="1" flexDir="column" gap="4px">
+                            <Button
+                                size="lg"
+                                colorScheme="gray"
+                                width={"100%"}
+                                borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                onClick={() => handleButtonClick("backspace")}
+                            >
+                                <FontAwesomeIcon icon={faDeleteLeft} />
+                            </Button>
+                            <Button
+                                size="lg"
+                                colorScheme="gray"
+                                width={"100%"}
+                                borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                onClick={() => handleButtonClick("+")}
+                            >
+                                <FontAwesomeIcon icon={faPlus} />
+                            </Button>
+                            <Button
+                                size="lg"
+                                colorScheme="gray"
+                                width={"100%"}
+                                borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                onClick={() => handleButtonClick("x")}
+                            >
+                                <FontAwesomeIcon icon={faMultiply} />
+                            </Button>
+                            <Button
+                                size="lg"
+                                colorScheme="gray"
+                                width={"100%"}
+                                borderRadius={CALCULATOR_BUTTON_RADIUS}
+                                onClick={() => handleButtonClick("=")}
+                            >
+                                <FontAwesomeIcon icon={faEquals} />
+                            </Button>
                         </Flex>
-                    </FormControl>
-                    <FormControl mt={4} isInvalid={errors.amount}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Amount</FormLabel>
-                            <Box width="75%">
-                                <Input type="number" value={newTransaction.amount || ''} onChange={handleInputChange} name="amount" placeholder='E.g. 50'/>
-                                { errors.amount && <FormErrorMessage>{errors.amount}</FormErrorMessage> }
-                            </Box>
-                        </Flex>
-                    </FormControl>
-                    <FormControl mt={4} isInvalid={errors.title}>
-                        <Flex alignItems="center">
-                            <FormLabel width="25%">Title</FormLabel>
-                            <Box width="75%">
-                                <Input value={newTransaction.title || ''} onChange={handleInputChange} name="title" placeholder="E.g. Dinner at Tiong Bahru" />
-                                { errors.title && <FormErrorMessage>{errors.title}</FormErrorMessage> }
-                            </Box>
-                        </Flex>
-                    </FormControl>
+                    </Flex>
                 </DrawerBody>
                 <DrawerFooter>
                     <Flex width="full" gap="12px">
