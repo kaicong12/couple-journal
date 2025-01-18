@@ -57,9 +57,16 @@ export const AddTransactions = ({
     })
 
     const evaluateExpression = useCallback((currentExpression) => {
-        const sanitisedExpression = currentExpression.replace(/x/g, '*');
-        const result = new Function(`return ${sanitisedExpression}`)();
-        setExpression(result.toString());
+        try {
+            const sanitisedExpression = currentExpression.replace(/x/g, '*');
+            const result = new Function(`return ${sanitisedExpression}`)();
+            setExpression(result.toFixed(2).toString());
+        } catch (error) {
+            setErrors(prev => ({
+                ...prev,
+                amount: 'Invalid expression'
+            }));
+        }
     }, [])
 
     const handleSelectInputChange = (selectedOption, name) => {
@@ -80,13 +87,13 @@ export const AddTransactions = ({
     };
 
     const handleExpressionChange = useCallback((value) => {
-        const isValidValue = /^[0-9+\x]*\.?[0-9]{0,2}$/.test(value);
+        const isValidValue = /^(\d+(\.\d{0,2})?)(\+(\d+(\.\d{0,2})?))*$/.test(value);
+        setExpression(value.toString());
         if (isValidValue) {
             setErrors(prev => ({
                 ...prev,
                 amount: null
             }))
-            setExpression(value.toString());
         }
     }, [])
 
@@ -100,7 +107,6 @@ export const AddTransactions = ({
         } else {
             newExpression = expression + number;
         }
-
         handleExpressionChange(newExpression)
     }, [expression, handleExpressionChange, evaluateExpression])
 
