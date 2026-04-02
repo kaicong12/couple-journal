@@ -15,7 +15,6 @@ const Appreciation = () => {
             <Text
                 fontSize="30px"
                 fontWeight="800"
-                fontFamily="actor"
                 mb="30px"
             >
                 曾经看到一段很浪漫的话
@@ -23,7 +22,6 @@ const Appreciation = () => {
             { poem.map((poemTxt, pIndex)=> (
                 <Text
                     fontSize={ pIndex === 4 ? "20px" : "17px" }
-                    fontFamily="actor"
                     mb="10px"
                     fontWeight={ pIndex === 4 ? '800' : '400' }
                     key={pIndex}
@@ -32,7 +30,7 @@ const Appreciation = () => {
                 </Text>
             )) }
             
-            <Box boxSize="300px" mt="55px">
+            <Box boxSize="300px" mt="55px" mx="auto">
                 <Image src="/images/coupleCouch.svg" alt="Couple Couch"/>
             </Box>
         </Box>

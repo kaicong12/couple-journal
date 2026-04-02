@@ -8,12 +8,11 @@ function HeroSection() {
         <Text
             fontSize="40px"
             fontWeight="600"
-            fontFamily="actor"
             mb="10px"
         >
             Celebrating Us
         </Text>
-        <Text fontFamily="actor" fontSize="20px">
+        <Text fontSize="20px">
             From the first glance to endless adventures, here's to the moments that define us.
         </Text>
         <Box boxSize="300px" my="35px">

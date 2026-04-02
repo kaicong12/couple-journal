@@ -1,25 +1,9 @@
 import { useEffect, useState, useCallback, useMemo } from "react"
-import { 
-    forwardRef,
+import {
     Box,
-    Flex,
     Spinner,
-    Text,
     Button,
     ButtonGroup,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuOptionGroup,
-    MenuItemOption,
-    HStack,
-    VStack,
-    Input,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverBody,
-    PopoverArrow,
     useDisclosure,
 } from '@chakra-ui/react';
 
@@ -28,31 +12,19 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { useModalParams } from "../../hooks/useModalParams";
 import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
+import { FilterPanel } from "./Components/FilterPanel"
 import { EventCard } from "./Components/EventCard";
 import { EventModal } from "./Components/EventModal";
 import { EmptySearchState } from "./Components/EmptyState";
 import { getEvents, uploadEvent, deleteEvent, updateEvent } from "../../db";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faBowlFood, 
-    faCalendar,
-    faPlane, 
-    faGift, 
-    faList, 
-    faX,
-    faSort
+import {
+    faBowlFood,
+    faPlane,
+    faGift,
 } from '@fortawesome/free-solid-svg-icons';
 
-
-const FilterButton = forwardRef((props, ref) => {
-    const { rightIcon, buttontext } = props
-    return (
-        <Button {...props} rightIcon={rightIcon} ref={ref}>
-            { buttontext }
-        </Button>
-    )
-})
 
 const EventPage = () => {
     const defaultEventData = {
@@ -84,7 +56,7 @@ const EventPage = () => {
             'Date (Latest To Oldest)',
             'Date (Oldest To Latest)',
             'Name (A to Z)',
-            'Name (Z to Z)',
+            'Name (Z to A)',
         ]
     }, [])
 
@@ -94,11 +66,12 @@ const EventPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
+    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false)
     const debouncedSearch = useDebounce(searchTerm, 500)
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
-    
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -106,7 +79,7 @@ const EventPage = () => {
 
     const fetchEvents = async () => {
         setIsLoading(true)
-        
+
         try {
             const eventData = await getEvents('events')
             setEventData(eventData)
@@ -123,7 +96,7 @@ const EventPage = () => {
             includeScore: true,
             threshold: 0.4,
         };
-    
+
         const fuse = new Fuse(events, options);
         return fuse.search(query).map(result => result.item);
     }, [])
@@ -174,7 +147,7 @@ const EventPage = () => {
                 return b.title.localeCompare(a.title)
             }
         })
-        
+
         return sortedFilteredResults
     }, [eventData, debouncedSearch, selectedCategories, dateFilterParam, fuzzySearchEvents, eventSort])
 
@@ -199,7 +172,7 @@ const EventPage = () => {
             setNewEvent(defaultEventData)
             setIsLoading(false)
         }
-        
+
         onAddModalClose();
     };
 
@@ -247,8 +220,7 @@ const EventPage = () => {
         setCurrentPage(newPage);
     };
 
-    const handleDeactivateDateFilter = (e) => {
-        e.stopPropagation()
+    const handleDeactivateDateFilter = () => {
         closeDateFilter(true);
     };
 
@@ -256,119 +228,57 @@ const EventPage = () => {
     const pageNumbersToShow = 3; // Number of page buttons to display
     const startPage = Math.max(1, currentPage - Math.floor(pageNumbersToShow / 2));
     const endPage = Math.min(totalPages, startPage + pageNumbersToShow - 1);
-    const hasActiveCategories = selectedCategories.length
+
+    const hasActiveFilters = selectedCategories.length > 0 ||
+        dateFilterParam?.dateFilterApplied ||
+        eventSort !== 'Date (Latest To Oldest)'
 
     return (
         <Box minH="calc(100vh - 80px)" background="brown.50" width="100vw">
-            <SearchFilter
-                onAddModalOpen={onAddModalOpen}
-                onSearchEvent={onSearchEvent}
-            />
-            
+            <Box position="relative">
+                <SearchFilter
+                    onAddModalOpen={onAddModalOpen}
+                    onSearchEvent={onSearchEvent}
+                    hasActiveFilters={hasActiveFilters}
+                    isFilterOpen={isFilterPanelOpen}
+                    onToggleFilterPanel={() => setIsFilterPanelOpen(prev => !prev)}
+                />
+
+                <FilterPanel
+                    isOpen={isFilterPanelOpen}
+                    onClose={() => setIsFilterPanelOpen(false)}
+                    eventSort={eventSort}
+                    setEventSort={setEventSort}
+                    sortOptions={sortOptions}
+                    selectedCategories={selectedCategories}
+                    onSelectCategory={onSelectCategory}
+                    menuLists={menuLists}
+                    dateFilterParam={dateFilterParam}
+                    updateDateFilterParam={updateDateFilterParam}
+                    handleDeactivateDateFilter={handleDeactivateDateFilter}
+                />
+            </Box>
+
             <Box>
                 {isLoading ? (
                     <Box  minH="calc(100vh - 80px)" display="flex" justifyContent="center" alignItems="center">
-                        <Spinner position="relative" top="-100px" size="xl" /> 
+                        <Spinner position="relative" top="-100px" size="xl" />
                     </Box>
                 ) : (
                     <Box overflow="auto">
-                        <ButtonGroup display="flex" mt="10px" px="20px">
-                            <Popover isOpen={isDateFilterOpen} onClose={closeDateFilter} placement="bottom-end">
-                                <PopoverTrigger>
-                                    <FilterButton 
-                                        buttontext={'Date'}
-                                        onClick={() => { openDateFilter(dateFilterParam) }}
-                                        bg={dateFilterParam?.dateFilterApplied ? '#8F611B' : '#EAD9BF' }
-                                        color={dateFilterParam?.dateFilterApplied ? 'white' : '#8F611B'}
-                                        leftIcon={<FontAwesomeIcon icon={faCalendar} />}
-                                        rightIcon={dateFilterParam?.dateFilterApplied && <FontAwesomeIcon icon={faX} onClick={(e) => handleDeactivateDateFilter(e) } />}
-                                    />
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <PopoverArrow />
-                                    <PopoverBody>
-                                        <VStack spacing="4" py="12px">
-                                            <HStack>
-                                                <Text>Start Date:</Text>
-                                                <Input 
-                                                    width="100%"
-                                                    type="date" 
-                                                    value={dateFilterParam?.startDate || ''} 
-                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, startDate: e.target.value, dateFilterApplied: true })} 
-                                                />
-                                            </HStack>
-                                            <HStack>
-                                                <Text>End Date:</Text>
-                                                <Input 
-                                                    width="100%"
-                                                    type="date" 
-                                                    value={dateFilterParam?.endDate || ''} 
-                                                    onChange={(e) => updateDateFilterParam({ ...dateFilterParam, endDate: e.target.value, dateFilterApplied: true })} 
-                                                />
-                                            </HStack>
-                                        </VStack>
-                                    </PopoverBody>
-                                </PopoverContent>
-                            </Popover>
-                            <Menu>
-                                <MenuButton
-                                    as={FilterButton}
-                                    buttontext={'Sort By'}
-                                    bg='#EAD9BF'
-                                    color='#8F611B'
-                                    leftIcon={<FontAwesomeIcon icon={faSort} />}
-                                >
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuOptionGroup defaultValue={eventSort} onChange={(value) => { setEventSort(value) }}>
-                                        {sortOptions.map(sortOpt => (
-                                            <MenuItemOption 
-                                                key={sortOpt} 
-                                                value={sortOpt}
-                                            >
-                                                <Box display="flex" gap="10px" alignItems="center">
-                                                    <Text>{ sortOpt }</Text>
-                                                </Box>
-                                            </MenuItemOption>
-                                        ))}
-                                    </MenuOptionGroup>
-                                </MenuList>
-                            </Menu>
-                            <Menu closeOnSelect={false}>
-                                <MenuButton
-                                    as={FilterButton}
-                                    buttontext={'Category'}
-                                    bg={hasActiveCategories ? '#8F611B' : '#EAD9BF' }
-                                    color={hasActiveCategories ? 'white' : '#8F611B'}
-                                    leftIcon={<FontAwesomeIcon icon={faList} />}
-                                >
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuOptionGroup onChange={(value) => { onSelectCategory(value) }} type="checkbox">
-                                        {menuLists.map(menu => (
-                                            <MenuItemOption 
-                                                isChecked={selectedCategories.includes(menu.label)}
-                                                key={menu.label} 
-                                                value={menu.label}
-                                            >
-                                                <Box display="flex" gap="10px" alignItems="center">
-                                                    { menu.leftIcon }
-                                                    <Text>{ menu.label }</Text>
-                                                </Box>
-                                            </MenuItemOption>
-                                        ))}
-                                    </MenuOptionGroup>
-                                </MenuList>
-                            </Menu>
-                        </ButtonGroup>
-
                         {currentEvents.length ? (
                             <Box>
-                                <Flex gap="20px" px="20px" pt="20px" flexWrap="wrap" justifyItems="center" alignItems="center">
+                                <Box
+                                    display="grid"
+                                    gridTemplateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
+                                    gap="20px"
+                                    px="20px"
+                                    pt="20px"
+                                >
                                     {currentEvents.map(event => (
                                         <EventCard key={event.id} event={event} onOpen={() => handleCardClick(event)} />
                                     ))}
-                                </Flex>
+                                </Box>
 
                                 <ButtonGroup mt="4" padding="20px" display="flex" justifyContent="center">
                                     <Button bg="brown.200" onClick={() => handlePageChange(currentPage - 1)} isDisabled={currentPage === 1}>
@@ -391,16 +301,16 @@ const EventPage = () => {
                             </Box>
                         ) : <EmptySearchState />}
                         {selectedEvent && (
-                            <EventModal 
+                            <EventModal
                                 handleDeleteEvent={handleDeleteEvent}
                                 handleUpdateEvent={handleUpdateEvent}
-                                event={selectedEvent} 
-                                isOpen={isOpen} 
-                                onClose={onClose} 
+                                event={selectedEvent}
+                                isOpen={isOpen}
+                                onClose={onClose}
                                 availableCategories={menuLists}
                             />
                         )}
-                        <AddEventModal 
+                        <AddEventModal
                             menuLists={menuLists}
                             newEvent={newEvent}
                             setNewEvent={setNewEvent}

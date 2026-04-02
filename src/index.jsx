@@ -10,6 +10,10 @@ import { extendTheme, ChakraProvider } from '@chakra-ui/react'
 import { brownScheme} from './theme'
 
 const theme = extendTheme({
+  fonts: {
+    heading: `'Newsreader', serif`,
+    body: `'Newsreader', sans-serif`,
+  },
   colors: {
     brown: brownScheme,
   },

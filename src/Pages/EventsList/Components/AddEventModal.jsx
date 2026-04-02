@@ -66,10 +66,14 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         accept: {
             'image/*': []
         },
+        maxFiles: 1,
+        multiple: false,
         onDrop: acceptedFiles => {
-            setPreviewImage(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
+            if (!acceptedFiles.length) return;
+            const file = Object.assign(acceptedFiles[0], {
+                preview: URL.createObjectURL(acceptedFiles[0])
+            });
+            setPreviewImage([file]);
             setNewEvent(prev => ({
                 ...prev,
                 file: acceptedFiles[0]
