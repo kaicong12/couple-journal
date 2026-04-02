@@ -11,7 +11,7 @@ import {
     faGift,
 } from '@fortawesome/free-solid-svg-icons'
 import { ArrowDownUp, Calendar as CalendarIcon, Tag, X, ChevronDown } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
+import { Calendar } from '@/Components/ui/calendar'
 
 export const FilterPanel = ({
     isOpen,
