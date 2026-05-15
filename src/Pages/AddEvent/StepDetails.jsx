@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Calendar as CalendarIcon, MapPin, Tag, Users } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { Calendar } from '@/Components/ui/calendar'
+import { Popover, PopoverTrigger, PopoverContent } from '@/Components/ui/popover'
 import { LocationSearchBox } from '../EventsList/Components/LocationSearchBox'
 
 export function StepDetails({ formData, updateFormData, errors, defaultCategories }) {
