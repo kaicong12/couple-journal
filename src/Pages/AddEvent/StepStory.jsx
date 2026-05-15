@@ -1,25 +1,48 @@
 import { useState } from 'react'
-import { Type, AlignLeft, Tags } from 'lucide-react'
+import { Type, AlignLeft, Sparkles } from 'lucide-react'
+import { generateCaption } from '../../utils/generateCaption'
 
 export function StepStory({ formData, updateFormData, errors }) {
-  const [newTag, setNewTag] = useState('')
-  const [showTagInput, setShowTagInput] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generateError, setGenerateError] = useState(null)
 
-  const addTag = () => {
-    const trimmed = newTag.trim().toLowerCase()
-    if (trimmed && !formData.tags.includes(trimmed)) {
-      updateFormData({ tags: [...formData.tags, trimmed] })
+  const handleGenerate = async () => {
+    if (!formData.files.length) return
+    setIsGenerating(true)
+    setGenerateError(null)
+    try {
+      const result = await generateCaption(formData.files)
+      updateFormData({
+        title: result.title || formData.title,
+        description: result.description || formData.description,
+      })
+    } catch (err) {
+      console.error('AI generation failed:', err)
+      setGenerateError('Could not generate caption. Please try again or write your own.')
+    } finally {
+      setIsGenerating(false)
     }
-    setNewTag('')
-    setShowTagInput(false)
-  }
-
-  const removeTag = (tag) => {
-    updateFormData({ tags: formData.tags.filter(t => t !== tag) })
   }
 
   return (
     <div className="space-y-6">
+      {/* Generate with AI */}
+      {formData.files.length > 0 && (
+        <div>
+          <button
+            onClick={handleGenerate}
+            disabled={isGenerating}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-sienna/50 text-sienna text-sm font-medium hover:bg-sienna/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Sparkles size={16} className={isGenerating ? 'animate-pulse' : ''} />
+            {isGenerating ? 'Generating...' : 'Generate with AI'}
+          </button>
+          {generateError && (
+            <p className="text-destructive text-xs mt-1.5 text-center">{generateError}</p>
+          )}
+        </div>
+      )}
+
       {/* Title */}
       <div>
         <label className="text-xs uppercase tracking-wider text-muted-text mb-2 block">
@@ -52,56 +75,6 @@ export function StepStory({ formData, updateFormData, errors }) {
           rows={4}
           className="w-full p-3.5 rounded-lg border border-accent-warm bg-surface text-sm outline-none transition-colors focus:border-sienna resize-none"
         />
-      </div>
-
-      {/* Tags */}
-      <div>
-        <label className="text-xs uppercase tracking-wider text-muted-text mb-2 block">
-          <Tags size={12} className="inline mr-1.5 relative -top-px" />
-          Tags (optional)
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {formData.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1.5 rounded-full text-xs font-medium bg-accent-warm/50 text-text flex items-center gap-1.5"
-            >
-              {tag}
-              <button
-                onClick={() => removeTag(tag)}
-                className="text-muted-text hover:text-text"
-              >
-                ×
-              </button>
-            </span>
-          ))}
-          {showTagInput ? (
-            <div className="flex items-center gap-1">
-              <input
-                autoFocus
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') addTag()
-                  if (e.key === 'Escape') setShowTagInput(false)
-                }}
-                onBlur={() => {
-                  if (newTag.trim()) addTag()
-                  else setShowTagInput(false)
-                }}
-                placeholder="Tag..."
-                className="px-2 py-1 text-xs border border-accent-warm rounded-full w-20 bg-transparent outline-none focus:border-sienna"
-              />
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowTagInput(true)}
-              className="px-3 py-1.5 rounded-full text-xs font-medium border border-dashed border-accent-warm text-muted-text hover:border-sienna hover:text-sienna transition-colors"
-            >
-              + add
-            </button>
-          )}
-        </div>
       </div>
 
       {/* Preview of photos */}
