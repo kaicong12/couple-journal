@@ -26,7 +26,6 @@ export default function AddEvent() {
     people: [],
     title: '',
     description: '',
-    tags: [],
   })
 
   const [errors, setErrors] = useState({})
@@ -86,7 +85,6 @@ export default function AddEvent() {
         location: formData.location,
         categories: formData.categories,
         people: formData.people,
-        tags: formData.tags,
         files: formData.files,
       }
 

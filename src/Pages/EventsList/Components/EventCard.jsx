@@ -1,21 +1,68 @@
+import { useState } from 'react'
 import { convertFbTimestampToDate } from '../../../utils'
-import { MapPin } from 'lucide-react';
+import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const EventCard = ({ event, onOpen }) => {
     const dateStr = convertFbTimestampToDate(event.date);
+    const photos = event.photos?.length ? event.photos : (event.thumbnail ? [event.thumbnail] : []);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handlePrev = (e) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev - 1 + photos.length) % photos.length);
+    };
+
+    const handleNext = (e) => {
+        e.stopPropagation();
+        setCurrentIndex((prev) => (prev + 1) % photos.length);
+    };
 
     return (
         <article
             onClick={onOpen}
             className="bg-surface rounded-sm shadow-[0_10px_40px_-10px_rgba(42,37,33,0.08)] hover:shadow-[0_15px_50px_-10px_rgba(42,37,33,0.12)] transition-all duration-300 ease-in-out group cursor-pointer overflow-hidden flex flex-col"
         >
-            {/* Image — fixed height, cover to fill without stretching */}
-            <div className="w-full h-[280px] overflow-hidden">
-                <img
-                    src={event.thumbnail || 'https://via.placeholder.com/600x400'}
-                    alt={`Thumbnail for ${event.title}`}
-                    className="w-full !h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-500 ease-out"
-                />
+            {/* Image carousel */}
+            <div className="relative w-full h-[280px] overflow-hidden">
+                {photos.length > 0 ? (
+                    <img
+                        src={photos[currentIndex]}
+                        alt={`Photo ${currentIndex + 1} for ${event.title}`}
+                        className="w-full !h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                    />
+                ) : (
+                    <img
+                        src="https://via.placeholder.com/600x400"
+                        alt={`Placeholder for ${event.title}`}
+                        className="w-full !h-full object-cover"
+                    />
+                )}
+                {photos.length > 1 && (
+                    <>
+                        <button
+                            onClick={handlePrev}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                            {photos.map((_, idx) => (
+                                <span
+                                    key={idx}
+                                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                                        idx === currentIndex ? 'bg-white' : 'bg-white/50'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* Content */}
