@@ -13,17 +13,27 @@ export const getEvents = async () => {
 
 export const uploadEvent = async (newEvent) => {
     const eventsCol = collection(db, "events");
-    const { file, ...eventData } = newEvent
+    const { file, files, ...eventData } = newEvent
 
     const completeEventData = { ...eventData }
     const storage = getStorage();
 
     try {
-        if (file) {
+        if (files && files.length > 0) {
+            const photoURLs = await Promise.all(
+                files.map(async (f) => {
+                    const storageRef = ref(storage, `events/${Date.now()}_${f.name}`);
+                    const fileSnapshot = await uploadBytes(storageRef, f);
+                    return getDownloadURL(fileSnapshot.ref);
+                })
+            );
+            completeEventData["photos"] = photoURLs;
+            completeEventData["thumbnail"] = photoURLs[0];
+        } else if (file) {
             const storageRef = ref(storage, `events/${file.name}`);
             const fileSnapshot = await uploadBytes(storageRef, file);
             const photoURL = await getDownloadURL(fileSnapshot.ref);
-            completeEventData["thumbnail"] = photoURL
+            completeEventData["thumbnail"] = photoURL;
         }
 
         const docRef = await addDoc(eventsCol, completeEventData);
