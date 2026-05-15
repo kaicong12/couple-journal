@@ -8,9 +8,11 @@ import {
 } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import { SlidersHorizontal, Search } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 
 export const SearchFilter = ({ onAddModalOpen, onSearchEvent, hasActiveFilters, onToggleFilterPanel, isFilterOpen }) => {
+    const navigate = useNavigate()
     return (
         <Box display="flex" gap="10px" pt="20px" px="20px" alignItems="center">
             <InputGroup flex="1">
@@ -76,7 +78,7 @@ export const SearchFilter = ({ onAddModalOpen, onSearchEvent, hasActiveFilters, 
             </Box>
 
             <Button
-                onClick={onAddModalOpen}
+                onClick={() => navigate('/events/new')}
                 bg="#B48261"
                 color="white"
                 height="40px"

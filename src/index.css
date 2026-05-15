@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" important;
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource/newsreader/400.css";
@@ -166,3 +166,4 @@ code {
     @apply font-sans antialiased;
   }
 }
+
