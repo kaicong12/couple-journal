@@ -11,6 +11,13 @@ export const getEvents = async () => {
     return eventList;
 }
 
+export const getEvent = async (id) => {
+    const eventDocRef = doc(db, "events", id);
+    const snap = await getDoc(eventDocRef);
+    if (!snap.exists()) return null;
+    return { id: snap.id, ...snap.data() };
+}
+
 export const uploadEvent = async (newEvent) => {
     const eventsCol = collection(db, "events");
     const { file, files, ...eventData } = newEvent

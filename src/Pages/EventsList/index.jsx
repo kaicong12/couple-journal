@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react"
+import { useNavigate } from "react-router-dom";
 import {
     Box,
     Spinner,
@@ -14,9 +15,8 @@ import { AddEventModal } from "./Components/AddEventModal";
 import { SearchFilter } from "./Components/SearchFilter"
 import { FilterPanel } from "./Components/FilterPanel"
 import { EventCard } from "./Components/EventCard";
-import { EventModal } from "./Components/EventModal";
 import { EmptySearchState } from "./Components/EmptyState";
-import { getEvents, uploadEvent, deleteEvent, updateEvent } from "../../db";
+import { getEvents, uploadEvent } from "../../db";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -27,6 +27,7 @@ import {
 
 
 const EventPage = () => {
+    const navigate = useNavigate();
     const defaultEventData = {
         title: '',
         description: '',
@@ -72,9 +73,7 @@ const EventPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isAddModalOpen, onOpen: onAddModalOpen, onClose: onAddModalClose } = useDisclosure();
-    const [selectedEvent, setSelectedEvent] = useState(null);
     const [isDateFilterOpen, dateFilterParam, openDateFilter, closeDateFilter, updateDateFilterParam] = useModalParams();
 
     const fetchEvents = async () => {
@@ -111,11 +110,10 @@ const EventPage = () => {
 
         if (selectedCategories.length) {
             filteredResults = filteredResults.filter(event => {
-                if (!selectedCategories.length) {
-                    return true
-                } else {
-                    return selectedCategories.includes(event.category)
-                }
+                const eventCats = event.categories?.length
+                    ? event.categories
+                    : (event.category ? [event.category] : [])
+                return eventCats.some(c => selectedCategories.includes(c))
             })
         }
 
@@ -176,20 +174,6 @@ const EventPage = () => {
         onAddModalClose();
     };
 
-    const handleDeleteEvent = async (event) => {
-        setIsLoading(true)
-
-        try {
-            await deleteEvent(event.id)
-            await fetchEvents()
-        } catch (err) {
-            console.log(err, 'delete event failed')
-        } finally {
-            setIsLoading(false)
-            onClose();
-        }
-    };
-
     const onSelectCategory = (categories) => {
         setSelectedCategories(categories)
     }
@@ -199,22 +183,8 @@ const EventPage = () => {
     }
 
     const handleCardClick = (event) => {
-        setSelectedEvent(event);
-        onOpen();
+        navigate(`/events/${event.id}`, { state: { event } });
     };
-
-    const handleUpdateEvent = async (event) => {
-        setIsLoading(true)
-
-        try {
-            await updateEvent(event)
-            await fetchEvents()
-        } catch (err) {
-            console.log(err, 'error updating event')
-        } finally {
-            handleCardClick(event)
-        }
-    }
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
@@ -300,16 +270,6 @@ const EventPage = () => {
                                 </ButtonGroup>
                             </Box>
                         ) : <EmptySearchState />}
-                        {selectedEvent && (
-                            <EventModal
-                                handleDeleteEvent={handleDeleteEvent}
-                                handleUpdateEvent={handleUpdateEvent}
-                                event={selectedEvent}
-                                isOpen={isOpen}
-                                onClose={onClose}
-                                availableCategories={menuLists}
-                            />
-                        )}
                         <AddEventModal
                             menuLists={menuLists}
                             newEvent={newEvent}
