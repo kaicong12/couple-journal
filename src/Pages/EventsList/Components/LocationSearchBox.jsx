@@ -67,7 +67,7 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
     };
 
     return (
-        <Box>
+        <Box width="100%" minW={0}>
             <AsyncSelect
                 cacheOptions
                 loadOptions={loadOptions}
@@ -75,6 +75,8 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
                 onChange={handleOnSelectLocation}
                 placeholder="Search for locations..."
                 defaultInputValue={displayInput}
+                menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                menuPosition="fixed"
                 components={{
                     DropdownIndicator: editMode
                         ? null // Do not render the dropdown indicator in edit mode
@@ -85,18 +87,22 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
                         ),
                 }}
                 styles={{
+                    container: (provided) => ({ ...provided, width: '100%', minWidth: 0 }),
                     control: (provided) => ({
                         ...provided,
+                        width: '100%',
                         padding: '4px',
                         boxShadow: 'none',
                         borderColor: 'lightgray',
-                        ':hover': {
-                            borderColor: 'gray',
-                        },
+                        ':hover': { borderColor: 'gray' },
                     }),
-                    indicatorSeparator: () => ({
-                        display: 'none',
-                    }),
+                    valueContainer: (provided) => ({ ...provided, flexWrap: 'nowrap', overflow: 'hidden', minWidth: 0 }),
+                    singleValue: (provided) => ({ ...provided, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }),
+                    input: (provided) => ({ ...provided, minWidth: 0 }),
+                    menuPortal: (provided) => ({ ...provided, zIndex: 60 }),
+                    menu: (provided) => ({ ...provided, zIndex: 60 }),
+                    option: (provided) => ({ ...provided, whiteSpace: 'normal', wordBreak: 'break-word' }),
+                    indicatorSeparator: () => ({ display: 'none' }),
                 }}
             />
         </Box>

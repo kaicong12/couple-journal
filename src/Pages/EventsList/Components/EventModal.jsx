@@ -48,6 +48,12 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
         return availableCategories.filter(category => category.label !== "All")
     }, [availableCategories])
 
+    const displayCategories = useMemo(() => {
+        if (event.categories?.length) return event.categories
+        if (event.category) return [event.category]
+        return []
+    }, [event.categories, event.category])
+
     const handleEdit = () => {
         setEditedEvent(event)
         setEditMode(true);
@@ -133,7 +139,15 @@ export const EventModal = ({ handleDeleteEvent, handleUpdateEvent, event, isOpen
                                     </MenuList>
                                 </Menu>
                             ) : (
-                                <Badge p="2" borderRadius="6px" colorScheme='green'>{event.category || "Unknown Category"}</Badge>
+                                <Box display="flex" flexWrap="wrap" gap="6px">
+                                    {displayCategories.length ? (
+                                        displayCategories.map((cat) => (
+                                            <Badge key={cat} p="2" borderRadius="6px" colorScheme='green'>{cat}</Badge>
+                                        ))
+                                    ) : (
+                                        <Badge p="2" borderRadius="6px" colorScheme='gray'>Uncategorized</Badge>
+                                    )}
+                                </Box>
                             )}
 
                             { editMode ? (
