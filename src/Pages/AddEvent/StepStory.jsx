@@ -11,7 +11,10 @@ export function StepStory({ formData, updateFormData, errors }) {
     setIsGenerating(true)
     setGenerateError(null)
     try {
-      const result = await generateCaption(formData.files)
+      const result = await generateCaption(formData.files, {
+        title: formData.title,
+        description: formData.description,
+      })
       updateFormData({
         title: result.title || formData.title,
         description: result.description || formData.description,
