@@ -192,7 +192,7 @@ export default function EditEvent() {
     <div className="min-h-[calc(100vh-80px)] bg-parchment flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4 pb-2">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/events')}
           aria-label="Back"
           className="w-9 h-9 rounded-full bg-surface shadow-soft flex items-center justify-center text-text hover:bg-accent-warm/40 transition-colors"
         >

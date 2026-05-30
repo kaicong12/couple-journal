@@ -25,7 +25,15 @@ Guidelines:
 - If you can identify the activity, location type, or mood, mention it naturally
 - Keep the tone lighthearted and loving`
 
-async function callModel(model, imageContent) {
+function buildUserHints({ title, description } = {}) {
+  const hints = []
+  if (title?.trim()) hints.push(`Title the user already wrote: "${title.trim()}"`)
+  if (description?.trim()) hints.push(`Description/notes the user already wrote: "${description.trim()}"`)
+  if (!hints.length) return ''
+  return `\n\nThe user has provided the following context about the photos — use it to ground your title and description so they match what actually happened:\n${hints.join('\n')}`
+}
+
+async function callModel(model, imageContent, hints) {
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -37,7 +45,7 @@ async function callModel(model, imageContent) {
       messages: [
         {
           role: 'user',
-          content: [...imageContent, { type: 'text', text: PROMPT }],
+          content: [...imageContent, { type: 'text', text: PROMPT + hints }],
         },
       ],
     }),
@@ -51,7 +59,7 @@ async function callModel(model, imageContent) {
   return response.json()
 }
 
-export async function generateCaption(files) {
+export async function generateCaption(files, context = {}) {
   const imageFiles = files.slice(0, 4)
   const base64Images = await Promise.all(imageFiles.map(fileToBase64))
 
@@ -60,10 +68,12 @@ export async function generateCaption(files) {
     image_url: { url: dataUrl },
   }))
 
+  const hints = buildUserHints(context)
+
   let lastError
   for (const model of MODELS) {
     try {
-      const data = await callModel(model, imageContent)
+      const data = await callModel(model, imageContent, hints)
       const content = data.choices?.[0]?.message?.content?.trim()
 
       try {
