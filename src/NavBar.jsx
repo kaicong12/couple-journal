@@ -3,7 +3,7 @@ import { routesWithinApp } from './routes';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Tabs, Text, TabList, Tab } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faCalendarAlt, faWallet } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
     const location = useLocation();
@@ -47,14 +47,14 @@ const NavBar = () => {
                             </Box>
                         </Link>
                     </Tab>
-                    {/* <Tab>
-                        <Link to={`letter`}>
+                    <Tab>
+                        <Link to={`spending`}>
                             <Box display="flex" flexDirection="column" alignItems="center">
-                                <FontAwesomeIcon icon={faEnvelope} />
-                                <Text fontSize="12px" fontWeight="bold">Letter</Text>
+                                <FontAwesomeIcon icon={faWallet} />
+                                <Text fontSize="12px" fontWeight="bold">Spending</Text>
                             </Box>
                         </Link>
-                    </Tab> */}
+                    </Tab>
                 </TabList>
             </Tabs>
         </Box>

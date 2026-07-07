@@ -8,6 +8,9 @@ import Events from './Pages/EventsList';
 import AddEvent from './Pages/AddEvent';
 import EventDetail from './Pages/EventDetail';
 import EditEvent from './Pages/EditEvent';
+import Spending from './Pages/Spending';
+import SpendingSettings from './Pages/Spending/SpendingSettings';
+import SpendingExpenseDetail from './Pages/Spending/ExpenseDetail';
 import { LoginPage } from './Pages/Login';
 import PrivateRoute from './PrivateRoute';
 import { useAuth } from './AuthContext';
@@ -46,6 +49,21 @@ function App() {
             <Route path="events/:id/edit" element={
               <PrivateRoute>
                 <EditEvent />
+              </PrivateRoute>
+            } />
+            <Route path="spending" element={
+              <PrivateRoute>
+                <Spending />
+              </PrivateRoute>
+            } />
+            <Route path="spending/settings" element={
+              <PrivateRoute>
+                <SpendingSettings />
+              </PrivateRoute>
+            } />
+            <Route path="spending/:id" element={
+              <PrivateRoute>
+                <SpendingExpenseDetail />
               </PrivateRoute>
             } />
             {/* <Route path="letter" element={<Letter />} /> */}
