@@ -1,0 +1,30 @@
+{
+  "projectId": "990c9dc2-bec4-49c7-94c9-f9bbd0de8bf4",
+  "pkg": "couple-journal",
+  "shape": "package",
+  "readmeHeader": ".design-sync/conventions.md",
+  "entry": ".design-sync/ds-entry.mjs",
+  "buildCmd": "npm run build && mkdir -p .design-sync/.cache/css && sed 's|url(/assets/|url(./|g' dist/assets/index-*.css > .design-sync/.cache/css/tailwind.css && cp dist/assets/*.woff dist/assets/*.woff2 .design-sync/.cache/css/",
+  "srcDir": "src/Components",
+  "tsconfig": "jsconfig.json",
+  "cssEntry": ".design-sync/.cache/css/tailwind.css",
+  "overrides": {
+    "Dialog": { "cardMode": "single", "viewport": "640x560" },
+    "Popover": { "cardMode": "single", "viewport": "480x320" },
+    "SyncToast": { "cardMode": "single", "viewport": "420x340" }
+  },
+  "componentSrcMap": {
+    "Button": "src/Components/ui/button.jsx",
+    "Calendar": "src/Components/ui/calendar.jsx",
+    "Dialog": "src/Components/ui/dialog.jsx",
+    "Input": "src/Components/ui/input.jsx",
+    "Label": "src/Components/ui/label.jsx",
+    "Popover": "src/Components/ui/popover.jsx",
+    "Select": "src/Components/ui/select.jsx",
+    "Avatar": "src/Pages/Spending/Components/Avatar.jsx",
+    "SummaryCards": "src/Pages/Spending/Components/SummaryCards.jsx",
+    "FilterChips": "src/Pages/Spending/Components/FilterChips.jsx",
+    "SyncToast": "src/Pages/Spending/Components/SyncToast.jsx",
+    "SearchBar": null
+  }
+}
