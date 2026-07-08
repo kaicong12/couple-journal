@@ -19,7 +19,7 @@ export default function FilterChips({ filter, onFilterChange }) {
             "px-3 py-1.5 rounded-full text-xs font-medium uppercase tracking-wide transition-colors",
             filter === f.key
               ? "bg-text text-white"
-              : "bg-white text-text border border-accent-warm hover:bg-accent-warm/50"
+              : "bg-paper text-ink-soft border border-accent-warm hover:bg-accent-warm/50"
           )}
         >
           {f.label}

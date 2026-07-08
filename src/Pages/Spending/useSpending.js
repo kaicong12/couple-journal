@@ -112,6 +112,15 @@ export function useSpending() {
 
   const summary = useMemo(() => {
     const total = monthExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+    const prevM = selectedMonth.month === 0 ? 11 : selectedMonth.month - 1;
+    const prevY = selectedMonth.month === 0 ? selectedMonth.year - 1 : selectedMonth.year;
+    const prevTotal = expenses.reduce((sum, e) => {
+      const d = e.date?.toDate ? e.date.toDate() : new Date(e.date);
+      return d.getFullYear() === prevY && d.getMonth() === prevM ? sum + e.amount : sum;
+    }, 0);
+    const pctChange = prevTotal > 0 ? Math.round(((total - prevTotal) / prevTotal) * 100) : null;
+    const prevMonthName = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][prevM];
     const youPaid = monthExpenses
       .filter((e) => e.paidBy === currentUid)
       .reduce((sum, e) => sum + e.amount, 0);
@@ -131,8 +140,8 @@ export function useSpending() {
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 4);
 
-    return { total, youPaid, miraPaid, count, categoryBreakdown };
-  }, [monthExpenses, categories, currentUid]);
+    return { total, youPaid, miraPaid, count, categoryBreakdown, pctChange, prevMonthName };
+  }, [monthExpenses, expenses, selectedMonth, categories, currentUid]);
 
   const addExpense = useCallback(
     async (data) => {

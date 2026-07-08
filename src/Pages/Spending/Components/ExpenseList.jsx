@@ -1,6 +1,7 @@
 import { useAuth } from "../../../AuthContext";
 import { useNavigate } from "react-router-dom";
 import { X } from "lucide-react";
+import Avatar from "./Avatar";
 
 function formatDateHeader(dateStr) {
   const date = new Date(dateStr + "T00:00:00");
@@ -8,18 +9,18 @@ function formatDateHeader(dateStr) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const dayName = days[date.getDay()];
   const monthName = months[date.getMonth()];
   const dayNum = date.getDate();
 
   if (date.toDateString() === today.toDateString()) {
-    return `TODAY · ${dayName} ${monthName} ${dayNum}`;
+    return `Today · ${dayName} ${monthName} ${dayNum}`;
   }
   if (date.toDateString() === yesterday.toDateString()) {
-    return `YESTERDAY · ${dayName} ${monthName} ${dayNum}`;
+    return `Yesterday · ${dayName} ${monthName} ${dayNum}`;
   }
   return `${dayName} ${monthName} ${dayNum}`;
 }
@@ -36,72 +37,68 @@ export default function ExpenseList({ groupedExpenses, categories, onRemove }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="bg-paper rounded-sm shadow-[var(--shadow-soft)] overflow-hidden">
       {groupedExpenses.map(([dateKey, items]) => (
         <div key={dateKey}>
-          <p className="text-[11px] uppercase tracking-wider text-muted-text font-medium mb-2 px-1">
+          <p className="px-5 py-2 text-[10px] uppercase tracking-[0.14em] text-muted-text font-bold bg-parchment border-b border-black/5">
             {formatDateHeader(dateKey)}
           </p>
-          <div className="space-y-0">
-            {items.map((expense) => {
-              const cat = categories.find((c) => c.id === expense.categoryId);
-              const isYou = expense.paidBy === currentUid;
+          {items.map((expense) => {
+            const cat = categories.find((c) => c.id === expense.categoryId);
+            const isYou = expense.paidBy === currentUid;
 
-              return (
-                <div
-                  key={expense.id}
-                  className="flex items-center gap-3 py-3 px-4 bg-white rounded-lg mb-1 shadow-[var(--shadow-soft)] cursor-pointer hover:shadow-[var(--shadow-soft-hover)] transition-shadow group"
-                  style={{ borderLeft: `3px solid ${cat?.color || "#8E867E"}` }}
-                  onClick={() => navigate(`/spending/${expense.id}`)}
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{expense.merchant}</p>
-                    <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                      <span className="text-xs text-muted-text">{cat?.name || "Other"}</span>
-                      {expense.description && (
-                        <>
-                          <span className="text-xs text-muted-text">·</span>
-                          <span className="text-xs text-muted-text">{expense.description}</span>
-                        </>
-                      )}
-                      {expense.source === "gmail" && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E8F5E9] text-[#2E7D32] font-medium uppercase leading-none">
-                          ✦ Gmail
-                        </span>
-                      )}
-                      {expense.split === "50/50" && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-sienna/10 text-sienna font-medium uppercase leading-none">
-                          Split 50/50
-                        </span>
-                      )}
-                    </div>
+            return (
+              <div
+                key={expense.id}
+                className="flex items-center gap-4 py-3 px-5 border-b border-black/5 last:border-b-0 cursor-pointer hover:bg-parchment transition-colors group"
+                onClick={() => navigate(`/spending/${expense.id}`)}
+              >
+                <span
+                  className="w-2 h-2 rounded-full shrink-0"
+                  style={{ backgroundColor: cat?.color || "#8E867E" }}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-display font-medium text-[15.5px] truncate">{expense.merchant}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                    <span className="text-[11px] text-muted-text">{cat?.name || "Other"}</span>
+                    {expense.description && (
+                      <>
+                        <span className="text-[11px] text-muted-text">·</span>
+                        <span className="text-[11px] text-muted-text">{expense.description}</span>
+                      </>
+                    )}
+                    {expense.source === "gmail" && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-sage/15 text-sage font-bold uppercase tracking-[0.1em] leading-none inline-flex items-center gap-1">
+                        ✦ Gmail
+                      </span>
+                    )}
+                    {expense.split === "50/50" && (
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-sienna/15 text-sienna-deep font-bold uppercase tracking-[0.08em] leading-none">
+                        Split 50/50
+                      </span>
+                    )}
                   </div>
-
-                  <span
-                    className={`w-7 h-7 rounded-full inline-flex items-center justify-center text-[11px] text-white font-medium shrink-0 leading-none ${
-                      isYou ? "bg-sienna" : "bg-[#6B5344]"
-                    }`}
-                  >
-                    {isYou ? "Y" : "M"}
-                  </span>
-
-                  <span className="text-sm font-medium w-20 text-right whitespace-nowrap">
-                    S$ {expense.amount.toFixed(2)}
-                  </span>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onRemove(expense.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-text hover:text-text p-1"
-                  >
-                    <X size={14} />
-                  </button>
                 </div>
-              );
-            })}
-          </div>
+
+                <Avatar who={isYou ? "you" : "mira"} />
+
+                <span className="font-display font-medium text-base sm:w-24 text-right whitespace-nowrap">
+                  <span className="text-[11px] text-muted-text mr-0.5">S$</span>
+                  {expense.amount.toFixed(2)}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(expense.id);
+                  }}
+                  className="hidden sm:flex w-6 h-6 rounded-full items-center justify-center opacity-35 group-hover:opacity-100 group-hover:border group-hover:border-accent-warm group-hover:bg-paper transition-opacity text-muted-text hover:text-text"
+                >
+                  <X size={13} />
+                </button>
+              </div>
+            );
+          })}
         </div>
       ))}
     </div>

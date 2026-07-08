@@ -9,23 +9,34 @@ import {
 } from "@/Components/ui/dialog";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui/popover";
+import { Calendar } from "@/Components/ui/calendar";
 import { Timestamp } from "firebase/firestore";
 import Fuse from "fuse.js";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, CalendarDays } from "lucide-react";
+import Avatar from "./Avatar";
 
-const CATEGORY_COLORS = ["#B48261", "#7A8B5E", "#6B7FA3", "#A35D5D", "#4A7C59", "#C4944A", "#3D6B4F", "#8B6F47"];
+const CATEGORY_COLORS = ["#C0764A", "#8F9A6E", "#708BA4", "#B07A6B", "#5C7064", "#C09A4F", "#9C8A78", "#8B6F47"];
+
+const localDateStr = (d = new Date()) => {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
 
 export default function AddExpenseDialog({ open, onOpenChange, categories, onSave, onAddCategory, partnerUid }) {
   const { user } = useAuth();
   const currentUid = user?.uid || "mock-user-uid";
   const [amount, setAmount] = useState("");
-  const [date, setDate] = useState(() => new Date().toISOString().split("T")[0]);
+  const [date, setDate] = useState(() => localDateStr());
   const [merchant, setMerchant] = useState("");
   const [categorySearch, setCategorySearch] = useState("");
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [paidBy, setPaidBy] = useState("you");
   const [split, setSplit] = useState("none");
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const filteredCategories = useMemo(() => {
     if (!categorySearch.trim()) return categories;
@@ -63,7 +74,7 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
 
   const resetForm = () => {
     setAmount("");
-    setDate(new Date().toISOString().split("T")[0]);
+    setDate(localDateStr());
     setMerchant("");
     setCategorySearch("");
     setSelectedCategoryId("");
@@ -100,7 +111,7 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
                   step="0.01"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="pl-9 h-11 text-lg font-medium"
+                  className="pl-9 h-11 text-xl font-display font-medium"
                   placeholder="0.00"
                   autoFocus
                 />
@@ -110,12 +121,34 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
               <label className="text-[11px] uppercase tracking-wider text-muted-text font-medium mb-1 block">
                 Date
               </label>
-              <Input
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="h-11"
-              />
+              <Popover open={showDatePicker} onOpenChange={setShowDatePicker}>
+                <PopoverTrigger
+                  render={
+                    <button
+                      type="button"
+                      className="h-11 w-full flex items-center gap-2 rounded-lg border border-input bg-parchment px-3 text-sm text-text hover:border-sienna transition-colors"
+                    />
+                  }
+                >
+                  <CalendarDays size={14} className="text-muted-text shrink-0" />
+                  <span className="truncate">{formatDate(date)}</span>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={new Date(date + "T00:00:00")}
+                    onSelect={(d) => {
+                      if (d) {
+                        const yyyy = d.getFullYear();
+                        const mm = String(d.getMonth() + 1).padStart(2, "0");
+                        const dd = String(d.getDate()).padStart(2, "0");
+                        setDate(`${yyyy}-${mm}-${dd}`);
+                      }
+                      setShowDatePicker(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
 
@@ -191,28 +224,24 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
             <div className="flex gap-2">
               <button
                 onClick={() => setPaidBy("you")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-colors ${
                   paidBy === "you"
                     ? "bg-text text-white"
                     : "bg-parchment text-text border border-accent-warm"
                 }`}
               >
-                <span className="w-5 h-5 rounded-full bg-sienna inline-flex items-center justify-center text-[10px] text-white leading-none">
-                  Y
-                </span>
+                <Avatar who="you" />
                 You
               </button>
               <button
                 onClick={() => setPaidBy("mira")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-medium transition-colors ${
                   paidBy === "mira"
                     ? "bg-text text-white"
                     : "bg-parchment text-text border border-accent-warm"
                 }`}
               >
-                <span className="w-5 h-5 rounded-full bg-[#6B5344] inline-flex items-center justify-center text-[10px] text-white leading-none">
-                  M
-                </span>
+                <Avatar who="mira" />
                 Mira
               </button>
             </div>
@@ -226,20 +255,20 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
             <div className="flex gap-2">
               <button
                 onClick={() => setSplit("none")}
-                className={`px-4 py-2 rounded-lg text-xs font-medium uppercase tracking-wide transition-colors ${
+                className={`px-4 py-2 rounded-full text-[10.5px] font-bold uppercase tracking-[0.06em] transition-colors ${
                   split === "none"
-                    ? "bg-text text-white"
-                    : "bg-parchment text-text border border-accent-warm"
+                    ? "bg-sienna text-white"
+                    : "bg-paper text-ink-soft border border-accent-warm"
                 }`}
               >
                 Not Split
               </button>
               <button
                 onClick={() => setSplit("50/50")}
-                className={`px-4 py-2 rounded-lg text-xs font-medium uppercase tracking-wide transition-colors ${
+                className={`px-4 py-2 rounded-full text-[10.5px] font-bold uppercase tracking-[0.06em] transition-colors ${
                   split === "50/50"
                     ? "bg-sienna text-white"
-                    : "bg-parchment text-text border border-accent-warm"
+                    : "bg-paper text-ink-soft border border-accent-warm"
                 }`}
               >
                 50 / 50
@@ -249,10 +278,18 @@ export default function AddExpenseDialog({ open, onOpenChange, categories, onSav
         </div>
 
         <DialogFooter className="flex-row justify-end gap-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em]"
+          >
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!amount || !merchant}>
+          <Button
+            onClick={handleSave}
+            disabled={!amount || !merchant}
+            className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em] bg-text text-paper hover:bg-text/90"
+          >
             Save Expense
           </Button>
         </DialogFooter>

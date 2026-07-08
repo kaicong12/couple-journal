@@ -14,13 +14,13 @@ export function getMockExpensesForUser(currentUid, partnerUid) {
 }
 
 export const MOCK_CATEGORIES = [
-  { id: "cat-1", name: "Eating out", color: "#B48261" },
-  { id: "cat-2", name: "Groceries", color: "#7A8B5E" },
-  { id: "cat-3", name: "Transport", color: "#6B7FA3" },
-  { id: "cat-4", name: "Date night", color: "#A35D5D" },
-  { id: "cat-5", name: "Travel", color: "#4A7C59" },
-  { id: "cat-6", name: "Gifts", color: "#C4944A" },
-  { id: "cat-7", name: "Home", color: "#3D6B4F" },
+  { id: "cat-1", name: "Eating out", color: "#C0764A" },
+  { id: "cat-2", name: "Groceries", color: "#8F9A6E" },
+  { id: "cat-3", name: "Transport", color: "#708BA4" },
+  { id: "cat-4", name: "Date night", color: "#B07A6B" },
+  { id: "cat-5", name: "Travel", color: "#5C7064" },
+  { id: "cat-6", name: "Gifts", color: "#C09A4F" },
+  { id: "cat-7", name: "Home", color: "#9C8A78" },
 ];
 
 export const MOCK_EXPENSES = [

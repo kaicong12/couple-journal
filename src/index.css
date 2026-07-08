@@ -35,11 +35,18 @@ code {
   /* Sienna Heirloom palette */
   --color-sienna: #B48261;
   --color-sienna-dark: #9A6A4E;
+  --color-sienna-deep: #966548;
   --color-parchment: #F7F5F0;
+  --color-paper: #FBFAF6;
   --color-surface: #FFFFFF;
+  --color-surface-warm: #EFE9DF;
+  --color-surface-deep: #E5DDD0;
   --color-text: #2A2521;
+  --color-ink-soft: #5C5048;
   --color-muted-text: #8E867E;
   --color-accent-warm: #E3D8CE;
+  --color-sage: #7B9A87;
+  --color-rose: #B07A6B;
 
   /* Shadows */
   --shadow-soft: 0 10px 40px -10px rgba(42, 37, 33, 0.08);

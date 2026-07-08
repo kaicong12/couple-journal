@@ -49,42 +49,51 @@ export default function Spending() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 pb-24">
+    <div className="max-w-5xl mx-auto px-4 py-8 pb-24 text-left">
       {/* Header */}
-      <div className="flex flex-col gap-4 mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-3xl font-display font-medium">Spending</h1>
-            <div className="flex items-center gap-1 text-muted-text">
-              <button onClick={prevMonth} className="p-1 hover:text-text transition-colors">
-                <ChevronLeft size={18} />
-              </button>
-              <span className="text-sm font-medium min-w-[110px] text-center">
-                {MONTHS[selectedMonth.month]} {selectedMonth.year}
-              </span>
-              <button onClick={nextMonth} className="p-1 hover:text-text transition-colors">
-                <ChevronRight size={18} />
-              </button>
-            </div>
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
+        <div className="flex items-baseline gap-4">
+          <h1 className="text-3xl font-display font-medium tracking-tight">Spending</h1>
+          <div className="flex items-center gap-2 text-ink-soft">
+            <button onClick={prevMonth} className="p-1 hover:text-text transition-colors">
+              <ChevronLeft size={16} />
+            </button>
+            <span className="font-display text-[17px] text-text min-w-[100px] text-center">
+              {MONTHS[selectedMonth.month]} {selectedMonth.year}
+            </span>
+            <button onClick={nextMonth} className="p-1 hover:text-text transition-colors">
+              <ChevronRight size={16} />
+            </button>
           </div>
+        </div>
+
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-[11px] text-muted-text hidden sm:block">
+            <span className="text-sage font-bold">✓</span> last synced 2 min ago
+          </span>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={handleSync}
+            className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em] bg-paper"
+          >
+            <RefreshCw size={14} className="mr-1.5" />
+            Sync Gmail
+          </Button>
+          <Button
+            size="lg"
+            onClick={() => setShowAddDialog(true)}
+            className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em]"
+          >
+            <Plus size={14} className="mr-1.5" />
+            Add Expense
+          </Button>
           <button
             onClick={() => navigate("/spending/settings")}
             className="p-2 text-muted-text hover:text-text transition-colors"
           >
             <Settings size={18} />
           </button>
-        </div>
-
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-xs text-muted-text hidden sm:block">✓ last synced 2 min ago</span>
-          <Button variant="outline" size="lg" onClick={handleSync}>
-            <RefreshCw size={16} className="mr-1.5" />
-            Sync Gmail
-          </Button>
-          <Button size="lg" onClick={() => setShowAddDialog(true)}>
-            <Plus size={16} className="mr-1.5" />
-            Add Expense
-          </Button>
         </div>
       </div>
 
@@ -118,6 +127,15 @@ export default function Spending() {
         onAddCategory={addCategory}
         partnerUid={partnerUid}
       />
+
+      {/* Mobile FAB */}
+      <button
+        onClick={() => setShowAddDialog(true)}
+        className="sm:hidden fixed right-5 bottom-6 z-40 w-[52px] h-[52px] rounded-full bg-sienna text-white font-display text-[28px] leading-none shadow-[0_10px_24px_-6px_rgba(150,101,72,0.55)] flex items-center justify-center pb-1"
+        aria-label="Add expense"
+      >
+        +
+      </button>
 
       {/* Sync Toast */}
       <SyncToast
