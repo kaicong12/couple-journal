@@ -10,7 +10,9 @@ import {
   deleteCategory as deleteCategoryService,
   seedDataIfEmpty,
   getSpendingSettings,
+  markEmailProcessed,
 } from "./spendingService";
+import { syncGmail as syncGmailService } from "./gmailSync";
 import { MOCK_CATEGORIES, MOCK_SETTINGS, getMockExpensesForUser } from "./mockData";
 
 const PARTNER_UID = "partner-mock-uid";
@@ -153,11 +155,23 @@ export function useSpending() {
 
   const removeExpense = useCallback(
     async (id) => {
+      // Removing a synced expense also tells the sync to skip that receipt
+      const expense = expenses.find((e) => e.id === id);
+      if (user && expense?.gmailMeta?.messageId) {
+        await markEmailProcessed(expense.gmailMeta.messageId, { status: "removed" });
+      }
       await deleteExpenseService(id);
       await loadData();
     },
-    [loadData]
+    [expenses, user, loadData]
   );
+
+  const syncGmail = useCallback(async () => {
+    if (!user) return null; // logged out → caller falls back to mock toast
+    const results = await syncGmailService({ currentUid, categories });
+    await loadData();
+    return results;
+  }, [user, currentUid, categories, loadData]);
 
   const addCategory = useCallback(
     async (name, color) => {
@@ -217,6 +231,7 @@ export function useSpending() {
     addCategory,
     removeCategory,
     getCategoryById,
+    syncGmail,
     loadData,
   };
 }

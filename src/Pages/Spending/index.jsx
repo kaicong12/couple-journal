@@ -27,18 +27,45 @@ export default function Spending() {
     setSearchQuery,
     prevMonth,
     nextMonth,
+    settings,
     addExpense,
     removeExpense,
     addCategory,
+    syncGmail,
   } = useSpending();
 
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [showSyncToast, setShowSyncToast] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResults, setSyncResults] = useState(null);
+  const [syncError, setSyncError] = useState(null);
 
-  const handleSync = useCallback(() => {
+  const handleSync = useCallback(async () => {
+    if (syncing) return;
     setShowSyncToast(false);
-    setTimeout(() => setShowSyncToast(true), 1500);
-  }, []);
+    setSyncError(null);
+    setSyncing(true);
+    try {
+      const results = await syncGmail(); // null when logged out → mock toast
+      setSyncResults(results);
+      setShowSyncToast(true);
+    } catch (e) {
+      setSyncError(e.message);
+    } finally {
+      setSyncing(false);
+    }
+  }, [syncing, syncGmail]);
+
+  const lastSyncedLabel = (() => {
+    const ts = settings?.lastSyncedAt;
+    if (!ts) return null;
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    const mins = Math.max(0, Math.round((Date.now() - d.getTime()) / 60000));
+    if (mins < 1) return "last synced just now";
+    if (mins < 60) return `last synced ${mins} min ago`;
+    const hours = Math.round(mins / 60);
+    return hours < 24 ? `last synced ${hours}h ago` : `last synced ${Math.round(hours / 24)}d ago`;
+  })();
 
   if (loading) {
     return (
@@ -68,17 +95,26 @@ export default function Spending() {
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-[11px] text-muted-text hidden sm:block">
-            <span className="text-sage font-bold">✓</span> last synced 2 min ago
-          </span>
+          {syncError ? (
+            <span className="text-[11px] text-rose hidden sm:block max-w-56 truncate" title={syncError}>
+              {syncError}
+            </span>
+          ) : (
+            lastSyncedLabel && (
+              <span className="text-[11px] text-muted-text hidden sm:block">
+                <span className="text-sage font-bold">✓</span> {lastSyncedLabel}
+              </span>
+            )
+          )}
           <Button
             variant="outline"
             size="lg"
             onClick={handleSync}
+            disabled={syncing}
             className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em] bg-paper"
           >
-            <RefreshCw size={14} className="mr-1.5" />
-            Sync Gmail
+            <RefreshCw size={14} className={`mr-1.5 ${syncing ? "animate-spin" : ""}`} />
+            {syncing ? "Syncing..." : "Sync Gmail"}
           </Button>
           <Button
             size="lg"
@@ -140,6 +176,7 @@ export default function Spending() {
       {/* Sync Toast */}
       <SyncToast
         show={showSyncToast}
+        results={syncResults}
         onDismiss={() => setShowSyncToast(false)}
         onFilterGmail={() => setFilter("gmail")}
       />
