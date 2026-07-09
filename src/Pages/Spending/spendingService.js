@@ -14,6 +14,7 @@ import {
 const EXPENSES_COLLECTION = "expenses";
 const CATEGORIES_COLLECTION = "spendingCategories";
 const SETTINGS_DOC = "spendingSettings";
+const PROCESSED_EMAILS_COLLECTION = "processedEmails";
 
 const DEFAULT_CATEGORIES = [
   { name: "Eating out", color: "#B48261" },
@@ -89,6 +90,21 @@ export async function getSpendingSettings() {
 
 export async function updateSpendingSettings(data) {
   await setDoc(doc(db, SETTINGS_DOC, "config"), data, { merge: true });
+}
+
+// Idempotency ledger for Gmail sync: one doc per examined Gmail message id,
+// status imported | skipped | removed. Present id ⇒ never re-imported.
+export async function getProcessedEmailIds() {
+  const snapshot = await getDocs(collection(db, PROCESSED_EMAILS_COLLECTION));
+  return new Set(snapshot.docs.map((d) => d.id));
+}
+
+export async function markEmailProcessed(messageId, data) {
+  await setDoc(
+    doc(db, PROCESSED_EMAILS_COLLECTION, messageId),
+    { ...data, processedAt: Timestamp.now() },
+    { merge: true }
+  );
 }
 
 export async function seedDataIfEmpty(currentUserUid, partnerUid) {
