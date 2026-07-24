@@ -3,7 +3,7 @@ import { routesWithinApp } from './routes';
 import { Link, useLocation } from 'react-router-dom';
 import { Box, Tabs, Text, TabList, Tab } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faCalendarAlt, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
     const location = useLocation();
@@ -44,6 +44,14 @@ const NavBar = () => {
                             <Box display="flex" flexDirection="column" alignItems="center">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
                                 <Text fontSize="12px" fontWeight="bold">Events</Text>
+                            </Box>
+                        </Link>
+                    </Tab>
+                    <Tab>
+                        <Link to={`us`}>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <FontAwesomeIcon icon={faHeart} />
+                                <Text fontSize="12px" fontWeight="bold">Us</Text>
                             </Box>
                         </Link>
                     </Tab>
