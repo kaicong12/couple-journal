@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react'
 import { Timestamp } from 'firebase/firestore'
 import { Calendar as CalendarIcon, Trash2 } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/Components/ui/dialog'
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/Components/ui/alert-dialog'
 import { Button } from '@/Components/ui/button'
 import { Calendar } from '@/Components/ui/calendar'
 import { Popover, PopoverTrigger, PopoverContent } from '@/Components/ui/popover'
@@ -18,11 +26,13 @@ export function MilestoneDialog({ open, onClose, milestone, onSaved }) {
   const [errors, setErrors] = useState({})
   const [isSaving, setIsSaving] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
   useEffect(() => {
     if (!open) return
     setStep('form')
     setErrors({})
+    setConfirmDeleteOpen(false)
     if (milestone) {
       setForm({
         title: milestone.title,
@@ -74,11 +84,11 @@ export function MilestoneDialog({ open, onClose, milestone, onSaved }) {
   }
 
   const handleDelete = async () => {
-    if (!window.confirm(`Delete "${milestone.title}"?`)) return
     setIsSaving(true)
     try {
       await deleteMilestone(milestone.id)
       await onSaved()
+      setConfirmDeleteOpen(false)
       onClose()
     } catch (error) {
       console.error('Failed to delete milestone:', error)
@@ -222,7 +232,7 @@ export function MilestoneDialog({ open, onClose, milestone, onSaved }) {
 
               {isEdit && (
                 <button
-                  onClick={handleDelete}
+                  onClick={() => setConfirmDeleteOpen(true)}
                   disabled={isSaving}
                   className="flex items-center gap-1.5 self-start text-xs text-destructive/80 transition-colors hover:text-destructive disabled:opacity-50"
                 >
@@ -269,6 +279,37 @@ export function MilestoneDialog({ open, onClose, milestone, onSaved }) {
             </Button>
           </div>
         )}
+
+        <AlertDialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
+          <AlertDialogContent className="bg-parchment p-6">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="font-display text-lg">
+                Delete this milestone?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-xs leading-relaxed text-muted-text">
+                “{milestone?.title}” will be removed for both of you. This can't be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setConfirmDeleteOpen(false)}
+                disabled={isSaving}
+                className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em]"
+              >
+                Keep it
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isSaving}
+                className="rounded-sm text-[11px] font-bold uppercase tracking-[0.13em]"
+              >
+                {isSaving ? 'Deleting…' : 'Delete'}
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </DialogContent>
     </Dialog>
   )
