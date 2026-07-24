@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, getDoc, deleteDoc, collection, getDocs, addDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteDoc, collection, getDocs, addDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 
@@ -72,6 +72,39 @@ export const deleteEvent = async (eventId) => {
         console.error("Error deleting event: ", e);
         throw new Error("Failed to delete event: " + e.message);
     }
+}
+
+export const getCoupleProfile = async () => {
+    const profileRef = doc(db, "us", "profile");
+    const snap = await getDoc(profileRef);
+    return snap.exists() ? snap.data() : null;
+}
+
+export const saveCoupleProfile = async (data) => {
+    const profileRef = doc(db, "us", "profile");
+    await setDoc(profileRef, data, { merge: true });
+}
+
+export const getMilestones = async () => {
+    const milestonesCol = collection(db, "milestones");
+    const snapshot = await getDocs(milestonesCol);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
+export const addMilestone = async (milestone) => {
+    const milestonesCol = collection(db, "milestones");
+    const docRef = await addDoc(milestonesCol, milestone);
+    return docRef.id;
+}
+
+export const updateMilestone = async (milestone) => {
+    const { id, ...data } = milestone;
+    await updateDoc(doc(db, "milestones", id), data);
+    return id;
+}
+
+export const deleteMilestone = async (milestoneId) => {
+    await deleteDoc(doc(db, "milestones", milestoneId));
 }
 
 export const updateEvent = async (event) => {

@@ -8,6 +8,7 @@ import Events from './Pages/EventsList';
 import AddEvent from './Pages/AddEvent';
 import EventDetail from './Pages/EventDetail';
 import EditEvent from './Pages/EditEvent';
+import Us from './Pages/Us';
 import { LoginPage } from './Pages/Login';
 import PrivateRoute from './PrivateRoute';
 import { useAuth } from './AuthContext';
@@ -46,6 +47,11 @@ function App() {
             <Route path="events/:id/edit" element={
               <PrivateRoute>
                 <EditEvent />
+              </PrivateRoute>
+            } />
+            <Route path="us" element={
+              <PrivateRoute>
+                <Us />
               </PrivateRoute>
             } />
             {/* <Route path="letter" element={<Letter />} /> */}
