@@ -27,6 +27,14 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
     const [previewImage, setPreviewImage] = useState([])
     const [errors, setErrors] = useState({});
 
+    // Revoke any outstanding preview object URL when the modal unmounts.
+    useEffect(() => {
+        return () => {
+            previewImage.forEach(prev => prev?.preview && URL.revokeObjectURL(prev.preview));
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewEvent(prev => ({
@@ -70,6 +78,8 @@ export const AddEventModal = ({ menuLists, newEvent, setNewEvent, isAddModalOpen
         multiple: false,
         onDrop: acceptedFiles => {
             if (!acceptedFiles.length) return;
+            // Revoke the previously previewed object URL before replacing it.
+            previewImage.forEach(prev => prev?.preview && URL.revokeObjectURL(prev.preview));
             const file = Object.assign(acceptedFiles[0], {
                 preview: URL.createObjectURL(acceptedFiles[0])
             });

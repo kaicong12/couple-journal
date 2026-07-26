@@ -25,28 +25,40 @@ export function daysBetween(from, to) {
     return Math.round((startOfDay(to) - startOfDay(from)) / MS_PER_DAY)
 }
 
+// Number of days in a given (0-indexed) month of a year.
+function daysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate()
+}
+
+// Build a date for (year, month, day), clamping day to the month's length so
+// e.g. day 31 in February lands on Feb 28/29 instead of rolling into March.
+function clampedDate(year, month, day) {
+    return new Date(year, month, Math.min(day, daysInMonth(year, month)))
+}
+
 // Next date this milestone lands on, today or later.
 // Non-repeating milestones already in the past return null.
 export function nextOccurrence(date, repeats, today = new Date()) {
     const target = startOfDay(date)
     const now = startOfDay(today)
+    const targetDay = target.getDate()
 
     if (!repeats || repeats === 'none') {
         return target >= now ? target : null
     }
 
     if (repeats === 'yearly') {
-        let candidate = new Date(now.getFullYear(), target.getMonth(), target.getDate())
+        let candidate = clampedDate(now.getFullYear(), target.getMonth(), targetDay)
         if (candidate < now) {
-            candidate = new Date(now.getFullYear() + 1, target.getMonth(), target.getDate())
+            candidate = clampedDate(now.getFullYear() + 1, target.getMonth(), targetDay)
         }
         return candidate
     }
 
     // monthly
-    let candidate = new Date(now.getFullYear(), now.getMonth(), target.getDate())
-    if (candidate < now || candidate.getMonth() !== now.getMonth()) {
-        candidate = new Date(now.getFullYear(), now.getMonth() + 1, target.getDate())
+    let candidate = clampedDate(now.getFullYear(), now.getMonth(), targetDay)
+    if (candidate < now) {
+        candidate = clampedDate(now.getFullYear(), now.getMonth() + 1, targetDay)
     }
     return candidate
 }

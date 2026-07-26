@@ -6,6 +6,8 @@ import { Box } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
+const GOOGLE_PLACES_API_KEY = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+
 export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode }) => {
     const [searchInput, setSearchInput] = useState(currentLocation);
     const [displayInput, setDisplayInput] = useState(currentLocation);
@@ -20,10 +22,12 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
         }
     };
 
+    // Fetches suggestions and returns them so callers don't have to read the
+    // async `results` state before React has committed the update.
     const fetchAutocomplete = async (search) => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("X-Goog-Api-Key", "AIzaSyA7qFAV9taIxXIbzm2rnrdNOlnFBtHSp-8");
+        myHeaders.append("X-Goog-Api-Key", GOOGLE_PLACES_API_KEY);
 
         const raw = JSON.stringify({
             "input": search
@@ -40,10 +44,13 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
         try {
             const response = await fetch(url, requestOptions);
             const data = await response.json();
-            setResults(data.suggestions ?? []);
+            const suggestions = data.suggestions ?? [];
+            setResults(suggestions);
+            return suggestions;
         } catch (error) {
             console.error('Error fetching autocomplete results:', error);
             setResults([]);
+            return [];
         }
     };
 
@@ -56,9 +63,8 @@ export const LocationSearchBox = ({ onSelectLocation, currentLocation, editMode 
     }, [debouncedSearch]);
 
     const loadOptions = (inputValue, callback) => {
-        fetchAutocomplete(inputValue).then(() => {
-            console.log(results);
-            const options = results.map((result) => ({
+        fetchAutocomplete(inputValue).then((suggestions) => {
+            const options = suggestions.map((result) => ({
                 label: result.placePrediction.text.text,
                 value: result.placePrediction.placeId
             }));

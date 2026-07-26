@@ -14,7 +14,12 @@ import PrivateRoute from './PrivateRoute';
 import { useAuth } from './AuthContext';
 
 function App() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  // Wait for onAuthStateChanged to resolve before deciding, otherwise the
+  // Login page flashes on every refresh for already-authenticated users.
+  if (loading) {
+    return null;
+  }
   if (!user) {
     return <LoginPage />;
   }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { ImagePlus, X } from 'lucide-react'
 
@@ -11,9 +11,26 @@ export function StepPhotos({ files, onChange, error }) {
   }, [files, onChange])
 
   const removeFile = (index) => {
+    const removed = files[index]
+    if (removed?.preview) {
+      URL.revokeObjectURL(removed.preview)
+    }
     const updated = files.filter((_, i) => i !== index)
     onChange(updated)
   }
+
+  // Revoke any outstanding object URLs when the step unmounts to free the
+  // underlying File blobs.
+  useEffect(() => {
+    return () => {
+      files.forEach(file => {
+        if (file?.preview) {
+          URL.revokeObjectURL(file.preview)
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { 'image/*': [] },

@@ -80,7 +80,7 @@ const EventPage = () => {
         setIsLoading(true)
 
         try {
-            const eventData = await getEvents('events')
+            const eventData = await getEvents()
             setEventData(eventData)
         } catch (error) {
             console.error('Error fetching events:', error);
@@ -101,7 +101,6 @@ const EventPage = () => {
     }, [])
 
     const filteredEventData = useMemo(() => {
-        setCurrentPage(1)
         let filteredResults = eventData
 
         if (debouncedSearch && debouncedSearch.length) {
@@ -123,7 +122,11 @@ const EventPage = () => {
             const paramEndDate =  new Date(dateFilterParam?.endDate)
 
             filteredResults = filteredResults.filter(event => {
-                const fbTimestampDate = event.date.toDate()
+                // event.date is a Firestore Timestamp; skip events without one
+                const fbTimestampDate = event.date?.toDate?.()
+                if (!fbTimestampDate) {
+                    return false;
+                }
                 if (dateFilterParam.startDate && fbTimestampDate < paramStartDate) {
                     return false;
                 }
@@ -134,11 +137,13 @@ const EventPage = () => {
             });
         }
 
-        const sortedFilteredResults = filteredResults.sort((a, b) => {
+        // Sort a copy — mutating filteredResults in place would reorder the
+        // eventData state array when no search/filter has narrowed it.
+        const sortedFilteredResults = [...filteredResults].sort((a, b) => {
             if (eventSort === 'Date (Latest To Oldest)') {
-                return b.date - a.date
+                return (b.date?.seconds ?? 0) - (a.date?.seconds ?? 0)
             } else if (eventSort === 'Date (Oldest To Latest)') {
-                return a.date - b.date
+                return (a.date?.seconds ?? 0) - (b.date?.seconds ?? 0)
             } else if (eventSort === 'Name (A to Z)') {
                 return a.title.localeCompare(b.title)
             } else {
@@ -148,6 +153,11 @@ const EventPage = () => {
 
         return sortedFilteredResults
     }, [eventData, debouncedSearch, selectedCategories, dateFilterParam, fuzzySearchEvents, eventSort])
+
+    // Reset to the first page whenever the filter/search/sort inputs change.
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [debouncedSearch, selectedCategories, dateFilterParam, eventSort])
 
     useEffect(() => {
         fetchEvents()
@@ -264,7 +274,7 @@ const EventPage = () => {
                                             {i + startPage}
                                         </Button>
                                     ))}
-                                    <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage === totalPages}>
+                                    <Button bg="brown.200" onClick={() => handlePageChange(currentPage + 1)} isDisabled={currentPage >= totalPages}>
                                         Next
                                     </Button>
                                 </ButtonGroup>
