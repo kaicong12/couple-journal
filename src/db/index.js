@@ -62,10 +62,24 @@ export const deleteEvent = async (eventId) => {
         }
         
         const eventData = docSnap.data();
-        if (eventData.thumbnail) {
-            const fileRef = ref(storage, eventData.thumbnail);
-            await deleteObject(fileRef);
-        }
+
+        // Collect every stored image (multi-photo `photos` array + legacy
+        // single `thumbnail`), de-duplicated, so none are orphaned in Storage.
+        const urlsToDelete = new Set([
+            ...(Array.isArray(eventData.photos) ? eventData.photos : []),
+            ...(eventData.thumbnail ? [eventData.thumbnail] : []),
+        ]);
+
+        await Promise.all(
+            [...urlsToDelete].map(async (url) => {
+                try {
+                    await deleteObject(ref(storage, url));
+                } catch (err) {
+                    // Ignore already-missing objects; keep deleting the rest.
+                    console.warn("Could not delete storage object:", url, err);
+                }
+            })
+        );
 
         await deleteDoc(eventDocRef);
     } catch (e) {

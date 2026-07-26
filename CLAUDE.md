@@ -7,12 +7,13 @@ A React couple's app with event planning and a shared story page.
 - React 18 (Vite) with JavaScript
 - Chakra UI v2 (legacy — being migrated to shadcn/ui + Tailwind CSS v4)
 - shadcn/ui + Tailwind CSS v4 (new components use this)
-- Firebase (Auth, Firestore, Realtime Database)
-- Recoil for state management
+- Firebase (Auth, Firestore, Realtime Database, Storage)
+- Recoil (`RecoilRoot` is mounted in `index.jsx`; no atoms are defined yet)
 - Framer Motion for animations
 - Fuse.js for fuzzy search
-- OpenAI SDK for AI features
-- Lucide React for icons (shadcn default)
+- OpenAI SDK, pointed at OpenRouter, for AI caption generation (`src/utils/generateCaption.js`)
+- Google Places API for location autocomplete
+- Lucide React (shadcn default) and Font Awesome for icons
 
 ## Commands
 
@@ -22,14 +23,13 @@ A React couple's app with event planning and a shared story page.
 
 ## Project Structure
 
-- `src/Pages/` — page-level features (EventsList, OurStory, Login)
-- `src/components/ui/` — shadcn/ui components (button, dialog, input, select, label)
-- `src/Components/` — shared Chakra components (legacy)
+- `src/Pages/` — page-level features (OurStory, EventsList, EventDetail, AddEvent, EditEvent, Us, Login)
+- `src/Components/ui/` — shadcn/ui components (button, dialog, input, select, label, calendar, popover, alert-dialog)
+- `src/Components/` — shared components (e.g. SearchBar; some legacy Chakra)
 - `src/lib/utils.js` — shadcn utility (cn function)
-- `src/db/` — Firebase config and database helpers (firebase.js, firestore.js, rtdb.js)
-- `src/hooks/` — custom hooks
-- `src/recoil/` — Recoil atoms
-- `src/utils/` — utility functions
+- `src/db/` — Firebase config and database helpers (firebase.js, firestore.js, rtdb.js, index.js)
+- `src/hooks/` — custom hooks (useDebounce, useModalParams)
+- `src/utils/` — utility functions (generateCaption.js, index.js)
 - `src/Icons/` — custom SVG icon components
 - `src/theme.js` — Chakra UI theme config (legacy)
 - `src/routes.js` — route definitions
@@ -98,6 +98,11 @@ Depth is conveyed through soft, ambient environmental lighting rather than techn
 - CSS variables defined in `src/index.css` (:root and .dark)
 - Path alias: `@/` → `./src/`
 - Components config: `components.json` at project root
+- Note: `components.json` aliases resolve UI components to `@/components/ui`
+  (lowercase), but the files actually live in `src/Components/ui` (capital C).
+  This works on case-insensitive filesystems (macOS default) but is a
+  correctness hazard on case-sensitive ones (most Linux CI/hosts). Prefer
+  importing with the real casing (`@/Components/ui/...`).
 
 ## Conventions
 
